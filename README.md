@@ -1,4 +1,4 @@
-# WhatsApp Business Cloud API
+# WhatsApp Business Cloud API C# Wrapper
 
 A Wrapper for Whatsapp Business Cloud API hosted by Meta.
 
