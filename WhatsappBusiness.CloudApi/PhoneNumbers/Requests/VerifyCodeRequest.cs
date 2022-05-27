@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace WhatsappBusiness.CloudApi.Requests
+namespace WhatsappBusiness.CloudApi.PhoneNumbers.Requests
 {
     public class VerifyCodeRequest
     {

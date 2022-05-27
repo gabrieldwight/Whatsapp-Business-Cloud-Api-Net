@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace WhatsappBusiness.CloudApi.Requests
+namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
-    public class ImageMessageByIdRequest
+    public class ImageMessageByUrlRequest
     {
         [JsonProperty("messaging_product")]
         public string MessagingProduct { get; private set; } = "whatsapp";
@@ -17,12 +17,12 @@ namespace WhatsappBusiness.CloudApi.Requests
         public string Type { get; private set; } = "image";
 
         [JsonProperty("image")]
-        public MediaImage Image { get; set; }
+        public MediaImageUrl Image { get; set; }
     }
 
-    public class MediaImage
+    public class MediaImageUrl
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [JsonProperty("link")]
+        public string Link { get; set; }
     }
 }

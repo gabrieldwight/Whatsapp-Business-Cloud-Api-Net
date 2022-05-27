@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace WhatsappBusiness.CloudApi.Requests
+namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
-    public class AudioMessageByIdRequest
+    public class StickerMessageByUrlRequest
     {
         [JsonProperty("messaging_product")]
         public string MessagingProduct { get; private set; } = "whatsapp";
@@ -14,15 +14,15 @@ namespace WhatsappBusiness.CloudApi.Requests
         public string To { get; set; }
 
         [JsonProperty("type")]
-        public string Type { get; private set; } = "audio";
+        public string Type { get; private set; } = "sticker";
 
-        [JsonProperty("audio")]
-        public MediaAudio Audio { get; set; }
+        [JsonProperty("sticker")]
+        public MediaStickerUrl Sticker { get; set; }
     }
 
-    public class MediaAudio
+    public class MediaStickerUrl
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [JsonProperty("link")]
+        public string Link { get; set; }
     }
 }
