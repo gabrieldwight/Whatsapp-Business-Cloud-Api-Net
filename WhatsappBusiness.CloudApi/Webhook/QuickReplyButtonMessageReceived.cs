@@ -2,6 +2,9 @@
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
+    /// <summary>
+    /// When your customer clicks on a quick reply button in an interactive message template, a response is sent.
+    /// </summary>
     public class QuickReplyButtonMessageReceived
     {
         [JsonProperty("object")]

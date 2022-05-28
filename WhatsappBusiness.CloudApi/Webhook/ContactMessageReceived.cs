@@ -2,6 +2,9 @@
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
+    /// <summary>
+    /// A contact message you received from a customer
+    /// </summary>
     public class ContactMessageReceived
     {
         [JsonProperty("object")]

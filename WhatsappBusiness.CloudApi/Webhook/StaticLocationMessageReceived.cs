@@ -2,6 +2,9 @@
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
+    /// <summary>
+    /// A static location message you received from a customer.
+    /// </summary>
     public class StaticLocationMessageReceived
     {
         [JsonProperty("object")]

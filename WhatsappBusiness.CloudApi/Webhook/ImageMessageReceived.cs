@@ -2,6 +2,10 @@
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
+    /// <summary>
+    /// When a message with media is received, the WhatsApp Business API downloads the media. A notification is sent to your Webhook once the media is downloaded.
+    /// The Webhook notification contains information that identifies the media object and enables you to find and retrieve the object. Use the media endpoints to retrieve the media.
+    /// </summary>
     public class ImageMessageReceived
     {
         [JsonProperty("object")]

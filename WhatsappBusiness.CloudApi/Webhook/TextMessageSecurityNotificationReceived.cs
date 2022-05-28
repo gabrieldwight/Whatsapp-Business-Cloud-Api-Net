@@ -2,6 +2,9 @@
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
+    /// <summary>
+    /// A text message you receive from a customer, when you have the show_security_notifications parameter set to true in the application settings.
+    /// </summary>
     public class TextMessageSecurityNotificationReceived
     {
         [JsonProperty("object")]

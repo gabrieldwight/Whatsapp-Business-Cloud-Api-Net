@@ -2,6 +2,10 @@
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
+    /// <summary>
+    /// When you receive a media message containing a sticker, WhatsApp Business API downloads the sticker and a notification is sent to your Webhook once the sticker is downloaded.
+    /// The Webhook notification contains information that identifies the media object and allows you to find and retrieve the object. Use the media endpoints to retrieve the media.
+    /// </summary>
     public class StickerMessageReceived
     {
         [JsonProperty("object")]

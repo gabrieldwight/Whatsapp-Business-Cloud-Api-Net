@@ -2,6 +2,9 @@
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
+    /// <summary>
+    /// A message you received from a customer that is not supported.
+    /// </summary>
     public class UnknownMessageReceived
     {
         [JsonProperty("object")]
