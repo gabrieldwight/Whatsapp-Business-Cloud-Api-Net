@@ -1,6 +1,6 @@
 ﻿namespace WhatsappBusiness.CloudApi.Response
 {
-    public class VerificationResponse : BaseSuccessResponse
+    public class MarkMessageResponse : BaseSuccessResponse
     {
     }
 }

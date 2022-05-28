@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json;
-
-namespace WhatsappBusiness.CloudApi.Response
+﻿namespace WhatsappBusiness.CloudApi.Response
 {
-    public class RegistrationResponse
+    public class RegistrationResponse : BaseSuccessResponse
     {
-        [JsonProperty("success")]
-        public bool Success { get; set; }
     }
 }
