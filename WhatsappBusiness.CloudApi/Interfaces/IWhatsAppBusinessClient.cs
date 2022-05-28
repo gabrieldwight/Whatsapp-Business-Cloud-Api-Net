@@ -32,17 +32,17 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         
         MediaUploadResponse UploadMedia(UploadMediaRequest uploadMediaRequest, string accessToken, CancellationToken cancellationToken = default);
 
-        Task<MediaUrlResponse> GetMediaUrlAsync(string mediaUrl, string accessToken, CancellationToken cancellationToken = default);
+        Task<MediaUrlResponse> GetMediaUrlAsync(string mediaId, string accessToken, CancellationToken cancellationToken = default);
 
-        MediaUrlResponse GetMediaUrl(string mediaUrl, string accessToken, CancellationToken cancellationToken = default);
+        MediaUrlResponse GetMediaUrl(string mediaId, string accessToken, CancellationToken cancellationToken = default);
 
-        Task<BaseSuccessResponse> DeleteMediaAsync(string mediaUrl, string accessToken, CancellationToken cancellationToken = default);
+        Task<BaseSuccessResponse> DeleteMediaAsync(string mediaId, string accessToken, CancellationToken cancellationToken = default);
 
-        BaseSuccessResponse DeleteMedia(string mediaUrl, string accessToken, CancellationToken cancellationToken = default);
+        BaseSuccessResponse DeleteMedia(string mediaId, string accessToken, CancellationToken cancellationToken = default);
         #endregion
 
         #region Phone Numbers functions
-        Task<PhoneNumberResponse> GetWhatsAppBusinssAccountPhoneNumberAsync(string whatsAppBusinessAccountId, string accessToken, CancellationToken cancellationToken = default);
+        Task<PhoneNumberResponse> GetWhatsAppBusinessAccountPhoneNumberAsync(string whatsAppBusinessAccountId, string accessToken, CancellationToken cancellationToken = default);
 
         PhoneNumberResponse GetWhatsAppBusinessAccountPhoneNumber(string whatsAppBusinessAccountId, string accessToken, CancellationToken cancellationToken = default);
 
@@ -50,9 +50,9 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 
         PhoneNumberByIdResponse GetWhatsAppBusinessAccountPhoneNumberById(string whatsAppBusinessPhoneNumberId, string accessToken, CancellationToken cancellationToken = default);
 
-        Task<VerificationResponse> RequestVerificationCodeAsync(RequestVerificationCode requestVerification, string accesstoken, CancellationToken cancellationToken = default);
+        Task<VerificationResponse> RequestVerificationCodeAsync(RequestVerificationCode requestVerification, string accessToken, CancellationToken cancellationToken = default);
 
-        VerificationResponse RequestVerificationCode(RequestVerificationCode requestVerification, string accesstoken, CancellationToken cancellationToken = default);
+        VerificationResponse RequestVerificationCode(RequestVerificationCode requestVerification, string accessToken, CancellationToken cancellationToken = default);
 
         Task<VerificationResponse> VerifyCodeAsync(VerifyCodeRequest verifyCodeRequest, string accessToken, CancellationToken cancellationToken = default);
 

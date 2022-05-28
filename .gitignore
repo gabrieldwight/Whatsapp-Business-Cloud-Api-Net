@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Samples/WhatsAppBusinessCloudAPI.Web/appsettings.json
+/Samples/WhatsAppBusinessCloudAPI.Web/appsettings.Development.json
