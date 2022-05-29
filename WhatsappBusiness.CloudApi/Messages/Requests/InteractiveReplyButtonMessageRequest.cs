@@ -17,13 +17,13 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Type { get; private set; } = "interactive";
 
         [JsonProperty("interactive")]
-        public ReplyButtonInteractive Interactive { get; set; }
+        public InteractiveReplyButtonMessage Interactive { get; set; }
     }
 
-    public class ReplyButtonInteractive
+    public class InteractiveReplyButtonMessage
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; private set; } = "button";
 
         [JsonProperty("body")]
         public ReplyButtonBody Body { get; set; }

@@ -23,7 +23,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
     public class InteractiveListMessage
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; private set; } = "list";
 
         [JsonProperty("header")]
         public Header Header { get; set; }
@@ -32,7 +32,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public ListBody Body { get; set; }
 
         [JsonProperty("footer")]
-        public ListBody Footer { get; set; }
+        public Footer Footer { get; set; }
 
         [JsonProperty("action")]
         public ListAction Action { get; set; }
@@ -79,6 +79,12 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonProperty("type")]
         public string Type { get; set; }
 
+        [JsonProperty("text")]
+        public string Text { get; set; }
+    }
+
+    public class Footer
+    {
         [JsonProperty("text")]
         public string Text { get; set; }
     }
