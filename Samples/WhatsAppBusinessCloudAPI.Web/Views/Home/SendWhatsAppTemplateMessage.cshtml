@@ -1,0 +1,26 @@
+﻿@model SendTemplateMessageViewModel
+@{
+	ViewData["Title"] = "Send WhatsApp Template Message Page";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Send WhatsApp Template Message</h1>
+</div>
+<div class="row">
+	<form asp-action="SendWhatsAppTemplateMessage">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-group">
+			<label class="control-label">Recipient Phone Number</label>
+			<input asp-for="RecipientPhoneNumber" class="form-control" />
+			<span asp-validation-for="RecipientPhoneNumber" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label class="control-label">Template Name</label>
+			<input asp-for="TemplateName" class="form-control" />
+			<span asp-validation-for="TemplateName" class="form-control" />
+		</div>
+		<div class="form-group">
+			<input type="submit" value="Send Message" class="btn btn-primary" />
+		</div>
+	</form>
+</div>
