@@ -9,12 +9,12 @@ Official API Documentation: [Meta for Developers](https://developers.facebook.co
 > Note: **This package is WIP**. The capabilities of Cloud API will be reflected soon. Feel free to contribute!
 
 - [ ] Sending Messages
-  - [ ] Text
-  - [ ] Media (image, video, audio, document, sticker)
+  - [x] Text
+  - [x] Media (image, video, audio, document, sticker)
   - [ ] Contact
-  - [ ] Location
-  - [ ] Interactive (List, Reply)
-  - [ ] Template
+  - [x] Location
+  - [x] Interactive (List, Reply)
+  - [x] Template
 - [ ] Receiving Message (via Webhook)
   - [ ] Text
   - [ ] Media (image, video, audio, document, sticker)
