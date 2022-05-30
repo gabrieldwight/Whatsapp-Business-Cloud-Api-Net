@@ -316,7 +316,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>SendWhatsAppTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        public async Task<IActionResult> SendWhatsAppTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
         {
             try
             {
@@ -329,7 +329,71 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 var results = await _whatsAppBusinessClient.SendTextMessageTemplateAsync(textTemplateMessage);
 
-                return RedirectToAction(nameof(Index));
+                if (results != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return View();
+            }
+        }
+
+        public IActionResult SendWhatsAppContactMessage()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppContactMessage(SendContactMessageViewModel sendContactMessageViewModel)
+        {
+            try
+            {
+                ContactMessageRequest contactMessageRequest = new ContactMessageRequest();
+                contactMessageRequest.To = sendContactMessageViewModel.RecipientPhoneNumber;
+                contactMessageRequest.Contacts = new List<ContactData>()
+                {
+                    new ContactData()
+                    {
+                        Addresses = new List<Address>()
+                        {
+                            new Address()
+                            {
+                                State = "State Test",
+                                City = "City Test",
+                                Zip = "Zip Test",
+                                Country = "Country Test",
+                                CountryCode = "Country Code Test",
+                                Type = "Home"
+                            }
+                        },
+                        Name = new Name()
+                        {
+                            FormattedName = "Testing name",
+                            FirstName = "FName",
+                            LastName = "LName",
+                            MiddleName = "MName"
+                        }
+                    }
+                };
+
+                var results = await _whatsAppBusinessClient.SendContactAttachmentMessageAsync(contactMessageRequest);
+
+                if (results != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return RedirectToAction(nameof(SendWhatsAppContactMessage));
+                }
             }
             catch (WhatsappBusinessCloudAPIException ex)
             {
