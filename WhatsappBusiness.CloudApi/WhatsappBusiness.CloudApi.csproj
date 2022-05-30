@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>Gabriel Odero</Authors>
+    <Description>This is C# wrapper of whatsapp business cloud api for .NET</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>WhatsApp-Business;WhatsApp-Business-Api;WhatsApp;WhatsApp-Cloud-Api-Client;Api</PackageTags>
+    <Copyright>Copyright © Gabriel Odero.  All rights reserved.</Copyright>
+    <PackageProjectUrl>https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net</RepositoryUrl>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
