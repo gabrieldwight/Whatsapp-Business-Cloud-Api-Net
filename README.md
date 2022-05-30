@@ -8,10 +8,10 @@ Official API Documentation: [Meta for Developers](https://developers.facebook.co
 
 > Note: **This package is WIP**. The capabilities of Cloud API will be reflected soon. Feel free to contribute!
 
-- [ ] Sending Messages
+- [x] Sending Messages
   - [x] Text
   - [x] Media (image, video, audio, document, sticker)
-  - [ ] Contact
+  - [x] Contact
   - [x] Location
   - [x] Interactive (List, Reply)
   - [x] Template
