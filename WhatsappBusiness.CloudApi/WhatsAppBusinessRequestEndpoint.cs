@@ -1,4 +1,6 @@
-﻿namespace WhatsappBusiness.CloudApi
+﻿using System;
+
+namespace WhatsappBusiness.CloudApi
 {
     public static class WhatsAppBusinessRequestEndpoint
     {

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
@@ -38,10 +39,10 @@ namespace WhatsappBusiness.CloudApi.Response
         public string Email { get; set; }
 
         [JsonProperty("websites")]
-        public List<Uri> Websites { get; set; }
+        public List<string> Websites { get; set; }
 
         [JsonProperty("profile_picture_url")]
-        public Uri ProfilePictureUrl { get; set; }
+        public string ProfilePictureUrl { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }

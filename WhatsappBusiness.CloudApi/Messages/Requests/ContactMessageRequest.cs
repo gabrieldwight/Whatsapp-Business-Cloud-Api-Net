@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
@@ -14,10 +15,10 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Type { get; private set; } = "contacts";
 
         [JsonProperty("contacts")]
-        public List<Contact> Contacts { get; set; }
+        public List<ContactData> Contacts { get; set; }
     }
 
-    public class Contact
+    public class ContactData
     {
         [JsonProperty("addresses")]
         public List<Address> Addresses { get; set; }

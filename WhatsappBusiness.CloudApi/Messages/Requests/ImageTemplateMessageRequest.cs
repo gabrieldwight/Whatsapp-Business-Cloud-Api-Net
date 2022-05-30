@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
