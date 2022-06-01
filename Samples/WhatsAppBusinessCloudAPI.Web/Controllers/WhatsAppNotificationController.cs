@@ -16,6 +16,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private List<ContactMessage> contactMessage;
         private List<LocationMessage> locationMessage;
         private List<QuickReplyButtonMessage> quickReplyButtonMessage;
+        private List<ReplyButtonMessage> replyButtonMessage;
         private List<ListReplyButtonMessage> listReplyButtonMessage;
 
         public WhatsAppNotificationController(ILogger<WhatsAppNotificationController> logger)
@@ -157,19 +158,31 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                     });
                 }
 
+                if (messageType.Equals("button"))
+                {
+                    var quickReplyMessageReceived = JsonConvert.DeserializeObject<QuickReplyButtonMessageReceived>(Convert.ToString(messageReceived)) as QuickReplyButtonMessageReceived;
+                    quickReplyButtonMessage = new List<QuickReplyButtonMessage>(quickReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                    _logger.LogInformation(JsonConvert.SerializeObject(quickReplyButtonMessage, Formatting.Indented));
+
+                    return Ok(new
+                    {
+                        Message = "Quick Reply Button Message Received"
+                    });
+                }
+
                 if (messageType.Equals("interactive"))
                 {
                     var getInteractiveType = Convert.ToString(messageReceived["entry"][0]["changes"][0]["value"]["messages"][0]["interactive"]["type"]);
 
                     if (getInteractiveType.Equals("button_reply"))
                     {
-                        var quickReplyMessageReceived = JsonConvert.DeserializeObject<QuickReplyButtonMessageReceived>(Convert.ToString(messageReceived)) as QuickReplyButtonMessageReceived;
-                        quickReplyButtonMessage = new List<QuickReplyButtonMessage>(quickReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
-                        _logger.LogInformation(JsonConvert.SerializeObject(quickReplyMessageReceived, Formatting.Indented));
+                        var replyMessageReceived = JsonConvert.DeserializeObject<ReplyButtonMessageReceived>(Convert.ToString(messageReceived)) as ReplyButtonMessageReceived;
+                        replyButtonMessage = new List<ReplyButtonMessage>(replyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                        _logger.LogInformation(JsonConvert.SerializeObject(replyButtonMessage, Formatting.Indented));
 
                         return Ok(new
                         {
-                            Message = "Quick Reply Button Message Received"
+                            Message = "Reply Button Message Received"
                         });
                     }
 
@@ -177,7 +190,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                     {
                         var listReplyMessageReceived = JsonConvert.DeserializeObject<ListReplyButtonMessageReceived>(Convert.ToString(messageReceived)) as ListReplyButtonMessageReceived;
                         listReplyButtonMessage = new List<ListReplyButtonMessage>(listReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
-                        _logger.LogInformation(JsonConvert.SerializeObject(listReplyMessageReceived, Formatting.Indented));
+                        _logger.LogInformation(JsonConvert.SerializeObject(listReplyButtonMessage, Formatting.Indented));
 
                         return Ok(new
                         {
