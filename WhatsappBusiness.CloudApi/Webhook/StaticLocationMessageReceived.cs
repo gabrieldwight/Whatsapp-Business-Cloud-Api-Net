@@ -76,6 +76,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("location")]
         public Location Location { get; set; }
+
+        [JsonProperty("type")]
+        public string Type { get; set; }
     }
 
     public class Location

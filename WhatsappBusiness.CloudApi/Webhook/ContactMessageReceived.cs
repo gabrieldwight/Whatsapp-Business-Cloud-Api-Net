@@ -76,6 +76,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("contacts")]
         public List<MessageContact> Contacts { get; set; }
+
+        [JsonProperty("type")]
+        public string Type { get; set; }
     }
 
     public class MessageContact
