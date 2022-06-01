@@ -10,8 +10,13 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
     {
         private readonly ILogger<WhatsAppNotificationController> _logger;
         private string VerifyToken = "<YOUR VERIFY TOKEN STRING>";
-        private TextMessage textMessage;
-        private ImageMessage imageMessage;
+        private List<TextMessage> textMessage;
+        private List<ImageMessage> imageMessage;
+        private List<StickerMessage> stickerMessage;
+        private List<ContactMessage> contactMessage;
+        private List<LocationMessage> locationMessage;
+        private List<QuickReplyButtonMessage> quickReplyButtonMessage;
+        private List<ListReplyButtonMessage> listReplyButtonMessage;
 
         public WhatsAppNotificationController(ILogger<WhatsAppNotificationController> logger)
         {
@@ -48,31 +53,138 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 });
             }
 
-            
-            var messageType = Convert.ToString(messageReceived["entry"][0]["changes"][0]["value"]["messages"][0]["type"]);
+            // Message status updates will be trigerred in different scenario
+            var changesResult = messageReceived["entry"][0]["changes"][0]["value"];
 
-            if (messageType.Equals("text"))
+            if (changesResult["statuses"] != null)
             {
-                var textMessageReceived = JsonConvert.DeserializeObject<TextMessageReceived>(Convert.ToString(messageReceived)) as TextMessageReceived;
-                textMessage = textMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages).FirstOrDefault();
-                _logger.LogInformation(JsonConvert.SerializeObject(textMessage, Formatting.Indented));
+                var messageStatus = Convert.ToString(messageReceived["entry"][0]["changes"][0]["value"]["statuses"][0]["status"]);
 
-                return Ok(new
+                if (messageStatus.Equals("sent"))
                 {
-                    Message = "Text Message received"
-                });
+                    var messageStatusReceived = JsonConvert.DeserializeObject<UserInitiatedMessageSentStatus>(Convert.ToString(messageReceived)) as UserInitiatedMessageSentStatus;
+                    var messageStatusResults = new List<UserInitiatedStatus>(messageStatusReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Statuses));
+                    _logger.LogInformation(JsonConvert.SerializeObject(messageStatusResults, Formatting.Indented));
+                    
+                    return Ok(new
+                    {
+                        Message = $"Message Status Received: {messageStatus}"
+                    });
+                }
+
+                if (messageStatus.Equals("delivered"))
+                {
+                    var messageStatusReceived = JsonConvert.DeserializeObject<UserInitiatedMessageDeliveredStatus>(Convert.ToString(messageReceived)) as UserInitiatedMessageDeliveredStatus;
+                    var messageStatusResults = new List<UserInitiatedMessageDeliveryStatus>(messageStatusReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Statuses));
+                    _logger.LogInformation(JsonConvert.SerializeObject(messageStatusResults, Formatting.Indented));
+
+                    return Ok(new
+                    {
+                        Message = $"Message Status Received: {messageStatus}"
+                    });
+                }
+
+                if (messageStatus.Equals("read"))
+                {
+                    return Ok(new
+                    {
+                        Message = $"Message Status Received: {messageStatus}"
+                    });
+                }
             }
-
-            if (messageType.Equals("image"))
+            else
             {
-                var imageMessageReceived = JsonConvert.DeserializeObject<ImageMessageReceived>(Convert.ToString(messageReceived)) as ImageMessageReceived;
-                imageMessage = imageMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages).FirstOrDefault();
-                _logger.LogInformation(JsonConvert.SerializeObject(imageMessage, Formatting.Indented));
+                var messageType = Convert.ToString(messageReceived["entry"][0]["changes"][0]["value"]["messages"][0]["type"]);
 
-                return Ok(new
+                if (messageType.Equals("text"))
                 {
-                    Message = "Image Message received"
-                });
+                    var textMessageReceived = JsonConvert.DeserializeObject<TextMessageReceived>(Convert.ToString(messageReceived)) as TextMessageReceived;
+                    textMessage = new List<TextMessage>(textMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                    _logger.LogInformation(JsonConvert.SerializeObject(textMessage, Formatting.Indented));
+
+                    return Ok(new
+                    {
+                        Message = "Text Message received"
+                    });
+                }
+
+                if (messageType.Equals("image"))
+                {
+                    var imageMessageReceived = JsonConvert.DeserializeObject<ImageMessageReceived>(Convert.ToString(messageReceived)) as ImageMessageReceived;
+                    imageMessage = new List<ImageMessage>(imageMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                    _logger.LogInformation(JsonConvert.SerializeObject(imageMessage, Formatting.Indented));
+
+                    return Ok(new
+                    {
+                        Message = "Image Message received"
+                    });
+                }
+
+                if (messageType.Equals("sticker"))
+                {
+                    var stickerMessageReceived = JsonConvert.DeserializeObject<StickerMessageReceived>(Convert.ToString(messageReceived)) as StickerMessageReceived;
+                    stickerMessage = new List<StickerMessage>(stickerMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                    _logger.LogInformation(JsonConvert.SerializeObject(imageMessage, Formatting.Indented));
+
+                    return Ok(new
+                    {
+                        Message = "Image Message received"
+                    });
+                }
+
+                if (messageType.Equals("contacts"))
+                {
+                    var contactMessageReceived = JsonConvert.DeserializeObject<ContactMessageReceived>(Convert.ToString(messageReceived)) as ContactMessageReceived;
+                    contactMessage = new List<ContactMessage>(contactMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                    _logger.LogInformation(JsonConvert.SerializeObject(contactMessage, Formatting.Indented));
+
+                    return Ok(new
+                    {
+                        Message = "Contact Message Received"
+                    });
+                }
+
+
+                if (messageType.Equals("location"))
+                {
+                    var locationMessageReceived = JsonConvert.DeserializeObject<StaticLocationMessageReceived>(Convert.ToString(messageReceived)) as StaticLocationMessageReceived;
+                    locationMessage = new List<LocationMessage>(locationMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                    _logger.LogInformation(JsonConvert.SerializeObject(locationMessage, Formatting.Indented));
+
+                    return Ok(new
+                    {
+                        Message = "Location Message Received"
+                    });
+                }
+
+                if (messageType.Equals("interactive"))
+                {
+                    var getInteractiveType = Convert.ToString(messageReceived["entry"][0]["changes"][0]["value"]["messages"][0]["interactive"]["type"]);
+
+                    if (getInteractiveType.Equals("button_reply"))
+                    {
+                        var quickReplyMessageReceived = JsonConvert.DeserializeObject<QuickReplyButtonMessageReceived>(Convert.ToString(messageReceived)) as QuickReplyButtonMessageReceived;
+                        quickReplyButtonMessage = new List<QuickReplyButtonMessage>(quickReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                        _logger.LogInformation(JsonConvert.SerializeObject(quickReplyMessageReceived, Formatting.Indented));
+
+                        return Ok(new
+                        {
+                            Message = "Quick Reply Button Message Received"
+                        });
+                    }
+
+                    if (getInteractiveType.Equals("list_reply"))
+                    {
+                        var listReplyMessageReceived = JsonConvert.DeserializeObject<ListReplyButtonMessageReceived>(Convert.ToString(messageReceived)) as ListReplyButtonMessageReceived;
+                        listReplyButtonMessage = new List<ListReplyButtonMessage>(listReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                        _logger.LogInformation(JsonConvert.SerializeObject(listReplyMessageReceived, Formatting.Indented));
+
+                        return Ok(new
+                        {
+                            Message = "List Reply Message Received"
+                        });
+                    }
+                }
             }
             return Ok();
         }
