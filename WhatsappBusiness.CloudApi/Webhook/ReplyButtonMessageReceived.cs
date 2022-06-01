@@ -6,67 +6,67 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// <summary>
     /// When your customer clicks on a quick reply button in an interactive message template, a response is sent.
     /// </summary>
-    public class QuickReplyButtonMessageReceived
+    public class ReplyButtonMessageReceived
     {
         [JsonProperty("object")]
         public string Object { get; set; }
 
         [JsonProperty("entry")]
-        public List<QuickReplyButtonMessageEntry> Entry { get; set; }
+        public List<ReplyButtonMessageEntry> Entry { get; set; }
     }
 
-    public class QuickReplyButtonMessageEntry
+    public class ReplyButtonMessageEntry
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
         [JsonProperty("changes")]
-        public List<QuickReplyButtonMessageChange> Changes { get; set; }
+        public List<ReplyButtonMessageChange> Changes { get; set; }
     }
 
-    public class QuickReplyButtonMessageChange
+    public class ReplyButtonMessageChange
     {
         [JsonProperty("value")]
-        public QuickReplyButtonMessageValue Value { get; set; }
+        public ReplyButtonMessageValue Value { get; set; }
 
         [JsonProperty("field")]
         public string Field { get; set; }
     }
 
-    public class QuickReplyButtonMessageValue
+    public class ReplyButtonMessageValue
     {
         [JsonProperty("messaging_product")]
         public string MessagingProduct { get; set; }
 
         [JsonProperty("metadata")]
-        public QuickReplyButtonMessageMetadata Metadata { get; set; }
+        public ReplyButtonMessageMetadata Metadata { get; set; }
 
         [JsonProperty("contacts")]
-        public List<QuickReplyButtonMessageContact> Contacts { get; set; }
+        public List<ReplyButtonMessageContact> Contacts { get; set; }
 
         [JsonProperty("messages")]
-        public List<QuickReplyButtonMessage> Messages { get; set; }
+        public List<ReplyButtonMessage> Messages { get; set; }
     }
 
-    public class QuickReplyButtonMessageContact
+    public class ReplyButtonMessageContact
     {
         [JsonProperty("profile")]
-        public QuickReplyButtonMessageProfile Profile { get; set; }
+        public ReplyButtonMessageProfile Profile { get; set; }
 
         [JsonProperty("wa_id")]
         public string WaId { get; set; }
     }
 
-    public class QuickReplyButtonMessageProfile
+    public class ReplyButtonMessageProfile
     {
         [JsonProperty("name")]
         public string Name { get; set; }
     }
 
-    public class QuickReplyButtonMessage
+    public class ReplyButtonMessage
     {
         [JsonProperty("context")]
-        public QuickReplyButtonMessageContext Context { get; set; }
+        public ReplyButtonMessageContext Context { get; set; }
 
         [JsonProperty("from")]
         public string From { get; set; }
@@ -80,20 +80,11 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonProperty("button")]
-        public QuickReplyButtonMessageButton Button { get; set; }
+        [JsonProperty("interactive")]
+        public ReplyButtonMessageInteractive Interactive { get; set; }
     }
 
-    public class QuickReplyButtonMessageButton
-    {
-        [JsonProperty("text")]
-        public string Text { get; set; }
-
-        [JsonProperty("payload")]
-        public string Payload { get; set; }
-    }
-
-    public class QuickReplyButtonMessageContext
+    public class ReplyButtonMessageContext
     {
         [JsonProperty("from")]
         public string From { get; set; }
@@ -102,7 +93,25 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string Id { get; set; }
     }
 
-    public class QuickReplyButtonMessageMetadata
+    public class ReplyButtonMessageInteractive
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("button_reply")]
+        public ButtonReply ButtonReply { get; set; }
+    }
+
+    public class ButtonReply
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+    }
+
+    public class ReplyButtonMessageMetadata
     {
         [JsonProperty("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
