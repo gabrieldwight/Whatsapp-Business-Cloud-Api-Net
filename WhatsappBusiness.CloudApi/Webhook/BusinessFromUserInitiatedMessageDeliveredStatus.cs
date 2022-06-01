@@ -60,7 +60,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string Id { get; set; }
 
         [JsonProperty("status")]
-        public string StatusStatus { get; set; }
+        public string Status { get; set; }
 
         [JsonProperty("timestamp")]
         public string Timestamp { get; set; }
