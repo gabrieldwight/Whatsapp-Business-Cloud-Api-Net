@@ -1,8 +1,18 @@
-# WhatsApp Business Cloud API C# Wrapper
+# WhatsApp Business Cloud API C# Wrapper Library for .NET Developers
 
 A Wrapper for Whatsapp Business Cloud API hosted by Meta.
 
+[![Build status](https://dev.azure.com/gabrieldwight/WhatsappCloudApi/_apis/build/status/WhatsappCloudApi-CI)](https://dev.azure.com/gabrieldwight/WhatsappCloudApi/_build/latest?definitionId=9)
+[![NuGet version (WhatsappBusiness.CloudApi)](https://img.shields.io/nuget/v/WhatsappBusiness.CloudApi.svg?style=flat-square)](https://www.nuget.org/packages/WhatsappBusiness.CloudApi/)
+
 Official API Documentation: [Meta for Developers](https://developers.facebook.com/docs/whatsapp/cloud-api/overview)
+
+Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
+
+WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/docs/whatsapp/cloud-api/support/error-codes)
+
+- [End User License](https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net/blob/master/LICENSE)
+- [NuGet Package](https://www.nuget.org/packages/WhatsappBusiness.CloudApi/)
 
 ## Capabilities
 
@@ -16,15 +26,12 @@ Official API Documentation: [Meta for Developers](https://developers.facebook.co
   - [x] Interactive (List, Reply)
   - [x] Template
 - [ ] Receiving Message (via Webhook)
-  - [ ] Text
-  - [ ] Media (image, video, audio, document, sticker)
+  - [x] Text
+  - [x] Media (image, video, audio, document, sticker)
   - [ ] Contact
   - [ ] Location
   - [ ] Interactive (List, Reply)
   - [ ] Button
-
-[![Build status](https://dev.azure.com/gabrieldwight/WhatsappCloudApi/_apis/build/status/WhatsappCloudApi-CI)](https://dev.azure.com/gabrieldwight/WhatsappCloudApi/_build/latest?definitionId=9)
-[![NuGet version (WhatsappBusiness.CloudApi)](https://img.shields.io/nuget/v/WhatsappBusiness.CloudApi.svg?style=flat-square)](https://www.nuget.org/packages/WhatsappBusiness.CloudApi/)
 
 ## Installation
 - PackageManager: ```PM> Install-Package WhatsappBusiness.CloudApi```
@@ -324,6 +331,29 @@ textTemplateMessage.Template.Language = new TextMessageLanguage();
 textTemplateMessage.Template.Language.Code = "en_US";
 
 var results = await _whatsAppBusinessClient.SendTextMessageTemplateAsync(textTemplateMessage);
+```
+
+## Webhook Subscription
+First you need to setup callback url and verify token string for WhatsApp Cloud API to verify your callback url.
+Verification part
+```c#
+[HttpGet("<YOUR ENDPOINT ROUTE>")]
+public ActionResult<string> ConfigureWhatsAppMessageWebhook([FromQuery(Name = "hub.mode")] string hubMode,
+                                                                    [FromQuery(Name = "hub.challenge")] int hubChallenge,
+                                                                    [FromQuery(Name = "hub.verify_token")] string hubVerifyToken)
+{
+return Ok(hubChallenge);
+}
+```
+
+Receiving Messages
+```c#
+[HttpPost("<YOUR ENDPOINT ROUTE>")]
+public IActionResult ReceiveWhatsAppTextMessage([FromBody] dynamic messageReceived)
+{
+// Logic to handle different type of messages received
+return Ok();
+}
 ```
 
 ## Error handling
