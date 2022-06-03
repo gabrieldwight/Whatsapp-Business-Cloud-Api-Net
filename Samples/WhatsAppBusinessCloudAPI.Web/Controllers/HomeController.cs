@@ -447,6 +447,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         {
             try
             {
+                // Tested with facebook predefined template name: sample_movie_ticket_confirmation
                 ImageTemplateMessageRequest imageTemplateMessage = new ImageTemplateMessageRequest();
                 imageTemplateMessage.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
                 imageTemplateMessage.Template = new ImageMessageTemplate();
