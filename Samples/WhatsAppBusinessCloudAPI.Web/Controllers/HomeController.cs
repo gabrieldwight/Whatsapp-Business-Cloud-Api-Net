@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using WhatsappBusiness.CloudApi;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
 using WhatsappBusiness.CloudApi.Interfaces;
@@ -341,7 +342,191 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return View();
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppTextTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                // For Text Template message with parameters supported component type is body only
+                TextTemplateMessageRequest textTemplateMessage = new TextTemplateMessageRequest();
+                textTemplateMessage.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+                textTemplateMessage.Template = new TextMessageTemplate();
+                textTemplateMessage.Template.Name = sendTemplateMessageViewModel.TemplateName;
+                textTemplateMessage.Template.Language = new TextMessageLanguage();
+                textTemplateMessage.Template.Language.Code = LanguageCode.English_US;
+                textTemplateMessage.Template.Components = new List<TextMessageComponent>();
+                textTemplateMessage.Template.Components.Add(new TextMessageComponent()
+                {
+                    Type = "body",
+                    Parameters = new List<TextMessageParameter>()
+                    {
+                        new TextMessageParameter()
+                        {
+                            Type = "text",
+                            Text = "Testing Parameter Placeholder Position 1"
+                        },
+                        new TextMessageParameter()
+                        {
+                            Type = "text",
+                            Text = "Testing Parameter Placeholder Position 2"
+                        }
+                    }
+                });
+
+                var results = await _whatsAppBusinessClient.SendTextMessageTemplateAsync(textTemplateMessage);
+
+                if (results != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppInteractiveTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                // Tested with facebook predefined template name: sample_issue_resolution
+                InteractiveTemplateMessageRequest interactiveTemplateMessage = new InteractiveTemplateMessageRequest();
+                interactiveTemplateMessage.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+                interactiveTemplateMessage.Template = new InteractiveMessageTemplate();
+                interactiveTemplateMessage.Template.Name = sendTemplateMessageViewModel.TemplateName;
+                interactiveTemplateMessage.Template.Language = new InteractiveMessageLanguage();
+                interactiveTemplateMessage.Template.Language.Code = LanguageCode.English_US;
+                interactiveTemplateMessage.Template.Components = new List<InteractiveMessageComponent>();
+                interactiveTemplateMessage.Template.Components.Add(new InteractiveMessageComponent()
+                {
+                    Type = "body",
+                    Parameters = new List<InteractiveMessageParameter>()
+                    {
+                        new InteractiveMessageParameter()
+                        {
+                            Type = "text",
+                            Text = "Interactive Parameter Placeholder Position 1"
+                        }
+                    }
+                });
+
+                var results = await _whatsAppBusinessClient.SendInteractiveTemplateMessageAsync(interactiveTemplateMessage);
+
+                if (results != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppMediaTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                ImageTemplateMessageRequest imageTemplateMessage = new ImageTemplateMessageRequest();
+                imageTemplateMessage.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+                imageTemplateMessage.Template = new ImageMessageTemplate();
+                imageTemplateMessage.Template.Name = sendTemplateMessageViewModel.TemplateName;
+                imageTemplateMessage.Template.Language = new ImageMessageLanguage();
+                imageTemplateMessage.Template.Language.Code = LanguageCode.English_US;
+                imageTemplateMessage.Template.Components = new List<ImageMessageComponent>()
+                {
+                    new ImageMessageComponent()
+                    {
+                        Type = "header",
+                        Parameters = new List<ImageMessageParameter>()
+                        {
+                            new ImageMessageParameter()
+                            {
+                                Type = "image",
+                                Image = new Image()
+                                {
+                                    Link = "https://otakukart.com/wp-content/uploads/2022/03/Upcoming-Marvel-Movies-In-2022-23.jpg"
+                                }
+                            }
+                        },
+                    },
+                    new ImageMessageComponent()
+                    {
+                        Type = "body",
+                        Parameters = new List<ImageMessageParameter>()
+                        {
+                            new ImageMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "Movie Testing"
+                            },
+
+                            new ImageMessageParameter()
+                            {
+                                Type = "date_time",
+                                DateTime = new ImageTemplateDateTime()
+                                {
+                                    FallbackValue = DateTime.Now.ToString("dddd d, yyyy"),
+                                    DayOfWeek = (int)DateTime.Now.DayOfWeek,
+                                    Year = DateTime.Now.Year,
+                                    Month = DateTime.Now.Month,
+                                    DayOfMonth = DateTime.Now.Day,
+                                    Hour = DateTime.Now.Hour,
+                                    Minute = DateTime.Now.Minute,
+                                    Calendar = "GREGORIAN"
+                                }
+                            },
+
+                            new ImageMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "Venue Test"
+                            },
+
+                            new ImageMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "Seat 1A, 2A, 3A and 4A"
+                            }
+                        }
+                    }
+                };
+
+                var results = await _whatsAppBusinessClient.SendImageAttachmentTemplateMessageAsync(imageTemplateMessage);
+
+                if (results != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
             }
         }
 
