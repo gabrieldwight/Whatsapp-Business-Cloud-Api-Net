@@ -25,13 +25,13 @@ WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/do
   - [x] Location
   - [x] Interactive (List, Reply)
   - [x] Template
-- [ ] Receiving Message (via Webhook)
+- [x] Receiving Message (via Webhook)
   - [x] Text
   - [x] Media (image, video, audio, document, sticker)
-  - [ ] Contact
-  - [ ] Location
-  - [ ] Interactive (List, Reply)
-  - [ ] Button
+  - [x] Contact
+  - [x] Location
+  - [x] Interactive (List, Reply)
+  - [x] Button
 
 ## Installation
 - PackageManager: ```PM> Install-Package WhatsappBusiness.CloudApi```
