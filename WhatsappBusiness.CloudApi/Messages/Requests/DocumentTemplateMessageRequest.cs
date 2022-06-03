@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
-    public class ImageTemplateMessageRequest
+    public class DocumentTemplateMessageRequest
     {
         [JsonProperty("messaging_product")]
         public string MessagingProduct { get; private set; } = "whatsapp";
@@ -18,49 +18,49 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Type { get; private set; } = "template";
 
         [JsonProperty("template")]
-        public ImageMessageTemplate Template { get; set; }
+        public DocumentMessageTemplate Template { get; set; }
     }
 
-    public class ImageMessageTemplate
+    public class DocumentMessageTemplate
     {
         [JsonProperty("name")]
         public string Name { get; set; }
 
         [JsonProperty("language")]
-        public ImageMessageLanguage Language { get; set; }
+        public DocumentMessageLanguage Language { get; set; }
 
         [JsonProperty("components")]
-        public List<ImageMessageComponent> Components { get; set; }
+        public List<DocumentMessageComponent> Components { get; set; }
     }
 
-    public class ImageMessageComponent
+    public class DocumentMessageComponent
     {
         [JsonProperty("type")]
         public string Type { get; set; }
 
         [JsonProperty("parameters")]
-        public List<ImageMessageParameter> Parameters { get; set; }
+        public List<DocumentMessageParameter> Parameters { get; set; }
     }
 
-    public class ImageMessageParameter
+    public class DocumentMessageParameter
     {
         [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
-        public Image Image { get; set; }
+        [JsonProperty("document", NullValueHandling = NullValueHandling.Ignore)]
+        public Document Document { get; set; }
 
         [JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
         public string Text { get; set; }
 
         [JsonProperty("currency", NullValueHandling = NullValueHandling.Ignore)]
-        public ImageTemplateCurrency Currency { get; set; }
+        public DocumentTemplateCurrency Currency { get; set; }
 
         [JsonProperty("date_time", NullValueHandling = NullValueHandling.Ignore)]
-        public ImageTemplateDateTime DateTime { get; set; }
+        public DocumentTemplateDateTime DateTime { get; set; }
     }
 
-    public class ImageTemplateCurrency
+    public class DocumentTemplateCurrency
     {
         [JsonProperty("fallback_value")]
         public string FallbackValue { get; set; }
@@ -72,7 +72,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public long Amount1000 { get; set; }
     }
 
-    public class ImageTemplateDateTime
+    public class DocumentTemplateDateTime
     {
         [JsonProperty("fallback_value")]
         public string FallbackValue { get; set; }
@@ -99,13 +99,13 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Calendar { get; set; }
     }
 
-    public class Image
+    public class Document
     {
         [JsonProperty("link")]
         public string Link { get; set; }
     }
 
-    public class ImageMessageLanguage
+    public class DocumentMessageLanguage
     {
         [JsonProperty("code")]
         public string Code { get; set; }

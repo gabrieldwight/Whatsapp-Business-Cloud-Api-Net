@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
-    public class ImageTemplateMessageRequest
+    public class VideoTemplateMessageRequest
     {
         [JsonProperty("messaging_product")]
         public string MessagingProduct { get; private set; } = "whatsapp";
@@ -18,49 +18,49 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Type { get; private set; } = "template";
 
         [JsonProperty("template")]
-        public ImageMessageTemplate Template { get; set; }
+        public VideoMessageTemplate Template { get; set; }
     }
 
-    public class ImageMessageTemplate
+    public class VideoMessageTemplate
     {
         [JsonProperty("name")]
         public string Name { get; set; }
 
         [JsonProperty("language")]
-        public ImageMessageLanguage Language { get; set; }
+        public VideoMessageLanguage Language { get; set; }
 
         [JsonProperty("components")]
-        public List<ImageMessageComponent> Components { get; set; }
+        public List<VideoMessageComponent> Components { get; set; }
     }
 
-    public class ImageMessageComponent
+    public class VideoMessageComponent
     {
         [JsonProperty("type")]
         public string Type { get; set; }
 
         [JsonProperty("parameters")]
-        public List<ImageMessageParameter> Parameters { get; set; }
+        public List<VideoMessageParameter> Parameters { get; set; }
     }
 
-    public class ImageMessageParameter
+    public class VideoMessageParameter
     {
         [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
-        public Image Image { get; set; }
+        [JsonProperty("video", NullValueHandling = NullValueHandling.Ignore)]
+        public Video Video { get; set; }
 
         [JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
         public string Text { get; set; }
 
         [JsonProperty("currency", NullValueHandling = NullValueHandling.Ignore)]
-        public ImageTemplateCurrency Currency { get; set; }
+        public VideoTemplateCurrency Currency { get; set; }
 
         [JsonProperty("date_time", NullValueHandling = NullValueHandling.Ignore)]
-        public ImageTemplateDateTime DateTime { get; set; }
+        public VideoTemplateDateTime DateTime { get; set; }
     }
 
-    public class ImageTemplateCurrency
+    public class VideoTemplateCurrency
     {
         [JsonProperty("fallback_value")]
         public string FallbackValue { get; set; }
@@ -72,7 +72,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public long Amount1000 { get; set; }
     }
 
-    public class ImageTemplateDateTime
+    public class VideoTemplateDateTime
     {
         [JsonProperty("fallback_value")]
         public string FallbackValue { get; set; }
@@ -99,13 +99,13 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Calendar { get; set; }
     }
 
-    public class Image
+    public class Video
     {
         [JsonProperty("link")]
         public string Link { get; set; }
     }
 
-    public class ImageMessageLanguage
+    public class VideoMessageLanguage
     {
         [JsonProperty("code")]
         public string Code { get; set; }

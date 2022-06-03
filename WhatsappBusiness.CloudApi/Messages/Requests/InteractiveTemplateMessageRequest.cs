@@ -59,8 +59,53 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
         public string Text { get; set; }
 
+        [JsonProperty("currency", NullValueHandling = NullValueHandling.Ignore)]
+        public InteractiveMessageCurrency Currency { get; set; }
+
+        [JsonProperty("date_time", NullValueHandling = NullValueHandling.Ignore)]
+        public InteractiveMessageDateTime DateTime { get; set; }
+
         [JsonProperty("payload", NullValueHandling = NullValueHandling.Ignore)]
         public string Payload { get; set; }
+    }
+
+    public class InteractiveMessageCurrency
+    {
+        [JsonProperty("fallback_value")]
+        public string FallbackValue { get; set; }
+
+        [JsonProperty("code")]
+        public string Code { get; set; }
+
+        [JsonProperty("amount_1000")]
+        public long Amount1000 { get; set; }
+    }
+
+    public class InteractiveMessageDateTime
+    {
+        [JsonProperty("fallback_value")]
+        public string FallbackValue { get; set; }
+
+        [JsonProperty("day_of_week")]
+        public long DayOfWeek { get; set; }
+
+        [JsonProperty("year")]
+        public long Year { get; set; }
+
+        [JsonProperty("month")]
+        public long Month { get; set; }
+
+        [JsonProperty("day_of_month")]
+        public long DayOfMonth { get; set; }
+
+        [JsonProperty("hour")]
+        public long Hour { get; set; }
+
+        [JsonProperty("minute")]
+        public long Minute { get; set; }
+
+        [JsonProperty("calendar")]
+        public string Calendar { get; set; }
     }
 
     public class InteractiveMessageImage
