@@ -68,6 +68,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonProperty("from")]
         public string From { get; set; }
 
+        [JsonProperty("recipient_id")]
+        public string RecipientId { get; set; }
+
         [JsonProperty("id")]
         public string Id { get; set; }
 
