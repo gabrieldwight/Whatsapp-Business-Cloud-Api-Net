@@ -55,7 +55,7 @@ var httpClient = new HttpClient();
 
 httpClient.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
 	
-//create Mpesa API client instance
+//create WhatsAppBusiness API client instance
 var whatsAppBusinessClient = new WhatsAppBusinessClient(httpClient, whatsAppConfig); //make sure to pass httpclient and whatsAppConfig intance as an argument
 	
 ```
@@ -501,3 +501,14 @@ catch (WhatsappBusinessCloudAPIException ex)
 	_logger.LogError(ex, ex.Message);
 }		
 ```
+## Issues
+
+If you will face any issue with the usage of this package please raise one so as we can quickly fix it as soon as possible.
+
+## Contributing
+
+This is an opensource project under ```MIT License``` so any one is welcome to contribute from typo, to source code to documentation.
+
+## Credits
+1. [Gabriel](https://github.com/gabrieldwight)
+2. All other contributors
