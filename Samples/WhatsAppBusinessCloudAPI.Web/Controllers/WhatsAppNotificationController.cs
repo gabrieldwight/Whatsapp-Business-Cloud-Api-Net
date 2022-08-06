@@ -5,6 +5,7 @@ using System.Net;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
 using WhatsappBusiness.CloudApi.Interfaces;
+using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.Webhook;
 
@@ -122,6 +123,16 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                         await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
 
+                        TextMessageReplyRequest textMessageReplyRequest = new TextMessageReplyRequest();
+                        textMessageReplyRequest.Context = new TextMessageContext();
+                        textMessageReplyRequest.Context.MessageId = textMessage.SingleOrDefault().Id;
+                        textMessageReplyRequest.To = textMessage.SingleOrDefault().From;
+                        textMessageReplyRequest.Text = new WhatsAppText();
+                        textMessageReplyRequest.Text.Body = "Your Message was received. Processing the request shortly";
+                        textMessageReplyRequest.Text.PreviewUrl = false;
+
+                        await _whatsAppBusinessClient.SendTextMessageAsync(textMessageReplyRequest);
+
                         return Ok(new
                         {
                             Message = "Text Message received"
@@ -194,6 +205,18 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         markMessageRequest.Status = "read";
 
                         await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+
+                        LocationMessageReplyRequest locationMessageReplyRequest = new LocationMessageReplyRequest();
+                        locationMessageReplyRequest.Context = new LocationMessageContext();
+                        locationMessageReplyRequest.Context.MessageId = locationMessage.SingleOrDefault().Id;
+                        locationMessageReplyRequest.To = locationMessage.SingleOrDefault().From;
+                        locationMessageReplyRequest.Location = new WhatsappBusiness.CloudApi.Messages.Requests.Location();
+                        locationMessageReplyRequest.Location.Name = "Location Test";
+                        locationMessageReplyRequest.Location.Address = "Address Test";
+                        locationMessageReplyRequest.Location.Longitude = -122.425332;
+                        locationMessageReplyRequest.Location.Latitude = 37.758056;
+
+                        await _whatsAppBusinessClient.SendLocationMessageAsync(locationMessageReplyRequest);
 
                         return Ok(new
                         {
