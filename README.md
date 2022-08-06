@@ -485,6 +485,19 @@ return Ok();
 }
 ```
 
+## Reply to Message
+```c#
+TextMessageReplyRequest textMessageReplyRequest = new TextMessageReplyRequest();
+textMessageReplyRequest.Context = new TextMessageContext();
+textMessageReplyRequest.Context.MessageId = textMessage.SingleOrDefault().Id;
+textMessageReplyRequest.To = textMessage.SingleOrDefault().From;
+textMessageReplyRequest.Text = new WhatsAppText();
+textMessageReplyRequest.Text.Body = "Your Message was received. Processing the request shortly";
+textMessageReplyRequest.Text.PreviewUrl = false;
+
+await _whatsAppBusinessClient.SendTextMessageAsync(textMessageReplyRequest);
+```
+
 ## Error handling
 WhatsAppBusinessClient Throws ```WhatsappBusinessCloudAPIException``` It is your role as the developer to catch
 the exception and continue processing in your aplication. Snippet below shows how you can catch the WhatsappBusinessCloudAPIException.
