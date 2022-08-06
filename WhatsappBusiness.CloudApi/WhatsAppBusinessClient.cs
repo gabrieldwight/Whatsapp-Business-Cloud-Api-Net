@@ -31,7 +31,7 @@ namespace WhatsappBusiness.CloudApi
         private readonly JsonSerializer _serializer = new JsonSerializer();
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
 
-        public WhatsAppBusinessClient(WhatsAppBusinessCloudApiConfig whatsAppConfig)
+        public WhatsAppBusinessClient(WhatsAppBusinessCloudApiConfig whatsAppConfig, bool isLatestGraphApiVersion = false)
         {
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
                 .WaitAndRetryAsync(1, retryAttempt =>
@@ -44,7 +44,7 @@ namespace WhatsappBusiness.CloudApi
             var services = new ServiceCollection();
             services.AddHttpClient("WhatsAppBusinessApiClient", client =>
             {
-                client.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
+                client.BaseAddress = (isLatestGraphApiVersion) ? WhatsAppBusinessRequestEndpoint.V14BaseAddress : WhatsAppBusinessRequestEndpoint.BaseAddress;
                 client.Timeout = TimeSpan.FromMinutes(10);
             }).ConfigurePrimaryHttpMessageHandler(messageHandler =>
             {

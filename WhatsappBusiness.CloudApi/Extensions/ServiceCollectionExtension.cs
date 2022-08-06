@@ -17,7 +17,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <param name="whatsAppBusinessPhoneNumberId"></param>
-        public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig)
+        public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, bool isLatestGraphApiVersion = false)
         {
             Random jitterer = new Random();
 
@@ -39,7 +39,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
             {
-                options.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
+                options.BaseAddress = (isLatestGraphApiVersion) ? WhatsAppBusinessRequestEndpoint.V14BaseAddress : WhatsAppBusinessRequestEndpoint.BaseAddress;
                 options.Timeout = TimeSpan.FromMinutes(10);
             }).ConfigurePrimaryHttpMessageHandler(messageHandler =>
             {
@@ -54,7 +54,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
             }).AddPolicyHandler(request => request.Method.Equals(HttpMethod.Get) ? retryPolicy : noOpPolicy);
         }
 
-        public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig) where THandler : HttpMessageHandler
+        public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, bool isLatestGraphApiVersion = false) where THandler : HttpMessageHandler
         {
             Random jitterer = new Random();
 
@@ -76,12 +76,11 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
             {
-                options.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
+                options.BaseAddress = (isLatestGraphApiVersion) ? WhatsAppBusinessRequestEndpoint.V14BaseAddress : WhatsAppBusinessRequestEndpoint.BaseAddress;
                 options.Timeout = TimeSpan.FromMinutes(10);
-            })
-                .SetHandlerLifetime(Timeout.InfiniteTimeSpan)
-                .ConfigurePrimaryHttpMessageHandler<THandler>()
-                .AddPolicyHandler(request => request.Method.Equals(HttpMethod.Get) ? retryPolicy : noOpPolicy);
+            }).SetHandlerLifetime(Timeout.InfiniteTimeSpan)
+              .ConfigurePrimaryHttpMessageHandler<THandler>()
+              .AddPolicyHandler(request => request.Method.Equals(HttpMethod.Get) ? retryPolicy : noOpPolicy);
         }
     }
 }
