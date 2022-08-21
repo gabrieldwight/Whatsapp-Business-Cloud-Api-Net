@@ -30,6 +30,21 @@ namespace WhatsappBusiness.CloudApi
         public static string MigrateAccount { get; private set; } = "{{Phone-Number-ID}}/register";
 
         /// <summary>
+        /// The Resumable Upload series of requests allow you to upload Profile Pictures to Meta so you can receive a handle to update these pictures in the Business Profile API.
+        /// </summary>
+        public static string ResumableUploadCreateUploadSession { get; private set; } = "app/uploads/?file_length={{FILE_LENGTH}}&file_type={{FILE_TYPE}}&file_name={{FILE_NAME}}";
+
+        /// <summary>
+        /// To upload a profile picture to your business profile, make a POST call to the named endpoint v14.0/{{Upload-ID}}, where Upload-ID is the value you received from Resumable Upload - Create an Upload Session.
+        /// </summary>
+        public static string ResumableUploadFileData { get; private set; } = "{{Upload-ID}}";
+
+        /// <summary>
+        /// You can query the status of an upload session by making a GET call to an endpoint that is named based on the Upload-ID that was returned through the Resumable Upload - Create an Upload Session request.
+        /// </summary>
+        public static string ResumableUploadQueryFileUploadStatus { get; private set; } = "{{Upload-ID}}";
+
+        /// <summary>
         /// Get WhatsApp Business Profile Account
         /// </summary>
         public static string GetBusinessProfileId { get; private set; } = "{{Phone-Number-ID}}/whatsapp_business_profile";

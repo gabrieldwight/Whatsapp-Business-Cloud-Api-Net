@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Polly;
 using Polly.Extensions.Http;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -21,6 +22,7 @@ using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
 using WhatsappBusiness.CloudApi.Registration.Requests;
 using WhatsappBusiness.CloudApi.Response;
 using WhatsappBusiness.CloudApi.TwoStepVerification.Requests;
+using static System.Net.WebRequestMethods;
 
 namespace WhatsappBusiness.CloudApi
 {
@@ -70,6 +72,34 @@ namespace WhatsappBusiness.CloudApi
         {
             _httpClient = httpClient;
             _whatsAppConfig = whatsAppConfig;
+        }
+
+        public async Task<ResumableUploadResponse> CreateResumableUploadSessionAsync(long fileLength, string fileType, string fileName, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.ResumableUploadCreateUploadSession);
+
+            builder.Replace("{{FILE_LENGTH}}", fileLength.ToString());
+            builder.Replace("{{FILE_TYPE}}", fileType);
+            builder.Replace("{{FILE_NAME}}", fileName);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return await WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        public ResumableUploadResponse CreateResumableUploadSession(long fileLength, string fileType, string fileName, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.ResumableUploadCreateUploadSession);
+
+            builder.Replace("{{FILE_LENGTH}}", fileLength.ToString());
+            builder.Replace("{{FILE_TYPE}}", fileType);
+            builder.Replace("{{FILE_NAME}}", fileName);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
         public BaseSuccessResponse CreateWABASubscription(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default)
@@ -224,6 +254,18 @@ namespace WhatsappBusiness.CloudApi
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.MigrateAccount.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(migrateAccountRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        public async Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
+            return await WhatsAppBusinessGetAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken, true);
+        }
+
+        public ResumableUploadResponse QueryFileUploadStatus(string uploadId, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
+            return WhatsAppBusinessGetAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken, true).GetAwaiter().GetResult();
         }
 
         public BaseSuccessResponse RegisterWhatsAppBusinessPhoneNumber(RegisterPhoneRequest registerPhoneRequest, CancellationToken cancellationToken = default)
@@ -490,16 +532,28 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(updateBusinessProfile, formattedWhatsAppEndpoint, cancellationToken);
         }
 
+        public async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
+            return await WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, filePath, fileContentType, cancellationToken);
+        }
+
+        public ResumableUploadResponse UploadFileData(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
+            return WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, filePath, fileContentType, cancellationToken).GetAwaiter().GetResult();
+        }
+
         public MediaUploadResponse UploadMedia(UploadMediaRequest uploadMediaRequest, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UploadMedia.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            return WhatsAppBusinessPostAsync<MediaUploadResponse>(uploadMediaRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+            return WhatsAppBusinessPostAsync<MediaUploadResponse>(formattedWhatsAppEndpoint, uploadMediaRequest.File, uploadMediaRequest.Type, cancellationToken, true).GetAwaiter().GetResult();
         }
 
         public async Task<MediaUploadResponse> UploadMediaAsync(UploadMediaRequest uploadMediaRequest, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UploadMedia.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            return await WhatsAppBusinessPostAsync<MediaUploadResponse>(uploadMediaRequest, formattedWhatsAppEndpoint, cancellationToken);
+            return await WhatsAppBusinessPostAsync<MediaUploadResponse>(formattedWhatsAppEndpoint, uploadMediaRequest.File, uploadMediaRequest.Type, cancellationToken, true);
         }
 
         public VerificationResponse VerifyCode(VerifyCodeRequest verifyCodeRequest, CancellationToken cancellationToken = default)
@@ -619,9 +673,122 @@ namespace WhatsappBusiness.CloudApi
             return result;
         }
 
-        private async Task<T> WhatsAppBusinessGetAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default) where T : new()
+        /// <summary>
+        /// To upload a profile picture to your business profile
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="whatsAppBusinessEndpoint"></param>
+        /// <param name="filePath"></param>
+        /// <param name="fileContentType"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
+        private async Task<T> WhatsAppBusinessPostAsync<T>(string whatsAppBusinessEndpoint, string filePath, string fileContentType, CancellationToken cancellationToken = default, bool isMediaUpload = false) where T : new()
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            
+            if (!isMediaUpload) // Resumable upload
+            {
+                _httpClient.DefaultRequestHeaders.Add("Content-Type", fileContentType);
+                _httpClient.DefaultRequestHeaders.Add("file_offset", "0");
+            }
+            
+            T result = new();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            FileInfo file = new FileInfo(filePath);
+            var uploaded_file = System.IO.File.ReadAllBytes(filePath);
+
+            string boundary = $"----------{Guid.NewGuid():N}";
+            var content = new MultipartFormDataContent(boundary);
+
+            if (isMediaUpload)
+            {
+                ByteArrayContent mediaFileContent = new ByteArrayContent(uploaded_file);
+                mediaFileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "file",
+                    FileName = file.FullName,
+                };
+                mediaFileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(fileContentType);
+
+                var fileData = new
+                {
+                    messaging_product = "whatsapp"
+                };
+
+                content.Add(mediaFileContent);
+                content.Add(new StringContent(fileData.messaging_product), "messaging_product");
+            }
+            else
+            {
+                ByteArrayContent mediaFileContent = new ByteArrayContent(uploaded_file);
+                mediaFileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "file",
+                    FileName = file.FullName,
+                };
+                content.Add(mediaFileContent);
+            }
+
+            var response = await _httpClient.PostAsync(whatsAppBusinessEndpoint, content, cancellationToken).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+#if NET5_0_OR_GREATER
+                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
+                {
+                    using var reader = new StreamReader(stream.Result);
+                    using var json = new JsonTextReader(reader);
+                    result = _serializer.Deserialize<T>(json);
+                }, cancellationToken);
+#endif
+#if NETSTANDARD2_0_OR_GREATER
+                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
+                {
+                    using var reader = new StreamReader(stream.Result);
+                    using var json = new JsonTextReader(reader);
+                    result = _serializer.Deserialize<T>(json);
+                }, cancellationToken);
+#endif
+            }
+            else
+            {
+                WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
+#if NET5_0_OR_GREATER
+                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
+                {
+                    using var reader = new StreamReader(stream.Result);
+                    using var json = new JsonTextReader(reader);
+                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
+                }, cancellationToken);
+                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+#endif
+#if NETSTANDARD2_0_OR_GREATER
+                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
+                {
+                    using var reader = new StreamReader(stream.Result);
+                    using var json = new JsonTextReader(reader);
+                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
+                }, cancellationToken);
+                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+#endif
+            }
+            return result;
+        }
+
+        private async Task<T> WhatsAppBusinessGetAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default, bool isCacheControlActive = false) where T : new()
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            
+            if (isCacheControlActive)
+            {
+                _httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
+                {
+                    NoCache = true,
+                };
+            }
+
             T result = new();
             cancellationToken.ThrowIfCancellationRequested();
             var response = await _httpClient.GetAsync(whatsAppBusinessEndpoint, cancellationToken).ConfigureAwait(false);

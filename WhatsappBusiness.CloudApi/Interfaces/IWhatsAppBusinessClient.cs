@@ -24,6 +24,18 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         
         BusinessProfileResponse GetBusinessProfileId(string whatsAppBusinessPhoneNumberId, CancellationToken cancellationToken = default);
 
+        Task<ResumableUploadResponse> CreateResumableUploadSessionAsync(long fileLength, string fileContentType, string fileName, CancellationToken cancellationToken = default);
+
+        ResumableUploadResponse CreateResumableUploadSession(long fileLength, string fileContentType, string fileName, CancellationToken cancellationToken = default);
+
+        Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default);
+
+        ResumableUploadResponse UploadFileData(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default);
+
+        Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, CancellationToken cancellationToken = default);
+
+        ResumableUploadResponse QueryFileUploadStatus(string uploadId, CancellationToken cancellationToken = default);
+
         Task<BaseSuccessResponse> UpdateBusinessProfileAsync(UpdateBusinessProfileRequest updateBusinessProfile, CancellationToken cancellationToken = default);
 
         BaseSuccessResponse UpdateBusinessProfile(UpdateBusinessProfileRequest updateBusinessProfileRequest, CancellationToken cancellationToken = default);
