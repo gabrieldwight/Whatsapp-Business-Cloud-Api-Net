@@ -6,6 +6,7 @@ using WhatsappBusiness.CloudApi;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
 using WhatsappBusiness.CloudApi.Interfaces;
+using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.Response;
 using WhatsAppBusinessCloudAPI.Web.Models;
@@ -18,13 +19,15 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IWhatsAppBusinessClient _whatsAppBusinessClient;
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
+        private readonly IWebHostEnvironment _environment;
 
         public HomeController(ILogger<HomeController> logger, IWhatsAppBusinessClient whatsAppBusinessClient,
-            IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig)
+            IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IWebHostEnvironment environment)
         {
             _logger = logger;
             _whatsAppBusinessClient = whatsAppBusinessClient;
             _whatsAppConfig = whatsAppConfig.Value;
+            _environment = environment;
         }
 
         public IActionResult Index()
@@ -85,48 +88,119 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 switch(sendMediaMessage.SelectedMediaType)
                 {
                     case "Audio":
-                        AudioMessageByUrlRequest audioMessage = new AudioMessageByUrlRequest();
-                        audioMessage.To = sendMediaMessage.RecipientPhoneNumber;
-                        audioMessage.Audio = new MediaAudioUrl();
-                        audioMessage.Audio.Link = sendMediaMessage.MediaLink;
-                        
-                        results = await _whatsAppBusinessClient.SendAudioAttachmentMessageByUrlAsync(audioMessage);
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaId))
+                        {
+                            AudioMessageByIdRequest audioMessage = new AudioMessageByIdRequest();
+                            audioMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            audioMessage.Audio = new MediaAudio();
+                            audioMessage.Audio.Id = sendMediaMessage.MediaId;
+
+                            results = await _whatsAppBusinessClient.SendAudioAttachmentMessageByIdAsync(audioMessage);
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaLink))
+                        {
+                            AudioMessageByUrlRequest audioMessage = new AudioMessageByUrlRequest();
+                            audioMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            audioMessage.Audio = new MediaAudioUrl();
+                            audioMessage.Audio.Link = sendMediaMessage.MediaLink;
+
+                            results = await _whatsAppBusinessClient.SendAudioAttachmentMessageByUrlAsync(audioMessage);
+                        }
                         break;
 
                     case "Document":
-                        DocumentMessageByUrlRequest documentMessage = new DocumentMessageByUrlRequest();
-                        documentMessage.To = sendMediaMessage.RecipientPhoneNumber;
-                        documentMessage.Document = new MediaDocumentUrl();
-                        documentMessage.Document.Link = sendMediaMessage.MediaLink;
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaId))
+                        {
+                            DocumentMessageByIdRequest documentMessage = new DocumentMessageByIdRequest();
+                            documentMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            documentMessage.Document = new MediaDocument();
+                            documentMessage.Document.Id = sendMediaMessage.MediaId;
+                            documentMessage.Document.Caption = sendMediaMessage.Message;
 
-                        results = await _whatsAppBusinessClient.SendDocumentAttachmentMessageByUrlAsync(documentMessage);
+                            results = await _whatsAppBusinessClient.SendDocumentAttachmentMessageByIdAsync(documentMessage);
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaLink))
+                        {
+                            DocumentMessageByUrlRequest documentMessage = new DocumentMessageByUrlRequest();
+                            documentMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            documentMessage.Document = new MediaDocumentUrl();
+                            documentMessage.Document.Link = sendMediaMessage.MediaLink;
+                            documentMessage.Document.Caption = sendMediaMessage.Message;
+
+                            results = await _whatsAppBusinessClient.SendDocumentAttachmentMessageByUrlAsync(documentMessage);
+                        }
                         break;
 
                     case "Image":
-                        ImageMessageByUrlRequest imageMessage = new ImageMessageByUrlRequest();
-                        imageMessage.To = sendMediaMessage.RecipientPhoneNumber;
-                        imageMessage.Image = new MediaImageUrl();
-                        imageMessage.Image.Link = sendMediaMessage.MediaLink;
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaId))
+                        {
+                            ImageMessageByIdRequest imageMessage = new ImageMessageByIdRequest();
+                            imageMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            imageMessage.Image = new MediaImage();
+                            imageMessage.Image.Id = sendMediaMessage.MediaId;
+                            imageMessage.Image.Caption = sendMediaMessage.Message;
 
-                        results = await _whatsAppBusinessClient.SendImageAttachmentMessageByUrlAsync(imageMessage);
+                            results = await _whatsAppBusinessClient.SendImageAttachmentMessageByIdAsync(imageMessage);
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaLink))
+                        {
+                            ImageMessageByUrlRequest imageMessage = new ImageMessageByUrlRequest();
+                            imageMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            imageMessage.Image = new MediaImageUrl();
+                            imageMessage.Image.Link = sendMediaMessage.MediaLink;
+                            imageMessage.Image.Caption = sendMediaMessage.Message;
+
+                            results = await _whatsAppBusinessClient.SendImageAttachmentMessageByUrlAsync(imageMessage);
+                        }
                         break;
 
                     case "Sticker":
-                        StickerMessageByUrlRequest stickerMessage = new StickerMessageByUrlRequest();
-                        stickerMessage.To = sendMediaMessage.RecipientPhoneNumber;
-                        stickerMessage.Sticker = new MediaStickerUrl();
-                        stickerMessage.Sticker.Link = sendMediaMessage.MediaLink;
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaId))
+                        {
+                            StickerMessageByIdRequest stickerMessage = new StickerMessageByIdRequest();
+                            stickerMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            stickerMessage.Sticker = new MediaSticker();
+                            stickerMessage.Sticker.Id = sendMediaMessage.MediaId;
 
-                        results = await _whatsAppBusinessClient.SendStickerMessageByUrlAsync(stickerMessage);
+                            results = await _whatsAppBusinessClient.SendStickerMessageByIdAsync(stickerMessage);
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaLink))
+                        {
+                            StickerMessageByUrlRequest stickerMessage = new StickerMessageByUrlRequest();
+                            stickerMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            stickerMessage.Sticker = new MediaStickerUrl();
+                            stickerMessage.Sticker.Link = sendMediaMessage.MediaLink;
+
+                            results = await _whatsAppBusinessClient.SendStickerMessageByUrlAsync(stickerMessage);
+                        }
                         break;
 
                     case "Video":
-                        VideoMessageByUrlRequest videoMessage = new VideoMessageByUrlRequest();
-                        videoMessage.To = sendMediaMessage.RecipientPhoneNumber;
-                        videoMessage.Video = new MediaVideoUrl();
-                        videoMessage.Video.Link = sendMediaMessage.MediaLink;
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaId))
+                        {
+                            VideoMessageByIdRequest videoMessage = new VideoMessageByIdRequest();
+                            videoMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            videoMessage.Video = new MediaVideo();
+                            videoMessage.Video.Id = sendMediaMessage.MediaId;
+                            videoMessage.Video.Caption = sendMediaMessage.Message;
 
-                        results = await _whatsAppBusinessClient.SendVideoAttachmentMessageByUrlAsync(videoMessage);
+                            results = await _whatsAppBusinessClient.SendVideoAttachmentMessageByIdAsync(videoMessage);
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaLink))
+                        {
+                            VideoMessageByUrlRequest videoMessage = new VideoMessageByUrlRequest();
+                            videoMessage.To = sendMediaMessage.RecipientPhoneNumber;
+                            videoMessage.Video = new MediaVideoUrl();
+                            videoMessage.Video.Link = sendMediaMessage.MediaLink;
+                            videoMessage.Video.Caption = sendMediaMessage.Message;
+
+                            results = await _whatsAppBusinessClient.SendVideoAttachmentMessageByUrlAsync(videoMessage);
+                        }
                         break;
                 }
 
@@ -580,6 +654,50 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 {
                     return RedirectToAction(nameof(SendWhatsAppContactMessage));
                 }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return View();
+            }
+        }
+
+        public IActionResult UploadMedia()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadMedia(IFormFile mediaFile)
+        {
+            try
+            {
+                var fileName = Path.GetFileName(mediaFile.FileName).Trim('"');
+
+                var rootPath = Path.Combine(_environment.WebRootPath, "Application_Files\\MediaUploads\\");
+
+                if (!Directory.Exists(rootPath))
+                {
+                    Directory.CreateDirectory(rootPath);
+                }
+
+                // Get the path of filename
+                var filePath = Path.Combine(_environment.WebRootPath, "Application_Files\\MediaUploads\\", fileName);
+
+                // Upload Csv file to the browser
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await mediaFile.CopyToAsync(stream);
+                }
+
+                UploadMediaRequest uploadMediaRequest = new UploadMediaRequest();
+                uploadMediaRequest.File = filePath;
+                uploadMediaRequest.Type = mediaFile.ContentType;
+
+                var uploadMediaResult = await _whatsAppBusinessClient.UploadMediaAsync(uploadMediaRequest);
+                ViewBag.MediaId = uploadMediaResult.MediaId;
+                return View();
             }
             catch (WhatsappBusinessCloudAPIException ex)
             {

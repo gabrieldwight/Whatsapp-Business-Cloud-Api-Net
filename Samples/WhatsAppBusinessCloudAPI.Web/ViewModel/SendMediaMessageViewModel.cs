@@ -9,5 +9,6 @@ namespace WhatsAppBusinessCloudAPI.Web.ViewModel
         public string SelectedMediaType { get; set; }
         public string Message { get; set; }
         public string MediaLink { get; set; }
+        public string MediaId { get; set; }
     }
 }
