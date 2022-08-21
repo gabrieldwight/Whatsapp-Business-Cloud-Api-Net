@@ -24,5 +24,8 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
     {
         [JsonProperty("link")]
         public string Link { get; set; }
+
+        [JsonProperty("caption")]
+        public string Caption { get; set; }
     }
 }
