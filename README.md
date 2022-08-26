@@ -500,6 +500,29 @@ textMessageReplyRequest.Text.PreviewUrl = false;
 await _whatsAppBusinessClient.SendTextMessageAsync(textMessageReplyRequest);
 ```
 
+## Verify Webhook X-Hub-Signature-256 (Credits @Tekkharibo)
+```c#
+[HttpPost]
+public async Task<IActionResult> GetMessage()
+{
+    string stringifiedBody;
+
+    string xHubSignature256 = this.HttpContext.Request.Headers["X-Hub-Signature-256"].ToString();
+
+    using (var sr = new StreamReader(this.HttpContext.Request.Body))
+    {
+        stringifiedBody = await sr.ReadToEndAsync().ConfigureAwait(false);
+    }
+
+    string xHubSignature256Result = FacebookWebhookHelper.CalculateSignature(this._configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AppSecret"], stringifiedBody);
+
+    if (!String.Equals(xHubSignature256, xHubSignature256Result, StringComparison.InvariantCultureIgnoreCase))
+        return this.Unauthorized("Invalid Signature");
+
+    return this.Ok();
+}
+```
+
 ## Error handling
 WhatsAppBusinessClient Throws ```WhatsappBusinessCloudAPIException``` It is your role as the developer to catch
 the exception and continue processing in your aplication. Snippet below shows how you can catch the WhatsappBusinessCloudAPIException.
