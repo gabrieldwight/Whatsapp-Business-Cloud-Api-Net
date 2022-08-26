@@ -26,6 +26,8 @@ WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/do
   - [x] Interactive (List, Reply)
   - [x] Template
   - [x] Template Messages with parameters
+  - [x] Single Product Message
+  - [x] Multiple Product Message
 - [x] Receiving Message (via Webhook)
   - [x] Text
   - [x] Media (image, video, audio, document, sticker)
