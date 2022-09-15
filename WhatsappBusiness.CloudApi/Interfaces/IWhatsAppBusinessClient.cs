@@ -363,6 +363,22 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         WhatsAppResponse SendDocumentAttachmentMessageByUrl(DocumentMessageByUrlRequest documentMessage, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Send Document Template Message
+        /// </summary>
+        /// <param name="documentTemplateMessageRequest">DocumentTemplateMessage Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        Task<WhatsAppResponse> SendDocumentAttachmentTemplateMessageAsync(DocumentTemplateMessageRequest documentTemplateMessageRequest, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Send Document Template Message
+        /// </summary>
+        /// <param name="documentTemplateMessageRequest">DocumentTemplateMessage Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        WhatsAppResponse SendDocumentAttachmentTemplateMessage(DocumentTemplateMessageRequest documentTemplateMessageRequest, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Send Image Message using Media Id
         /// </summary>
         /// <param name="imageMessage">ImageMessage Object</param>
