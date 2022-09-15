@@ -101,6 +101,8 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
     public class Document
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
         [JsonProperty("link")]
         public string Link { get; set; }
     }
