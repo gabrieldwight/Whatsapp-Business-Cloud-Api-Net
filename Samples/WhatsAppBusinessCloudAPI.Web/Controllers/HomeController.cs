@@ -540,6 +540,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                                 Type = "image",
                                 Image = new Image()
                                 {
+                                    //Id = sendTemplateMessageViewModel.MediaId,
                                     Link = "https://otakukart.com/wp-content/uploads/2022/03/Upcoming-Marvel-Movies-In-2022-23.jpg"
                                 }
                             }
@@ -588,6 +589,68 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 };
 
                 var results = await _whatsAppBusinessClient.SendImageAttachmentTemplateMessageAsync(imageTemplateMessage);
+
+                if (results != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppDocumentTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                DocumentTemplateMessageRequest documentTemplateMessage = new DocumentTemplateMessageRequest();
+                documentTemplateMessage.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+                documentTemplateMessage.Template = new DocumentMessageTemplate();
+                documentTemplateMessage.Template.Name = sendTemplateMessageViewModel.TemplateName;
+                documentTemplateMessage.Template.Language = new DocumentMessageLanguage();
+                documentTemplateMessage.Template.Language.Code = LanguageCode.English_US;
+                documentTemplateMessage.Template.Components = new List<DocumentMessageComponent>()
+                {
+                    new DocumentMessageComponent()
+                    {
+                        Type = "header",
+                        Parameters = new List<DocumentMessageParameter>()
+                        {
+                            new DocumentMessageParameter()
+                            {
+                                Type = "document",
+                                Document = new Document()
+                                {
+                                    //Id = sendTemplateMessageViewModel.MediaId,
+                                    Link = "<EXTERNAL_LINK_DOCUMENT>" // Link point where your document can be downloaded or retrieved by WhatsApp
+                                }
+                            }
+                        },
+                    },
+                    new DocumentMessageComponent()
+                    {
+                        Type = "body",
+                        Parameters = new List<DocumentMessageParameter>()
+                        {
+                            new DocumentMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "Order Invoice"
+                            },
+                        }
+                    }
+                };
+
+                var results = await _whatsAppBusinessClient.SendDocumentAttachmentTemplateMessageAsync(documentTemplateMessage);
 
                 if (results != null)
                 {
