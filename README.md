@@ -7,6 +7,8 @@ A Wrapper for Whatsapp Business Cloud API hosted by Meta.
 
 Official API Documentation: [Meta for Developers](https://developers.facebook.com/docs/whatsapp/cloud-api/overview)
 
+Sell Product and Services: [Product Message Configuration](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/sell-products-and-services)
+
 Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
 
 WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/docs/whatsapp/cloud-api/support/error-codes)
