@@ -644,6 +644,30 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
+        /// Send Document Template Message
+        /// </summary>
+        /// <param name="documentTemplateMessageRequest">DocumentTemplateMessage Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        public async Task<WhatsAppResponse> SendDocumentAttachmentTemplateMessageAsync(DocumentTemplateMessageRequest documentTemplateMessageRequest, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<WhatsAppResponse>(documentTemplateMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// Send Document Template Message
+        /// </summary>
+        /// <param name="documentTemplateMessageRequest">DocumentTemplateMessage Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        public WhatsAppResponse SendDocumentAttachmentTemplateMessage(DocumentTemplateMessageRequest documentTemplateMessageRequest, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<WhatsAppResponse>(documentTemplateMessageRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
         /// Send Image Message using Media Id
         /// </summary>
         /// <param name="imageMessage">ImageMessage Object</param>

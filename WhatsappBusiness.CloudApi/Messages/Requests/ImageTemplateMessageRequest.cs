@@ -101,8 +101,14 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
     public class Image
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("link")]
         public string Link { get; set; }
+
+        [JsonProperty("caption")]
+        public string Caption { get; set; }
     }
 
     public class ImageMessageLanguage

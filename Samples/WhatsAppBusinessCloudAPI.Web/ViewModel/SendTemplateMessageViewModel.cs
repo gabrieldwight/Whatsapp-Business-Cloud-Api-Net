@@ -4,5 +4,6 @@
     {
         public string RecipientPhoneNumber { get; set; }
         public string TemplateName { get; set; }
+        public string MediaId { get; set; }
     }
 }
