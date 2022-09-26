@@ -1,0 +1,81 @@
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
+	<a asp-controller="Home" asp-action="Index" class="brand-link">
+		<img src="~/whatsapp-logo.png" alt="WhatsApp Business Cloud API Logo" class="brand-image img-circle elevation-3"
+			 style="opacity: .8">
+		<span class="brand-text font-weight-light">WhatsApp Business Cloud API</span>
+	</a>
+	<div class="sidebar">
+		<nav class="mt-2">
+			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+				<li class="nav-item ">
+					<a asp-controller="Home" asp-action="UploadMedia" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.UploadMedia))">
+						<i class="nav-icon fa-solid fa-upload"></i>
+						<p>
+							Upload Media
+						</p>
+					</a>
+				</li>
+
+				<li class="nav-item ">
+					<a href="#" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""))">
+						<i class="nav-icon fa-solid fa-paper-plane"></i>
+						<p>
+							Send
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a asp-controller="Home" asp-action="SendWhatsAppTextMessage" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.SendWhatsAppTextMessage))">
+								<i class="nav-icon fa-solid fa-message"></i>
+								<p>
+									Text Message
+								</p>
+							</a>
+						</li>
+						<li class="nav-item ">
+							<a asp-controller="Home" asp-action="SendWhatsAppMediaMessage" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.SendWhatsAppMediaMessage))">
+								<i class="nav-icon fa-solid fa-photo-film-music"></i>
+								<p>
+									Media Message
+								</p>
+							</a>
+						</li>
+						<li class="nav-item ">
+							<a asp-controller="Home" asp-action="SendWhatsAppLocationMessage" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.SendWhatsAppLocationMessage))">
+								<i class="nav-icon fa-solid fa-location-dot"></i>
+								<p>
+									Location Message
+								</p>
+							</a>
+						</li>
+						<li class="nav-item ">
+							<a asp-controller="Home" asp-action="SendWhatsAppInteractiveMessage" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.SendWhatsAppInteractiveMessage))">
+								<i class="nav-icon fa-solid fa-file-invoice"></i>
+								<p>
+									Interactive Message
+								</p>
+							</a>
+						</li>
+						<li class="nav-item ">
+							<a asp-controller="Home" asp-action="SendWhatsAppTemplateMessage" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.SendWhatsAppTemplateMessage))">
+								<i class="nav-icon fa-solid fa-file-invoice"></i>
+								<p>
+									Template Message
+								</p>
+							</a>
+						</li>
+						<li class="nav-item ">
+							<a asp-controller="Home" asp-action="SendWhatsAppContactMessage" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.SendWhatsAppContactMessage))">
+								<i class="nav-icon fa-solid fa-address-book"></i>
+								<p>
+									Contact Message
+								</p>
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</aside>

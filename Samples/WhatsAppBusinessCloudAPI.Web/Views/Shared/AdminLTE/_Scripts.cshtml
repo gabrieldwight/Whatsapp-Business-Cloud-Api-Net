@@ -1,0 +1,16 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="~/lib/select2/js/select2.full.min.js"></script>
+<script src="~/lib/admin-lte/js/adminlte.min.js"></script>
+<partial name="_ToastStatusMessages" />
+<script>
+    $(function () {
+        //Initialize Select2 Elements
+        $('.select2').select2()
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
+    });
+</script>

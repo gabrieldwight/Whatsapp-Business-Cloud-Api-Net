@@ -1,5 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
+    ViewData["CurrentPage"] = "Privacy Policy";
+	Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+	ViewData["ControllerName"] = nameof(HomeController).Replace("Controller", "");
+	ViewData["ActionName"] = nameof(HomeController.Privacy);
 }
 <h1>@ViewData["Title"]</h1>
 
