@@ -20,7 +20,7 @@ WhatsAppBusinessCloudApiConfig whatsAppConfig = new WhatsAppBusinessCloudApiConf
 whatsAppConfig.WhatsAppBusinessPhoneNumberId = "101810896042124";//"110051771858679";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessPhoneNumberId"];
 whatsAppConfig.WhatsAppBusinessAccountId = "100294039530348";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessAccountId"];
 whatsAppConfig.WhatsAppBusinessId = "413543454261198";//"106900055514531";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessId"];
-whatsAppConfig.AccessToken ="EAAF4HZAawv84BAFL6jz4TCPh78o51SWXO73YHPPGU9gzklh9mHcAqW4SDBqKkK8h2ofMraJHqtmApvIcpERzZClaJfKIcdBzfl2kBZAYRddoZBJRxHGag5hrwf93AqZBGNsbvqyxIZCRgyiRnqhqKu1uEv3hPZAhZAMsA8PXRmcBrOPGE1ugib5ZCIfhfB5lNPV3kKTPzjLVQ5YOqDOoYqDYB";
+whatsAppConfig.AccessToken = "EAAF4HZAawv84BAGlF9HFh7b2PpfemZCC7YLP1TVvovaIhIzSuigw5S5E56jGlUAp74A3YY00qS3trdbVeMXcMfXO8CwSUTWcQBjRMZBEDDBNDxjUBsXfn4hHDZBwAGoQhV7kJfyJ1EZB70Ydv5bMYQQdqX4lRb4pBFzFeJOOPFpFue0P5QwECn6ZBpYd40yLXyCjiYwLa9qYcAKEJZCWgFc";
 
 builder.Services.AddWhatsAppBusinessCloudApiService(whatsAppConfig, isLatestGraphApiVersion: true);
 
