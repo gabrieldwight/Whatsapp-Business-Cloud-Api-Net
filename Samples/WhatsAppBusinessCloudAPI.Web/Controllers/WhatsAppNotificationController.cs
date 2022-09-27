@@ -34,11 +34,10 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             _logger = logger;
             _whatsAppBusinessClient = whatsAppBusinessClient;
             WhatsAppBusinessCloudApiConfig whatsAppConfig1 = new WhatsAppBusinessCloudApiConfig();
-            whatsAppConfig1.WhatsAppBusinessPhoneNumberId = "102738155936007";//"110051771858679";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessPhoneNumberId"];
-            whatsAppConfig1.WhatsAppBusinessAccountId = "761382061636999";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessAccountId"];
-            whatsAppConfig1.WhatsAppBusinessId = "102355269309806";//"106900055514531";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessId"];
-            whatsAppConfig1.AccessToken = "EAAK0eRNSfYcBALDp5dZAu8cbIYOeSg90A0QHFk5cdMPHHQoZCU4VLGdL25yr3uCZADUnHtw3vrPeRTw7oQnU7rk295PeF49ZAZAn3bsOqnL2HbToFehDexUbOS2y7Luz9Q59sKQ5rcVayyjTHirs5jZCrlatXVZBi5RNawtN71n0dD9l90pX5EWdkRlT96e37W78TZBnTeZCl5QZDZD";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AccessToken"];
-
+            whatsAppConfig1.WhatsAppBusinessPhoneNumberId = "101810896042124";//"110051771858679";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessPhoneNumberId"];
+            whatsAppConfig1.WhatsAppBusinessAccountId = "100294039530348";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessAccountId"];
+            whatsAppConfig1.WhatsAppBusinessId = "413543454261198";//"106900055514531";// builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessId"];
+            whatsAppConfig1.AccessToken = "EAAF4HZAawv84BAFL6jz4TCPh78o51SWXO73YHPPGU9gzklh9mHcAqW4SDBqKkK8h2ofMraJHqtmApvIcpERzZClaJfKIcdBzfl2kBZAYRddoZBJRxHGag5hrwf93AqZBGNsbvqyxIZCRgyiRnqhqKu1uEv3hPZAhZAMsA8PXRmcBrOPGE1ugib5ZCIfhfB5lNPV3kKTPzjLVQ5YOqDOoYqDYB";
             _whatsAppConfig = whatsAppConfig1;
         }
 
