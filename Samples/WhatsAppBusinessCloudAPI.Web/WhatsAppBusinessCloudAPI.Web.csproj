@@ -8,10 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\WhatsappBusiness.CloudApi\WhatsappBusiness.CloudApi.csproj" />
+    <PackageReference Include="WhatsappBusiness.CloudApi" Version="1.0.9" />
   </ItemGroup>
 
 </Project>
