@@ -401,7 +401,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 textTemplateMessage.Template = new TextMessageTemplate();
                 textTemplateMessage.Template.Name = sendTemplateMessageViewModel.TemplateName;
                 textTemplateMessage.Template.Language = new TextMessageLanguage();
-                textTemplateMessage.Template.Language.Code = "en_US";
+                textTemplateMessage.Template.Language.Code = sendTemplateMessageViewModel.MediaId??"en_US";
 
                 var results = await _whatsAppBusinessClient.SendTextMessageTemplateAsync(textTemplateMessage);
 
