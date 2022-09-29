@@ -86,7 +86,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             try
             {
                 WhatsAppResponse results = null;
-                switch(sendMediaMessage.SelectedMediaType)
+                switch (sendMediaMessage.SelectedMediaType)
                 {
                     case "Audio":
                         if (!string.IsNullOrWhiteSpace(sendMediaMessage.MediaId))
@@ -345,7 +345,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                     interactiveReplyButtonMessage.Interactive.Action = new ReplyButtonAction();
                     interactiveReplyButtonMessage.Interactive.Action.Buttons = new List<ReplyButton>()
                     {
-                        new ReplyButton() 
+                        new ReplyButton()
                         {
                             Type = "reply",
                             Reply = new Reply()
@@ -396,12 +396,19 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         {
             try
             {
-                TextTemplateMessageRequest textTemplateMessage = new TextTemplateMessageRequest();
-                textTemplateMessage.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
-                textTemplateMessage.Template = new TextMessageTemplate();
-                textTemplateMessage.Template.Name = sendTemplateMessageViewModel.TemplateName;
-                textTemplateMessage.Template.Language = new TextMessageLanguage();
-                textTemplateMessage.Template.Language.Code = sendTemplateMessageViewModel.MediaId??"en_US";
+                TextTemplateMessageRequest textTemplateMessage = new TextTemplateMessageRequest()
+                {
+                    To = sendTemplateMessageViewModel.RecipientPhoneNumber,
+                    Template = new TextMessageTemplate()
+                    {
+                        Name = sendTemplateMessageViewModel.TemplateName,
+                        Language = new TextMessageLanguage()
+                        {
+                            Code = sendTemplateMessageViewModel.MediaId ?? "en_US"
+                        }
+                    }
+                };
+
 
                 var results = await _whatsAppBusinessClient.SendTextMessageTemplateAsync(textTemplateMessage);
 
