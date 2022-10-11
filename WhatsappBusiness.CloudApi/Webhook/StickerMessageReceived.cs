@@ -80,6 +80,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("sticker")]
         public Sticker Sticker { get; set; }
+
+        [JsonProperty("context")]
+        public StickerMessageContext? Context { get; set; }
     }
 
     public class Sticker
@@ -101,5 +104,14 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("phone_number_id")]
         public string PhoneNumberId { get; set; }
+    }
+
+    public class StickerMessageContext
+    {
+        [JsonProperty("from")]
+        public string From { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }

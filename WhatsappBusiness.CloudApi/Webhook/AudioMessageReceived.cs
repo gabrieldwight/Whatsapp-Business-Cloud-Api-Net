@@ -7,64 +7,64 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// When a message with media is received, the WhatsApp Business API downloads the media. A notification is sent to your Webhook once the media is downloaded.
     /// The Webhook notification contains information that identifies the media object and enables you to find and retrieve the object. Use the media endpoints to retrieve the media.
     /// </summary>
-    public class ImageMessageReceived
+    public class AudioMessageReceived
     {
         [JsonProperty("object")]
         public string Object { get; set; }
 
         [JsonProperty("entry")]
-        public List<ImageMessageEntry> Entry { get; set; }
+        public List<AudioMessageEntry> Entry { get; set; }
     }
 
-    public class ImageMessageEntry
+    public class AudioMessageEntry
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
         [JsonProperty("changes")]
-        public List<ImageMessageChange> Changes { get; set; }
+        public List<AudioMessageChange> Changes { get; set; }
     }
 
-    public class ImageMessageChange
+    public class AudioMessageChange
     {
         [JsonProperty("value")]
-        public ImageMessageValue Value { get; set; }
+        public AudioMessageValue Value { get; set; }
 
         [JsonProperty("field")]
         public string Field { get; set; }
     }
 
-    public class ImageMessageValue
+    public class AudioMessageValue
     {
         [JsonProperty("messaging_product")]
         public string MessagingProduct { get; set; }
 
         [JsonProperty("metadata")]
-        public ImageMessageMetadata Metadata { get; set; }
+        public AudioMessageMetadata Metadata { get; set; }
 
         [JsonProperty("contacts")]
-        public List<ImageMessageContact> Contacts { get; set; }
+        public List<AudioMessageContact> Contacts { get; set; }
 
         [JsonProperty("messages")]
-        public List<ImageMessage> Messages { get; set; }
+        public List<AudioMessage> Messages { get; set; }
     }
 
-    public class ImageMessageContact
+    public class AudioMessageContact
     {
         [JsonProperty("profile")]
-        public ImageMessageProfile Profile { get; set; }
+        public AudioMessageProfile Profile { get; set; }
 
         [JsonProperty("wa_id")]
         public string WaId { get; set; }
     }
 
-    public class ImageMessageProfile
+    public class AudioMessageProfile
     {
         [JsonProperty("name")]
         public string Name { get; set; }
     }
 
-    public class ImageMessage
+    public class AudioMessage
     {
         [JsonProperty("from")]
         public string From { get; set; }
@@ -78,29 +78,23 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonProperty("image")]
-        public Image Image { get; set; }
+        [JsonProperty("audio")]
+        public Audio Audio { get; set; }
 
         [JsonProperty("context")]
-        public ImageMessageContext? Context { get; set; }
+        public AudioMessageContext? Context { get; set; }
     }
 
-    public class Image
+    public class Audio
     {
-        [JsonProperty("caption")]
-        public string Caption { get; set; }
-
         [JsonProperty("mime_type")]
         public string MimeType { get; set; }
-
-        [JsonProperty("sha256")]
-        public string Sha256 { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
     }
 
-    public class ImageMessageMetadata
+    public class AudioMessageMetadata
     {
         [JsonProperty("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
@@ -109,7 +103,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string PhoneNumberId { get; set; }
     }
 
-    public class ImageMessageContext
+    public class AudioMessageContext
     {
         [JsonProperty("from")]
         public string From { get; set; }
