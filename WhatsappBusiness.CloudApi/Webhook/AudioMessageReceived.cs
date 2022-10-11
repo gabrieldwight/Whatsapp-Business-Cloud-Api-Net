@@ -80,6 +80,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("audio")]
         public Audio Audio { get; set; }
+
+        [JsonProperty("context")]
+        public AudioMessageContext? Context { get; set; }
     }
 
     public class Audio
@@ -98,5 +101,14 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("phone_number_id")]
         public string PhoneNumberId { get; set; }
+    }
+
+    public class AudioMessageContext
+    {
+        [JsonProperty("from")]
+        public string From { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }

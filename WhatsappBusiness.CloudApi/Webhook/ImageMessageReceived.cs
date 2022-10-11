@@ -80,6 +80,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("image")]
         public Image Image { get; set; }
+
+        [JsonProperty("context")]
+        public ImageMessageContext? Context { get; set; }
     }
 
     public class Image
@@ -104,5 +107,14 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("phone_number_id")]
         public string PhoneNumberId { get; set; }
+    }
+
+    public class ImageMessageContext
+    {
+        [JsonProperty("from")]
+        public string From { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }

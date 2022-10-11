@@ -80,6 +80,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("video")]
         public Video Video { get; set; }
+
+        [JsonProperty("context")]
+        public VideoMessageContext? Context { get; set; }
     }
 
     public class Video
@@ -107,6 +110,15 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("phone_number_id")]
         public string PhoneNumberId { get; set; }
+    }
+
+    public class VideoMessageContext
+    {
+        [JsonProperty("from")]
+        public string From { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }
 

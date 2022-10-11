@@ -79,6 +79,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("type")]
         public string Type { get; set; }
+
+        [JsonProperty("context")]
+        public ContactMessageContext? Context { get; set; }
     }
 
     public class MessageContact
@@ -199,5 +202,14 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("phone_number_id")]
         public string PhoneNumberId { get; set; }
+    }
+
+    public class ContactMessageContext
+    {
+        [JsonProperty("from")]
+        public string From { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }
