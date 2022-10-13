@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "font-awesome@6.2.0",
+      "destination": "wwwroot/lib/font-awesome/",
+      "files": [
+        "css/all.min.css",
+        "webfonts/fa-brands-400.ttf",
+        "webfonts/fa-brands-400.woff2",
+        "webfonts/fa-regular-400.ttf",
+        "webfonts/fa-regular-400.woff2",
+        "webfonts/fa-solid-900.ttf",
+        "webfonts/fa-solid-900.woff2"
+      ]
+    },
+    {
+      "library": "admin-lte@3.2.0",
+      "destination": "wwwroot/lib/admin-lte/",
+      "files": [
+        "js/adminlte.min.js",
+        "css/adminlte.min.css"
+      ]
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/",
+      "files": [
+        "css/select2.min.css",
+        "js/select2.full.min.js"
+      ]
+    },
+    {
+      "library": "select2-bootstrap-theme@0.1.0-beta.10",
+      "destination": "wwwroot/lib/select2-bootstrap-theme/",
+      "files": [
+        "select2-bootstrap.min.css"
+      ]
+    }
+  ]
+}

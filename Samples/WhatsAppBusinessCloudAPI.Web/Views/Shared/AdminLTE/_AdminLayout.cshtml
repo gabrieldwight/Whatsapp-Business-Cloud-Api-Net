@@ -1,0 +1,58 @@
+﻿@{
+	var type = (string)TempData["_alert.type"];
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+	<title>WhatsApp Business Cloud API Sample - @ViewData["Title"]</title>
+	<partial name="AdminLTE/_Styles" />
+</head>
+<body class="hold-transition sidebar-mini">
+	<div class="wrapper">
+		<partial name="AdminLTE/_TopNavigation" />
+		<partial name="AdminLTE/_MainNavigation" />
+		<div class="content-wrapper">
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0 text-dark">@ViewData["CurrentPage"]</h1>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								@if (!string.IsNullOrWhiteSpace(Convert.ToString(ViewData["ControllerName"])) && !string.IsNullOrWhiteSpace(Convert.ToString(ViewData["ActionName"])))
+								{
+									<li class="breadcrumb-item"><a asp-controller="@ViewData["ControllerName"]" asp-action="@ViewData["ActionName"]">Home</a></li>
+								}
+								else
+								{
+									<li class="breadcrumb-item"><a href="#">Home</a></li>
+								}
+								<li class="breadcrumb-item active">@ViewData["CurrentPage"]</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content @($"toastsDefault{type}")">
+				<div class="container-fluid">
+					@RenderBody()
+				</div>
+			</div>
+		</div>
+		<aside class="control-sidebar control-sidebar-dark">
+			<div class="p-3">
+				<h5>Title</h5>
+				<p>Sidebar content</p>
+			</div>
+		</aside>
+		<partial name="AdminLTE/_Footer" />
+	</div>
+	<partial name="AdminLTE/_Scripts" />
+	@RenderSection("Scripts", required: false);
+</body>
+</html>

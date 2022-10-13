@@ -1,5 +1,9 @@
 ﻿@{
 	ViewData["Title"] = "Home Page";
+	ViewData["CurrentPage"] = "Home Page";
+	Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+	ViewData["ControllerName"] = nameof(HomeController).Replace("Controller", "");
+	ViewData["ActionName"] = nameof(HomeController.Index);
 }
 
 <div class="text-center">
