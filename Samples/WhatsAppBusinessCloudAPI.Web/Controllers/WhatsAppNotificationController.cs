@@ -124,7 +124,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
 
                         TextMessageReplyRequest textMessageReplyRequest = new TextMessageReplyRequest();
-                        textMessageReplyRequest.Context = new TextMessageContext();
+                        textMessageReplyRequest.Context = new WhatsappBusiness.CloudApi.Messages.ReplyRequests.TextMessageContext();
                         textMessageReplyRequest.Context.MessageId = textMessage.SingleOrDefault().Id;
                         textMessageReplyRequest.To = textMessage.SingleOrDefault().From;
                         textMessageReplyRequest.Text = new WhatsAppText();
@@ -207,7 +207,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
 
                         LocationMessageReplyRequest locationMessageReplyRequest = new LocationMessageReplyRequest();
-                        locationMessageReplyRequest.Context = new LocationMessageContext();
+                        locationMessageReplyRequest.Context = new WhatsappBusiness.CloudApi.Messages.ReplyRequests.LocationMessageContext();
                         locationMessageReplyRequest.Context.MessageId = locationMessage.SingleOrDefault().Id;
                         locationMessageReplyRequest.To = locationMessage.SingleOrDefault().From;
                         locationMessageReplyRequest.Location = new WhatsappBusiness.CloudApi.Messages.Requests.Location();

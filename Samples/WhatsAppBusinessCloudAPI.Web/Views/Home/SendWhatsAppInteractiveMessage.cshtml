@@ -1,31 +1,50 @@
 ﻿@model SendInteractiveMessageViewModel
 @{
 	ViewData["Title"] = "Send WhatsApp Interactive Message Page";
+	ViewData["CurrentPage"] = "Send WhatsApp Interactive Message";
+	Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+	ViewData["ControllerName"] = nameof(HomeController).Replace("Controller", "");
+	ViewData["ActionName"] = nameof(HomeController.SendWhatsAppInteractiveMessage);
 }
 
-<div class="text-center">
-	<h1 class="display-4">Send WhatsApp Interactive Message</h1>
-</div>
-<div class="row">
-	<form asp-action="SendWhatsAppInteractiveMessage">
-		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-		<div class="form-group">
-			<label class="control-label">Recipient Phone Number</label>
-			<input asp-for="RecipientPhoneNumber" class="form-control" />
-			<span asp-validation-for="RecipientPhoneNumber" class="form-control" />
+<section class="content">
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-info">
+				<div class="card-header">
+					<h3 class="card-title">Send WhatsApp Interactive Message</h3>
+				</div> <!--/. card-header -->
+				<!--Form start -->
+				<form asp-action="SendWhatsAppInteractiveMessage">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="card-body">
+						<div class="form-group">
+							<label class="control-label">Recipient Phone Number</label>
+							<input asp-for="RecipientPhoneNumber" class="form-control" />
+							<span asp-validation-for="RecipientPhoneNumber" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Message</label>
+							<input asp-for="Message" class="form-control" />
+							<span asp-validation-for="Message" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Interactive Type</label>
+							<select class="form-control form-select form-select-lg mb-3" asp-for="SelectedInteractiveType" asp-items="@Model.InteractiveType"></select>
+							<span asp-validation-for="SelectedInteractiveType" class="form-control" />
+						</div>
+					</div> <!--/. card-body -->
+					<div class="card-footer">
+						<button type="submit" name="submit" class="btn btn-primary">Send Message</button>
+					</div>
+				</form>
+			</div> <!-- /.card -->
 		</div>
-		<div class="form-group">
-			<label class="control-label">Message</label>
-			<input asp-for="Message" class="form-control" />
-			<span asp-validation-for="Message" class="form-control" />
-		</div>
-		<div class="form-group">
-			<label class="control-label">Interactive Type</label>
-			<select class="form-control form-select form-select-lg mb-3" asp-for="SelectedInteractiveType" asp-items="@Model.InteractiveType"></select>
-			<span asp-validation-for="SelectedInteractiveType" class="form-control" />
-		</div>
-		<div class="form-group">
-			<input type="submit" value="Send Message" class="btn btn-primary" />
-		</div>
-	</form>
-</div>
+	</div>
+</section>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	} 

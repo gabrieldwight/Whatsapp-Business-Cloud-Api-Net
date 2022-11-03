@@ -16,11 +16,13 @@ using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
 using WhatsappBusiness.CloudApi.Interfaces;
 using WhatsappBusiness.CloudApi.Media.Requests;
+using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
 using WhatsappBusiness.CloudApi.Registration.Requests;
 using WhatsappBusiness.CloudApi.Response;
 using WhatsappBusiness.CloudApi.TwoStepVerification.Requests;
+using WhatsappBusiness.CloudApi.Webhook;
 
 namespace WhatsappBusiness.CloudApi
 {
@@ -833,6 +835,30 @@ namespace WhatsappBusiness.CloudApi
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
             return await WhatsAppBusinessPostAsync<WhatsAppResponse>(locationMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// Send reaction message reply
+        /// </summary>
+        /// <param name="reactionMessageReply">ReactionMessageReply Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        public WhatsAppResponse SendReactionMessageReply(ReactionMessageReplyRequest reactionMessageReply, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<WhatsAppResponse>(reactionMessageReply, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Send reaction message reply
+        /// </summary>
+        /// <param name="reactionMessageReply">ReactionMessageReply Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        public async Task<WhatsAppResponse> SendReactionMessageReplyAsync(ReactionMessageReplyRequest reactionMessageReply, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<WhatsAppResponse>(reactionMessageReply, formattedWhatsAppEndpoint, cancellationToken);
         }
 
         /// <summary>

@@ -1,0 +1,19 @@
+﻿@{
+    var type = (string)TempData["_alert.type"];
+    var title = (string)TempData["_alert.title"];
+    var body = (string)TempData["_alert.body"];
+}
+@if (!string.IsNullOrEmpty(type))
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(`.toastsDefault${'@type'}`).Toasts('create', {
+                class: `bg-${'@type'}`,
+                title: '@title',
+                autohide: true,
+                delay: 4000,
+                body: '@body'
+            })
+        });
+    </script>
+}

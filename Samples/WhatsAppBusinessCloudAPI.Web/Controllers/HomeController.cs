@@ -9,6 +9,7 @@ using WhatsappBusiness.CloudApi.Interfaces;
 using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.Response;
+using WhatsAppBusinessCloudAPI.Web.Extensions.Alerts;
 using WhatsAppBusinessCloudAPI.Web.Models;
 using WhatsAppBusinessCloudAPI.Web.ViewModel;
 
@@ -54,12 +55,12 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 var results = await _whatsAppBusinessClient.SendTextMessageAsync(textMessageRequest);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent text message");
             }
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return View();
+                return View().WithDanger("Error", ex.Message);
             }
         }
 
@@ -206,7 +207,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent media message");
                 }
                 else
                 {
@@ -216,7 +217,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppMediaMessage));
+                return RedirectToAction(nameof(SendWhatsAppMediaMessage)).WithDanger("Error", ex.Message);
             }
         }
 
@@ -241,12 +242,12 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 var results = await _whatsAppBusinessClient.SendLocationMessageAsync(locationMessageRequest);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent location message");
             }
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return View();
+                return View().WithDanger("Error", ex.Message);
             }
         }
 
@@ -370,7 +371,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent interactive message");
                 }
                 else
                 {
@@ -380,7 +381,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppInteractiveMessage));
+                return RedirectToAction(nameof(SendWhatsAppInteractiveMessage)).WithDanger("Error", ex.Message);
             }
         }
 
@@ -406,7 +407,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent template text message");
                 }
                 else
                 {
@@ -416,7 +417,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
             }
         }
 
@@ -456,7 +457,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent template text message");
                 }
                 else
                 {
@@ -466,7 +467,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
             }
         }
 
@@ -501,7 +502,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent interactive template message");
                 }
                 else
                 {
@@ -511,7 +512,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
             }
         }
 
@@ -592,7 +593,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent image template message");
                 }
                 else
                 {
@@ -602,7 +603,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
             }
         }
 
@@ -654,7 +655,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent document template message");
                 }
                 else
                 {
@@ -664,7 +665,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
             }
         }
 
@@ -773,7 +774,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent contact message");
                 }
                 else
                 {
@@ -783,7 +784,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return View();
+                return View().WithDanger("Error", ex.Message);
             }
         }
 
@@ -822,12 +823,12 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 var uploadMediaResult = await _whatsAppBusinessClient.UploadMediaAsync(uploadMediaRequest);
                 ViewBag.MediaId = uploadMediaResult.MediaId;
-                return View();
+                return View().WithSuccess("Success", "Successfully upload media.");
             }
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return View();
+                return View().WithDanger("Error", ex.Message);
             }
         }
 

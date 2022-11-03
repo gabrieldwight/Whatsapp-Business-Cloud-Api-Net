@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
 using WhatsappBusiness.CloudApi.Media.Requests;
+using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
 using WhatsappBusiness.CloudApi.Registration.Requests;
@@ -511,6 +512,22 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MarkMessageResponse</returns>
         MarkMessageResponse MarkMessageAsRead(MarkMessageRequest markMessage, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Send reaction message reply
+        /// </summary>
+        /// <param name="reactionMessageReply">ReactionMessageReply Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        WhatsAppResponse SendReactionMessageReply(ReactionMessageReplyRequest reactionMessageReply, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Send reaction message reply
+        /// </summary>
+        /// <param name="reactionMessageReply">ReactionMessageReply Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        Task<WhatsAppResponse> SendReactionMessageReplyAsync(ReactionMessageReplyRequest reactionMessageReply, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Sticker Message by Media Id

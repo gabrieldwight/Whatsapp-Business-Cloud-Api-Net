@@ -103,8 +103,15 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
     {
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("link")]
         public string Link { get; set; }
+
+        [JsonProperty("caption")]
+        public string Caption { get; set; }
+
+        [JsonProperty("filename")]
+        public string Filename { get; set; }
     }
 
     public class DocumentMessageLanguage
