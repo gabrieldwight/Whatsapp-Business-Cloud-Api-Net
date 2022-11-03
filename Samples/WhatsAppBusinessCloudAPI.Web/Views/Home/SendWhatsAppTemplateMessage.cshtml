@@ -33,6 +33,11 @@
 							<input asp-for="MediaId" class="form-control" />
 							<span asp-validation-for="MediaId" class="form-control" />
 						</div>
+						<div class="form-group">
+							<label class="control-label">Link Url</label>
+							<input asp-for="MediaId" class="form-control" />
+							<span asp-validation-for="LinkUrl" class="form-control" />
+						</div>
 					</div> <!--/. card-body -->
 					<div class="card-footer">
 						<div class="form-group">
@@ -41,6 +46,7 @@
 							<button asp-action="SendWhatsAppInteractiveTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Interactive Template Message With Parameters</button>
 							<button asp-action="SendWhatsAppMediaTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Media Template Message With Parameters</button>
 							<button asp-action="SendWhatsAppDocumentTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Document Template Message With Parameters</button>
+							<button asp-action="SendWhatsAppVideoTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Video Template Message With Parameters</button>
 						</div>
 					</div>
 				</form>
@@ -53,4 +59,4 @@
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
-	} 
+} 

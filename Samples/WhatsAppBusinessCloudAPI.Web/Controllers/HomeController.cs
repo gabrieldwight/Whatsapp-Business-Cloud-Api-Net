@@ -669,6 +669,68 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppVideoTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                VideoTemplateMessageRequest videoTemplateMessage = new();
+                videoTemplateMessage.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+                videoTemplateMessage.Template = new();
+                videoTemplateMessage.Template.Name = sendTemplateMessageViewModel.TemplateName;
+                videoTemplateMessage.Template.Language = new();
+                videoTemplateMessage.Template.Language.Code = LanguageCode.English_US;
+                videoTemplateMessage.Template.Components = new List<VideoMessageComponent>()
+                {
+                    new VideoMessageComponent()
+                    {
+                        Type = "header",
+                        Parameters = new List<VideoMessageParameter>()
+                        {
+                            new VideoMessageParameter()
+                            {
+                                Type = "video",
+                                Video = new Video()
+                                {
+                                    //Id = sendTemplateMessageViewModel.MediaId,
+                                    Link = sendTemplateMessageViewModel.LinkUrl // Link point where your document can be downloaded or retrieved by WhatsApp
+                                }
+                            }
+                        },
+                    },
+                    new VideoMessageComponent()
+                    {
+                        Type = "body",
+                        Parameters = new List<VideoMessageParameter>()
+                        {
+                            new VideoMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "Video Information"
+                            },
+                        }
+                    }
+                };
+
+                var results = await _whatsAppBusinessClient.SendVideoAttachmentTemplateMessageAsync(videoTemplateMessage);
+
+                if (results != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+            }
+        }
+
         public IActionResult SendWhatsAppContactMessage()
         {
             return View();
