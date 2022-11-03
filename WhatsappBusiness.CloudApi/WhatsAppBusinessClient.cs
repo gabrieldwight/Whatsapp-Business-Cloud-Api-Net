@@ -956,6 +956,18 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
+        /// Send Video Template Message
+        /// </summary>
+        /// <param name="videoTemplateMessageRequest">VideoTemplateMessageRequest Object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        public async Task<WhatsAppResponse> SendVideoAttachmentTemplateMessageAsync(VideoTemplateMessageRequest videoTemplateMessageRequest, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<WhatsAppResponse>(videoTemplateMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
         /// Send Video Message using hyperlink
         /// </summary>
         /// <param name="videoMessage">VideoMessage object</param>
