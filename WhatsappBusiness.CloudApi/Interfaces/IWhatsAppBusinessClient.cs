@@ -604,7 +604,15 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <summary>
         /// Send Video Message by Template
         /// </summary>
-        /// <param name="videoMessage">VideoTemplateMessageRequest object</param>
+        /// <param name="videoTemplateMessageRequest">VideoTemplateMessageRequest object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsAppResponse</returns>
+        WhatsAppResponse SendVideoAttachmentTemplateMessage(VideoTemplateMessageRequest videoTemplateMessageRequest, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Send Video Message by Template
+        /// </summary>
+        /// <param name="videoTemplateMessageRequest">VideoTemplateMessageRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
         Task<WhatsAppResponse> SendVideoAttachmentTemplateMessageAsync(VideoTemplateMessageRequest videoTemplateMessageRequest, CancellationToken cancellationToken = default);
