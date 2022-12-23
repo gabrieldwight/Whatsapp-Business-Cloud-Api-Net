@@ -159,11 +159,20 @@ namespace WhatsappBusiness.CloudApi
         /// To delete media, make a DELETE call to the ID of the media you want to delete.
         /// </summary>
         /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public BaseSuccessResponse DeleteMedia(string mediaId, CancellationToken cancellationToken = default)
+        public BaseSuccessResponse DeleteMedia(string mediaId, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DeleteMedia.Replace("{{Media-ID}}", mediaId);
+            string formattedWhatsAppEndpoint;
+            if (isMediaOwnershipVerified)
+            {
+                formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DeleteMediaOwnership.Replace("{{Media-ID}}", mediaId).Replace("{{PHONE_NUMBER_ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            }
+            else
+            {
+                formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DeleteMedia.Replace("{{Media-ID}}", mediaId);
+            }
             return WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
@@ -171,11 +180,20 @@ namespace WhatsappBusiness.CloudApi
         /// To delete media, make a DELETE call to the ID of the media you want to delete.
         /// </summary>
         /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> DeleteMediaAsync(string mediaId, CancellationToken cancellationToken = default)
+        public async Task<BaseSuccessResponse> DeleteMediaAsync(string mediaId, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DeleteMedia.Replace("{{Media-ID}}", mediaId);
+            string formattedWhatsAppEndpoint;
+            if (isMediaOwnershipVerified)
+            {
+                formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DeleteMediaOwnership.Replace("{{Media-ID}}", mediaId).Replace("{{PHONE_NUMBER_ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            }
+            else
+            {
+                formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DeleteMedia.Replace("{{Media-ID}}", mediaId);
+            }
             return await WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
@@ -255,11 +273,20 @@ namespace WhatsappBusiness.CloudApi
         /// To retrieve your media’s URL, make a GET call to /{{Media-ID}}. Later, you can use this URL to download the media file.
         /// </summary>
         /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUrlResponse</returns>
-        public MediaUrlResponse GetMediaUrl(string mediaId, CancellationToken cancellationToken = default)
+        public MediaUrlResponse GetMediaUrl(string mediaId, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetMediaUrl.Replace("{{Media-ID}}", mediaId);
+            string formattedWhatsAppEndpoint;
+            if (isMediaOwnershipVerified)
+            {
+                formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetMediaUrlOwnership.Replace("{{Media-ID}}", mediaId).Replace("{{PHONE_NUMBER_ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            }
+            else
+            {
+                formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetMediaUrl.Replace("{{Media-ID}}", mediaId);
+            }
             return WhatsAppBusinessGetAsync<MediaUrlResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
@@ -267,11 +294,20 @@ namespace WhatsappBusiness.CloudApi
         /// To retrieve your media’s URL, make a GET call to /{{Media-ID}}. Later, you can use this URL to download the media file.
         /// </summary>
         /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUrlResponse</returns>
-        public async Task<MediaUrlResponse> GetMediaUrlAsync(string mediaId, CancellationToken cancellationToken = default)
+        public async Task<MediaUrlResponse> GetMediaUrlAsync(string mediaId, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetMediaUrl.Replace("{{Media-ID}}", mediaId);
+            string formattedWhatsAppEndpoint;
+            if (isMediaOwnershipVerified)
+            {
+                formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetMediaUrlOwnership.Replace("{{Media-ID}}", mediaId).Replace("{{PHONE_NUMBER_ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            }
+            else
+            {
+                formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetMediaUrl.Replace("{{Media-ID}}", mediaId);
+            }
             return await WhatsAppBusinessGetAsync<MediaUrlResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 

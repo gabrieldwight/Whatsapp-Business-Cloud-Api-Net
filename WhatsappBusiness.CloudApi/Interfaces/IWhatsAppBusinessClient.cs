@@ -146,36 +146,40 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         MediaUploadResponse UploadMedia(UploadMediaRequest uploadMediaRequest, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// To retrieve your media’s URL, make a GET call to /{{Media-ID}}. Later, you can use this URL to download the media file.
+        /// To retrieve your media’s URL, make a GET call to /{{Media-ID}}?phone_number_id=<PHONE_NUMBER_ID>. Later, you can use this URL to download the media file.
         /// </summary>
         /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUrlResponse</returns>
-        Task<MediaUrlResponse> GetMediaUrlAsync(string mediaId, CancellationToken cancellationToken = default);
+        Task<MediaUrlResponse> GetMediaUrlAsync(string mediaId, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// To retrieve your media’s URL, make a GET call to /{{Media-ID}}. Later, you can use this URL to download the media file.
+        /// To retrieve your media’s URL, make a GET call to /{{Media-ID}}?phone_number_id=<PHONE_NUMBER_ID>. Later, you can use this URL to download the media file.
         /// </summary>
         /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUrlResponse</returns>
-        MediaUrlResponse GetMediaUrl(string mediaId, CancellationToken cancellationToken = default);
+        MediaUrlResponse GetMediaUrl(string mediaId, bool isMediaOwnershipVerified = false,  CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To delete media, make a DELETE call to the ID of the media you want to delete.
         /// </summary>
         /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        Task<BaseSuccessResponse> DeleteMediaAsync(string mediaId, CancellationToken cancellationToken = default);
+        Task<BaseSuccessResponse> DeleteMediaAsync(string mediaId, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To delete media, make a DELETE call to the ID of the media you want to delete.
         /// </summary>
         /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        BaseSuccessResponse DeleteMedia(string mediaId, CancellationToken cancellationToken = default);
+        BaseSuccessResponse DeleteMedia(string mediaId, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default);
         #endregion
 
         #region Phone Numbers functions

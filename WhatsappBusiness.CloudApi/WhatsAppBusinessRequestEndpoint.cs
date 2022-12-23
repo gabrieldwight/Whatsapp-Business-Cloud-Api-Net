@@ -66,9 +66,19 @@ namespace WhatsappBusiness.CloudApi
         public static string GetMediaUrl { get; private set; } = "{{Media-ID}}";
 
         /// <summary>
+        /// To retrieve media URL with phone number id ownership
+        /// </summary>
+        public static string GetMediaUrlOwnership { get; private set; } = "{{Media-ID}}?phone_number_id={{PHONE_NUMBER_ID}}";
+
+        /// <summary>
         /// Delete media
         /// </summary>
         public static string DeleteMedia { get; private set; } = "{{Media-ID}}";
+
+        /// <summary>
+        /// Delete Media with phone number id ownership
+        /// </summary>
+        public static string DeleteMediaOwnership { get; private set; } = "{{Media-ID}}/?phone_number_id={{PHONE_NUMBER_ID}}";
 
         /// <summary>
         /// Endpoint to send WhatsApp Messages
