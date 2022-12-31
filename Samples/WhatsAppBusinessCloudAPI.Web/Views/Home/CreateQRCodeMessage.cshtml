@@ -1,0 +1,58 @@
+﻿@model QRCodeMessageViewModel
+@{
+	ViewData["Title"] = "Create QR Code WhatsApp Message Page";
+	ViewData["CurrentPage"] = "Create QR Code Message";
+	Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+	ViewData["ControllerName"] = nameof(HomeController).Replace("Controller", "");
+	ViewData["ActionName"] = nameof(HomeController.CreateQRCodeMessage);
+}
+
+<section class="content">
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-info">
+				<div class="card-header">
+					<h3 class="card-title">Create QR Code Message</h3>
+				</div> <!--/. card-header -->
+				<!--Form start -->
+				<form asp-action="CreateQRCodeMessage">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="card-body">
+						<div class="form-group">
+							<label class="control-label">Prefilled Message</label>
+							<input asp-for="Message" class="form-control" />
+							<span asp-validation-for="Message" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">QR Image Format</label>
+							<select class="form-control form-select form-select-lg mb-3" asp-for="SelectedImageFormat" asp-items="@Model.ImageFormat"></select>
+							<span asp-validation-for="SelectedImageFormat" class="form-control" />
+						</div>
+
+						<!-- Results -->
+						<div class="form-group">
+							<h2>QR Code Id: @ViewBag.QRCodeId</h2>
+						</div>
+
+						<div class="form-group">
+							<h2>Message: @ViewBag.QRCodeMessage</h2>
+						</div>
+
+						<div class="form-group">
+							<img src="@ViewBag.QRCodeUrl" class="img-thumbnail" />
+						</div>
+					</div> <!--/. card-body -->
+					<div class="card-footer">
+						<button type="submit" name="submit" class="btn btn-primary">Create QR Code Message</button>
+					</div>
+				</form>
+			</div> <!-- /.card -->
+		</div>
+	</div>
+</section>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	} 

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WhatsappBusiness.CloudApi.Response.QRCodeMessageResponse>
+@{
+	ViewData["Title"] = "QR Code Message List";
+	ViewData["CurrentPage"] = "QR Code Message List";
+	Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+	ViewData["ControllerName"] = nameof(HomeController).Replace("Controller", "");
+	ViewData["ActionName"] = nameof(HomeController.QRCodeMessageList);
+	int counter = 0;
+}
+
+<section class="content">
+	<div class="row">
+		@if (Model.Any())
+		{
+			@foreach (var item in Model)
+			{
+				if (counter != 0 && counter % 3 == 0)
+				{
+					@:</div>
+					@:<hr />
+					@:<div class="row">
+				}
+				<div class="col-md-4 col-sm-6">
+					<div class="card card-info">
+						<div class="card-header">
+							<h3 class="card-title">QR Code Message List</h3>
+						</div> <!--/. card-header -->
+						<div class="card-body">
+							<h5>@item.Code</h5>
+							<br />
+							<h5>@item.PrefilledMessage</h5>
+							<br />
+						</div> <!--/. card-body -->
+					</div> <!-- /.card -->
+				</div>
+				counter++;
+			}
+		}
+	</div>
+</section>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	} 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using WhatsappBusiness.CloudApi;
+using WhatsappBusiness.CloudApi.AccountMetrics;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
 using WhatsappBusiness.CloudApi.Interfaces;
@@ -842,5 +843,123 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    }
+
+		public IActionResult CreateQRCodeMessage()
+		{
+            QRCodeMessageViewModel qrCodeMessageViewModel = new QRCodeMessageViewModel();
+            qrCodeMessageViewModel.ImageFormat = new List<SelectListItem>()
+            {
+				new SelectListItem(){ Text = "SVG", Value = "SVG" },
+				new SelectListItem(){ Text = "PNG", Value = "PNG" },
+			};
+
+			return View(qrCodeMessageViewModel);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> CreateQRCodeMessage(QRCodeMessageViewModel qrCodeMessageViewModel)
+		{
+            try
+            {
+                var results = await _whatsAppBusinessClient.CreateQRCodeMessageAsync(qrCodeMessageViewModel.Message, qrCodeMessageViewModel.SelectedImageFormat);
+
+                if (results is not null)
+                {
+                    ViewBag.QRCodeId = results.Code;
+                    ViewBag.QRCodeMessage = results.PrefilledMessage;
+                    ViewBag.QRCodeUrl = results.QrImageUrl;
+					return View(qrCodeMessageViewModel).WithSuccess("Success", "Successfully created QR code Message.");
+				}
+                else
+                {
+					return View(qrCodeMessageViewModel).WithDanger("Error", "QR code message is null");
+				}
+            }
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return View(qrCodeMessageViewModel).WithDanger("Error", ex.Message);
+			}
+		}
+
+        public async Task<IActionResult> QRCodeMessageList()
+        {
+            try
+            {
+                var results = await _whatsAppBusinessClient.GetQRCodeMessageListAsync();
+
+                if (results is not null)
+                {
+                    if (results.Data.Any())
+                    {
+                        return View(results.Data).WithSuccess("Success", "Successfully retrieved QR code Message List");
+                    }
+                    else
+                    {
+                        return View(results.Data).WithDanger("Error", "QR code message list is empty");
+                    }
+                }
+                else
+                {
+                    return View().WithDanger("Error", "QR code message list not availble");
+                }
+            }
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return View().WithDanger("Error", ex.Message);
+			}
+		}
+
+        public async Task<IActionResult> Analytics()
+        {
+            try
+            {
+				DateTime currentDate = DateTime.UtcNow;
+				var startOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+				var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+				var results = await _whatsAppBusinessClient.GetAnalyticMetricsAsync(_whatsAppConfig.WhatsAppBusinessAccountId, startOfMonth, endOfMonth, Granularity.AnalyticsGranularity.MONTH);
+
+				if (results is not null)
+				{
+					return View(results).WithSuccess("Success", "Analytics retrieved successfully");
+				}
+				else
+				{
+					return View().WithDanger("Error", "Analytics not available");
+				}
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return View().WithDanger("Error", ex.Message);
+			}
+		}
+
+        public async Task<IActionResult> ConversationAnalytics()
+        {
+            try
+            {
+                DateTime currentDate = DateTime.UtcNow;
+                var startOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+                var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+                var results = await _whatsAppBusinessClient.GetConversationAnalyticMetricsAsync(_whatsAppConfig.WhatsAppBusinessAccountId, startOfMonth, endOfMonth, Granularity.ConversationGranularity.MONTHLY);
+
+                if (results is not null)
+                {
+                    return View(results).WithSuccess("Success", "Conversation Analytics retrieved successfully");
+                }
+                else
+                {
+                    return View().WithDanger("Error", "Conversation Analytics not available");
+                }
+            }
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return View().WithDanger("Error", ex.Message);
+			}
+		}
+	}
 }
