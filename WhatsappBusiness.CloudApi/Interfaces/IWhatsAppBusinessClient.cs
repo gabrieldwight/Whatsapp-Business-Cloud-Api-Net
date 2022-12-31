@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
@@ -782,6 +784,152 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
         BaseSuccessResponse DeleteWABASubscription(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default);
+        #endregion
+
+        #region Account Metrics
+        /// <summary>
+        /// The analytics field provides the number and type of messages sent and delivered by the phone numbers associated with a specific WABA
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+        /// <param name="productTypes">The types of messages (notification messages and/or customer support messages) for which you want to retrieve notifications. Provide an array and include 0 for notification messages, and 2 for customer support messages. If not provided, analytics will be returned for all messages together</param>
+        /// <param name="countryCodes">The countries for which you would like to retrieve analytics. Provide an array with 2 letter country codes for the countries you would like to include. If not provided, analytics will be returned for all countries you have communicated with</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>AnalyticsResponse</returns>
+        AnalyticsResponse GetAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? productTypes = null, List<string>? countryCodes = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// The analytics field provides the number and type of messages sent and delivered by the phone numbers associated with a specific WABA
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+        /// <param name="productTypes">The types of messages (notification messages and/or customer support messages) for which you want to retrieve notifications. Provide an array and include 0 for notification messages, and 2 for customer support messages. If not provided, analytics will be returned for all messages together</param>
+        /// <param name="countryCodes">The countries for which you would like to retrieve analytics. Provide an array with 2 letter country codes for the countries you would like to include. If not provided, analytics will be returned for all countries you have communicated with</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>AnalyticsResponse</returns>
+        Task<AnalyticsResponse> GetAnalyticMetricsAsync(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? productTypes = null, List<string>? countryCodes = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// The conversation_analytics field provides cost and conversation information for a specific WABA.
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+        /// <param name="metricTypes">List of metrics you would like to receive. If you send an empty list, we return results for all metric types.</param>
+        /// <param name="conversationTypes">List of conversation types. If you send an empty list, we return results for all conversation types.</param>
+        /// <param name="conversationDirections">List of conversation directions. If you send an empty list, we return results for all conversation directions</param>
+        /// <param name="dimensions">List of breakdowns you would like to apply to your metrics. If you send an empty list, we return results without any breakdowns.</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>ConversationAnalyticsResponse</returns>
+        ConversationAnalyticsResponse GetConversationAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// The conversation_analytics field provides cost and conversation information for a specific WABA.
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+        /// <param name="metricTypes">List of metrics you would like to receive. If you send an empty list, we return results for all metric types.</param>
+        /// <param name="conversationTypes">List of conversation types. If you send an empty list, we return results for all conversation types.</param>
+        /// <param name="conversationDirections">List of conversation directions. If you send an empty list, we return results for all conversation directions</param>
+        /// <param name="dimensions">List of breakdowns you would like to apply to your metrics. If you send an empty list, we return results without any breakdowns.</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>ConversationAnalyticsResponse</returns>
+        Task<ConversationAnalyticsResponse> GetConversationAnalyticMetricsAsync(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, CancellationToken cancellationToken = default);
+        #endregion
+
+        #region QR Code Message
+        /// <summary>
+        /// To create a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls endpoint with the prefilled_message parameter set to your message text and generate_qr_image parameter set to your preferred image format, either SVG or PNG.
+        /// </summary>
+        /// <param name="messageText"></param>
+        /// <param name="qrImageFormat"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageResponse</returns>
+        QRCodeMessageResponse CreateQRCodeMessage(string messageText, string qrImageFormat, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To create a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls endpoint with the prefilled_message parameter set to your message text and generate_qr_image parameter set to your preferred image format, either SVG or PNG.
+        /// </summary>
+        /// <param name="messageText"></param>
+        /// <param name="qrImageFormat"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageResponse</returns>
+        Task<QRCodeMessageResponse> CreateQRCodeMessageAsync(string messageText, string qrImageFormat, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To get a list of all the QR codes messages for a business
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageFilterResponse</returns>
+        QRCodeMessageFilterResponse GetQRCodeMessageList(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To get a list of all the QR codes messages for a business
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageFilterResponse</returns>
+        Task<QRCodeMessageFilterResponse> GetQRCodeMessageListAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To get information about a specific QR code message
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageFilterResponse</returns>
+        QRCodeMessageFilterResponse GetQRCodeMessageById(string qrCodeId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To get information about a specific QR code message
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageFilterResponse</returns>
+        Task<QRCodeMessageFilterResponse> GetQRCodeMessageByIdAsync(string qrCodeId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To update a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls/{qr-code-id} endpoint and include the parameter you wish to update.
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="messageText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageResponse</returns>
+        QRCodeMessageResponse UpdateQRCodeMessage(string qrCodeId, string messageText, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To update a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls/{qr-code-id} endpoint and include the parameter you wish to update.
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="messageText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageResponse</returns>
+        Task<QRCodeMessageResponse> UpdateQRCodeMessageAsync(string qrCodeId, string messageText, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// QR codes do not expire. You must delete a QR code in order to retire it.
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>BaseSuccessResponse</returns>
+        BaseSuccessResponse DeleteQRCodeMessage(string qrCodeId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// QR codes do not expire. You must delete a QR code in order to retire it.
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>BaseSuccessResponse</returns>
+        Task<BaseSuccessResponse> DeleteQRCodeMessageAsync(string qrCodeId, CancellationToken cancellationToken = default);
         #endregion
     }
 }

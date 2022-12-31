@@ -5,14 +5,9 @@ namespace WhatsappBusiness.CloudApi
     public static class WhatsAppBusinessRequestEndpoint
     {
         /// <summary>
-        /// WhatsApp Business Cloud API V13 BaseAddress
+        /// WhatsApp Business Cloud API V15 BaseAddress
         /// </summary>
-        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v13.0/");
-
-        /// <summary>
-        /// WhatsApp Business Cloud API V14 BaseAddress
-        /// </summary>
-        public static Uri V14BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v14.0/");
+        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v15.0/");
 
         /// <summary>
         /// To register your phone to WhatsApp Business
@@ -133,5 +128,25 @@ namespace WhatsappBusiness.CloudApi
         /// If you don’t want an application to receive webhooks for a given WhatsApp Business Account anymore you can delete the subscription.
         /// </summary>
         public static string DeleteSubscribedApps { get; private set; } = "{{WABA-ID}}/subscribed_apps";
+
+        /// <summary>
+        /// You can use the analytics and conversation_analytics fields to get metrics about messages and conversations associated with your WhatsApp Business Account (WABA). Specifically, you can get the number of messages sent and delivered as well as conversation and cost information for a given period.
+        /// </summary>
+        public static string AnalyticsAccountMetrics { get; private set; } = "{{WABA-ID}}?fields=analytics.start({{start-date}}).end({{end-date}}).granularity({{granularity}})";
+
+        /// <summary>
+        /// You can use the analytics and conversation_analytics fields to get metrics about messages and conversations associated with your WhatsApp Business Account (WABA). Specifically, you can get the number of messages sent and delivered as well as conversation and cost information for a given period.
+        /// </summary>
+        public static string ConversationAnalyticsAccountMetrics { get; private set; } = "{{WABA-ID}}?fields=conversation_analytics.start({{start-date}}).end({{end-date}}).granularity({{granularity}})";
+
+        public static string CreateQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls?prefilled_message={{message-text}}&generate_qr_image={{image-format}}&access_token={{user-access-token}}";
+
+        public static string GetQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls";
+
+        public static string GetQRCodeMessageById { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}";
+
+        public static string UpdateQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}?prefilled_message={{new-message-text}}&access_token={{user-access-token}}";
+
+        public static string DeleteQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}&access_token={{user-access-token}}";
     }
 }

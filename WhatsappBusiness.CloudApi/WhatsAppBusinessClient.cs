@@ -1,15 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Polly;
 using Polly.Extensions.Http;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WhatsappBusiness.CloudApi.AccountMetrics;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
@@ -54,7 +58,7 @@ namespace WhatsappBusiness.CloudApi
             var services = new ServiceCollection();
             services.AddHttpClient("WhatsAppBusinessApiClient", client =>
             {
-                client.BaseAddress = (isLatestGraphApiVersion) ? WhatsAppBusinessRequestEndpoint.V14BaseAddress : WhatsAppBusinessRequestEndpoint.BaseAddress;
+                client.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
                 client.Timeout = TimeSpan.FromMinutes(10);
             }).ConfigurePrimaryHttpMessageHandler(messageHandler =>
             {
@@ -85,6 +89,48 @@ namespace WhatsappBusiness.CloudApi
         {
             _httpClient = httpClient;
             _whatsAppConfig = whatsAppConfig;
+        }
+
+        /// <summary>
+        /// To create a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls endpoint with the prefilled_message parameter set to your message text and generate_qr_image parameter set to your preferred image format, either SVG or PNG.
+        /// </summary>
+        /// <param name="messageText"></param>
+        /// <param name="qrImageFormat"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageResponse</returns>
+        public QRCodeMessageResponse CreateQRCodeMessage(string messageText, string qrImageFormat, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.CreateQRCodeMessage);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            builder.Replace("{{message-text}}", messageText);
+            builder.Replace("{{image-format}}", qrImageFormat);
+            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return WhatsAppBusinessPostAsync<QRCodeMessageResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// To create a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls endpoint with the prefilled_message parameter set to your message text and generate_qr_image parameter set to your preferred image format, either SVG or PNG.
+        /// </summary>
+        /// <param name="messageText"></param>
+        /// <param name="qrImageFormat"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageResponse</returns>
+        public async Task<QRCodeMessageResponse> CreateQRCodeMessageAsync(string messageText, string qrImageFormat, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.CreateQRCodeMessage);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            builder.Replace("{{message-text}}", messageText);
+            builder.Replace("{{image-format}}", qrImageFormat);
+            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return await WhatsAppBusinessPostAsync<QRCodeMessageResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
         }
 
         /// <summary>
@@ -198,6 +244,44 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
+        /// QR codes do not expire. You must delete a QR code in order to retire it.
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>BaseSuccessResponse</returns>
+        public BaseSuccessResponse DeleteQRCodeMessage(string qrCodeId, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.DeleteQRCodeMessage);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            builder.Replace("{{qr-code-id}}", qrCodeId);
+            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// QR codes do not expire. You must delete a QR code in order to retire it.
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>BaseSuccessResponse</returns>
+        public async Task<BaseSuccessResponse> DeleteQRCodeMessageAsync(string qrCodeId, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.DeleteQRCodeMessage);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            builder.Replace("{{qr-code-id}}", qrCodeId);
+            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return await WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
+        }
+
+        /// <summary>
         /// If you don’t want an application to receive webhooks for a given WhatsApp Business Account anymore you can delete the subscription.
         /// </summary>
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
@@ -243,6 +327,226 @@ namespace WhatsappBusiness.CloudApi
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DeregisterPhone.Replace("{{Phone-Number-ID}}", whatsAppBusinessPhoneNumberId);
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// The analytics field provides the number and type of messages sent and delivered by the phone numbers associated with a specific WABA
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+        /// <param name="productTypes">The types of messages (notification messages and/or customer support messages) for which you want to retrieve notifications. Provide an array and include 0 for notification messages, and 2 for customer support messages. If not provided, analytics will be returned for all messages together</param>
+        /// <param name="countryCodes">The countries for which you would like to retrieve analytics. Provide an array with 2 letter country codes for the countries you would like to include. If not provided, analytics will be returned for all countries you have communicated with</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>AnalyticsResponse</returns>
+        public AnalyticsResponse GetAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? productTypes = null, List<string>? countryCodes = null, CancellationToken cancellationToken = default)
+        {
+            StringBuilder analyticUrlBuilder = new StringBuilder();
+            analyticUrlBuilder.Append(WhatsAppBusinessRequestEndpoint.AnalyticsAccountMetrics);
+
+            string formattedWhatsAppEndpoint;
+
+            if (phoneNumbers is null)
+            {
+                phoneNumbers = new();
+            }
+
+            if (productTypes is null)
+            {
+                productTypes = new();
+            }
+
+            if (countryCodes is null)
+            {
+                countryCodes = new();
+            }
+
+            analyticUrlBuilder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            analyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
+            analyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
+            analyticUrlBuilder.Replace("{{granularity}}", granularity);
+            analyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
+            analyticUrlBuilder.Append($".product_types({JsonConvert.SerializeObject(productTypes)})");
+            analyticUrlBuilder.Append($".country_codes({JsonConvert.SerializeObject(countryCodes)})");
+			analyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
+
+			formattedWhatsAppEndpoint = analyticUrlBuilder.ToString();
+
+            return WhatsAppBusinessGetAsync<AnalyticsResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// The analytics field provides the number and type of messages sent and delivered by the phone numbers associated with a specific WABA
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+        /// <param name="productTypes">The types of messages (notification messages and/or customer support messages) for which you want to retrieve notifications. Provide an array and include 0 for notification messages, and 2 for customer support messages. If not provided, analytics will be returned for all messages together</param>
+        /// <param name="countryCodes">The countries for which you would like to retrieve analytics. Provide an array with 2 letter country codes for the countries you would like to include. If not provided, analytics will be returned for all countries you have communicated with</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>AnalyticsResponse</returns>
+        public async Task<AnalyticsResponse> GetAnalyticMetricsAsync(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? productTypes = null, List<string>? countryCodes = null, CancellationToken cancellationToken = default)
+        {
+            StringBuilder analyticUrlBuilder = new StringBuilder();
+            analyticUrlBuilder.Append(WhatsAppBusinessRequestEndpoint.AnalyticsAccountMetrics);
+
+            string formattedWhatsAppEndpoint;
+
+            if (phoneNumbers is null)
+            {
+                phoneNumbers = new();
+            }
+
+            if (productTypes is null)
+            {
+                productTypes = new();
+            }
+
+            if (countryCodes is null)
+            {
+                countryCodes = new();
+            }
+
+            analyticUrlBuilder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            analyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
+            analyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
+            analyticUrlBuilder.Replace("{{granularity}}", granularity);
+            analyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
+            analyticUrlBuilder.Append($".product_types({JsonConvert.SerializeObject(productTypes)})");
+            analyticUrlBuilder.Append($".country_codes({JsonConvert.SerializeObject(countryCodes)})");
+            analyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
+
+            formattedWhatsAppEndpoint = analyticUrlBuilder.ToString();
+
+            return await WhatsAppBusinessGetAsync<AnalyticsResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
+        }
+
+        /// <summary>
+        /// The conversation_analytics field provides cost and conversation information for a specific WABA.
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+        /// <param name="metricTypes">List of metrics you would like to receive. If you send an empty list, we return results for all metric types.</param>
+        /// <param name="conversationTypes">List of conversation types. If you send an empty list, we return results for all conversation types.</param>
+        /// <param name="conversationDirections">List of conversation directions. If you send an empty list, we return results for all conversation directions</param>
+        /// <param name="dimensions">List of breakdowns you would like to apply to your metrics. If you send an empty list, we return results without any breakdowns.</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>ConversationAnalyticsResponse</returns>
+        public ConversationAnalyticsResponse GetConversationAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, CancellationToken cancellationToken = default)
+        {
+            StringBuilder conversationAnalyticUrlBuilder = new StringBuilder();
+            conversationAnalyticUrlBuilder.Append(WhatsAppBusinessRequestEndpoint.ConversationAnalyticsAccountMetrics);
+
+            string formattedWhatsAppEndpoint;
+
+            if (phoneNumbers is null)
+            {
+                phoneNumbers = new();
+            }
+
+            if (metricTypes is null)
+            {
+                metricTypes = new();
+            }
+
+            if (conversationTypes is null)
+            {
+                conversationTypes = new();
+            }
+
+            if (conversationDirections is null)
+            {
+                conversationDirections = new();
+            }
+
+            if (dimensions is null)
+            {
+                dimensions = new();
+            }
+
+            conversationAnalyticUrlBuilder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            conversationAnalyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
+            conversationAnalyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
+            conversationAnalyticUrlBuilder.Replace("{{granularity}}", granularity);
+            conversationAnalyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
+            conversationAnalyticUrlBuilder.Append($".metric_types({JsonConvert.SerializeObject(metricTypes)})");
+            conversationAnalyticUrlBuilder.Append($".conversation_types({JsonConvert.SerializeObject(conversationTypes)})");
+            conversationAnalyticUrlBuilder.Append($".conversation_directions({JsonConvert.SerializeObject(conversationDirections)})");
+            conversationAnalyticUrlBuilder.Append($".dimensions({JsonConvert.SerializeObject(dimensions)})");
+			conversationAnalyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
+
+			formattedWhatsAppEndpoint = conversationAnalyticUrlBuilder.ToString();
+
+            return WhatsAppBusinessGetAsync<ConversationAnalyticsResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// The conversation_analytics field provides cost and conversation information for a specific WABA.
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+        /// <param name="metricTypes">List of metrics you would like to receive. If you send an empty list, we return results for all metric types.</param>
+        /// <param name="conversationTypes">List of conversation types. If you send an empty list, we return results for all conversation types.</param>
+        /// <param name="conversationDirections">List of conversation directions. If you send an empty list, we return results for all conversation directions</param>
+        /// <param name="dimensions">List of breakdowns you would like to apply to your metrics. If you send an empty list, we return results without any breakdowns.</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>ConversationAnalyticsResponse</returns>
+        public async Task<ConversationAnalyticsResponse> GetConversationAnalyticMetricsAsync(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, CancellationToken cancellationToken = default)
+        {
+            StringBuilder conversationAnalyticUrlBuilder = new StringBuilder();
+            conversationAnalyticUrlBuilder.Append(WhatsAppBusinessRequestEndpoint.ConversationAnalyticsAccountMetrics);
+
+            string formattedWhatsAppEndpoint;
+
+            if (phoneNumbers is null)
+            {
+                phoneNumbers = new();
+            }
+
+            if (metricTypes is null)
+            {
+                metricTypes = new();
+            }
+
+            if (conversationTypes is null)
+            {
+                conversationTypes = new();
+            }
+
+            if (conversationDirections is null)
+            {
+                conversationDirections = new();
+            }
+
+            if (dimensions is null)
+            {
+                dimensions = new();
+            }
+
+            conversationAnalyticUrlBuilder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            conversationAnalyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
+            conversationAnalyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
+            conversationAnalyticUrlBuilder.Replace("{{granularity}}", granularity);
+            conversationAnalyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
+            conversationAnalyticUrlBuilder.Append($".metric_types({JsonConvert.SerializeObject(metricTypes)})");
+            conversationAnalyticUrlBuilder.Append($".conversation_types({JsonConvert.SerializeObject(conversationTypes)})");
+            conversationAnalyticUrlBuilder.Append($".conversation_directions({JsonConvert.SerializeObject(conversationDirections)})");
+            conversationAnalyticUrlBuilder.Append($".dimensions({JsonConvert.SerializeObject(dimensions)})");
+			conversationAnalyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
+
+			formattedWhatsAppEndpoint = conversationAnalyticUrlBuilder.ToString();
+
+            return await WhatsAppBusinessGetAsync<ConversationAnalyticsResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
         }
 
         /// <summary>
@@ -309,6 +613,74 @@ namespace WhatsappBusiness.CloudApi
                 formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetMediaUrl.Replace("{{Media-ID}}", mediaId);
             }
             return await WhatsAppBusinessGetAsync<MediaUrlResponse>(formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// To get a list of all the QR codes messages for a business
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageFilterResponse</returns>
+        public QRCodeMessageFilterResponse GetQRCodeMessageList(CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.GetQRCodeMessage);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return WhatsAppBusinessGetAsync<QRCodeMessageFilterResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// To get a list of all the QR codes messages for a business
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageFilterResponse</returns>
+        public async Task<QRCodeMessageFilterResponse> GetQRCodeMessageListAsync(CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.GetQRCodeMessage);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return await WhatsAppBusinessGetAsync<QRCodeMessageFilterResponse>(formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// To get information about a specific QR code message
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageFilterResponse</returns>
+        public QRCodeMessageFilterResponse GetQRCodeMessageById(string qrCodeId, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.GetQRCodeMessageById);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            builder.Replace("{{qr-code-id}}", qrCodeId);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return WhatsAppBusinessGetAsync<QRCodeMessageFilterResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// To get information about a specific QR code message
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageFilterResponse</returns>
+        public async Task<QRCodeMessageFilterResponse> GetQRCodeMessageByIdAsync(string qrCodeId, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.GetQRCodeMessageById);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            builder.Replace("{{qr-code-id}}", qrCodeId);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return await WhatsAppBusinessGetAsync<QRCodeMessageFilterResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
         /// <summary>
@@ -1170,6 +1542,48 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
+        /// To update a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls/{qr-code-id} endpoint and include the parameter you wish to update.
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="messageText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageResponse</returns>
+        public QRCodeMessageResponse UpdateQRCodeMessage(string qrCodeId, string messageText, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.UpdateQRCodeMessage);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            builder.Replace("{{qr-code-id}}", qrCodeId);
+            builder.Replace("{{new-message-text}}", messageText);
+            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return WhatsAppBusinessPostAsync<QRCodeMessageResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// To update a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls/{qr-code-id} endpoint and include the parameter you wish to update.
+        /// </summary>
+        /// <param name="qrCodeId"></param>
+        /// <param name="messageText"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>QRCodeMessageResponse</returns>
+        public async Task<QRCodeMessageResponse> UpdateQRCodeMessageAsync(string qrCodeId, string messageText, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.UpdateQRCodeMessage);
+            builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            builder.Replace("{{qr-code-id}}", qrCodeId);
+            builder.Replace("{{new-message-text}}", messageText);
+            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return await WhatsAppBusinessPostAsync<QRCodeMessageResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
+        }
+
+        /// <summary>
         /// To upload a profile picture to your business profile, make a POST call to the named endpoint v14.0/{{Upload-ID}}, where Upload-ID is the value you received from Resumable Upload - Create an Upload Session.
         /// </summary>
         /// <param name="uploadId">Upload id Session</param>
@@ -1315,9 +1729,13 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Response Object</returns>
         /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
-        private async Task<T> WhatsAppBusinessPostAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default) where T : new()
+        private async Task<T> WhatsAppBusinessPostAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default, bool isHeaderAccessTokenProvided = true) where T : new()
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            if (isHeaderAccessTokenProvided)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            }
+            
             T result = new();
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -1471,6 +1889,7 @@ namespace WhatsappBusiness.CloudApi
             return result;
         }
 
+        
         /// <summary>
         /// To perform WhatsAppBusiness Cloud API endpoint GET request 
         /// </summary>
@@ -1480,10 +1899,13 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="isCacheControlActive">Resumable upload header parameter</param>
         /// <returns>Response object</returns>
         /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
-        private async Task<T> WhatsAppBusinessGetAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default, bool isCacheControlActive = false) where T : new()
+        private async Task<T> WhatsAppBusinessGetAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default, bool isCacheControlActive = false, bool isHeaderAccessTokenProvided = true) where T : new()
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
-            
+            if (isHeaderAccessTokenProvided)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            }
+
             if (isCacheControlActive)
             {
                 _httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
@@ -1610,9 +2032,12 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Response object</returns>
         /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
-        private async Task<T> WhatsAppBusinessDeleteAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default) where T : new()
+        private async Task<T> WhatsAppBusinessDeleteAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default, bool isHeaderAccessTokenProvided = true) where T : new()
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            if (isHeaderAccessTokenProvided)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            }
             T result = new();
             cancellationToken.ThrowIfCancellationRequested();
             var response = await _httpClient.DeleteAsync(whatsAppBusinessEndpoint, cancellationToken).ConfigureAwait(false);

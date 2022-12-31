@@ -39,7 +39,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
             {
-                options.BaseAddress = (isLatestGraphApiVersion) ? WhatsAppBusinessRequestEndpoint.V14BaseAddress : WhatsAppBusinessRequestEndpoint.BaseAddress;
+                options.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
                 options.Timeout = TimeSpan.FromMinutes(10);
             }).ConfigurePrimaryHttpMessageHandler(messageHandler =>
             {
@@ -76,7 +76,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
             {
-                options.BaseAddress = (isLatestGraphApiVersion) ? WhatsAppBusinessRequestEndpoint.V14BaseAddress : WhatsAppBusinessRequestEndpoint.BaseAddress;
+                options.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
                 options.Timeout = TimeSpan.FromMinutes(10);
             }).SetHandlerLifetime(Timeout.InfiniteTimeSpan)
               .ConfigurePrimaryHttpMessageHandler<THandler>()
