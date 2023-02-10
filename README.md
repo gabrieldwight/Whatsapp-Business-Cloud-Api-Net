@@ -20,6 +20,8 @@ WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/do
 - [End User License](https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net/blob/master/LICENSE)
 - [NuGet Package](https://www.nuget.org/packages/WhatsappBusiness.CloudApi/)
 
+Take note: Sending a message to a phone number format `00[Country Code] xx xx xx` using the prefix `00` before the country code will make the cloud API to return invalid parameter error (#100) (Credits @Tekkharibo)
+
 ## Capabilities
 
 > Note: **This package is WIP**. The capabilities of Cloud API will be reflected soon. Feel free to contribute!
