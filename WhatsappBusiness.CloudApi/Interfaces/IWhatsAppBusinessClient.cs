@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
+using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
@@ -293,209 +294,235 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// Send Audio Message using Media Id
         /// </summary>
         /// <param name="audioMessage">Audio Message Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendAudioAttachmentMessageByIdAsync(AudioMessageByIdRequest audioMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendAudioAttachmentMessageByIdAsync(AudioMessageByIdRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Audio Message using Media Id
         /// </summary>
         /// <param name="audioMessage">Audio Message Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendAudioAttachmentMessageById(AudioMessageByIdRequest audioMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendAudioAttachmentMessageById(AudioMessageByIdRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Audio Message using hyperlink
         /// </summary>
         /// <param name="audioMessage">AudioMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendAudioAttachmentMessageByUrlAsync(AudioMessageByUrlRequest audioMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendAudioAttachmentMessageByUrlAsync(AudioMessageByUrlRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Audio Message using hyperlink
         /// </summary>
         /// <param name="audioMessage">AudioMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendAudioAttachmentMessageByUrl(AudioMessageByUrlRequest audioMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendAudioAttachmentMessageByUrl(AudioMessageByUrlRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Contact Message
         /// </summary>
         /// <param name="contactMessage">ContactMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendContactAttachmentMessageAsync(ContactMessageRequest contactMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendContactAttachmentMessageAsync(ContactMessageRequest contactMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Contact Message
         /// </summary>
         /// <param name="contactMessage">ContactMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendContactAttachmentMessage(ContactMessageRequest contactMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendContactAttachmentMessage(ContactMessageRequest contactMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Document Message using Media Id
         /// </summary>
         /// <param name="documentMessage">DocumentMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendDocumentAttachmentMessageByIdAsync(DocumentMessageByIdRequest documentMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendDocumentAttachmentMessageByIdAsync(DocumentMessageByIdRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Document Message using Media Id
         /// </summary>
         /// <param name="documentMessage">DocumentMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendDocumentAttachmentMessageById(DocumentMessageByIdRequest documentMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendDocumentAttachmentMessageById(DocumentMessageByIdRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Document Message using hyperlink
         /// </summary>
         /// <param name="documentMessage">DocumentMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendDocumentAttachmentMessageByUrlAsync(DocumentMessageByUrlRequest documentMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendDocumentAttachmentMessageByUrlAsync(DocumentMessageByUrlRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Document Message using hyperlink
         /// </summary>
         /// <param name="documentMessage">DocumentMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendDocumentAttachmentMessageByUrl(DocumentMessageByUrlRequest documentMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendDocumentAttachmentMessageByUrl(DocumentMessageByUrlRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Document Template Message
         /// </summary>
         /// <param name="documentTemplateMessageRequest">DocumentTemplateMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendDocumentAttachmentTemplateMessageAsync(DocumentTemplateMessageRequest documentTemplateMessageRequest, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendDocumentAttachmentTemplateMessageAsync(DocumentTemplateMessageRequest documentTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Document Template Message
         /// </summary>
         /// <param name="documentTemplateMessageRequest">DocumentTemplateMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendDocumentAttachmentTemplateMessage(DocumentTemplateMessageRequest documentTemplateMessageRequest, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendDocumentAttachmentTemplateMessage(DocumentTemplateMessageRequest documentTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Image Message using Media Id
         /// </summary>
         /// <param name="imageMessage">ImageMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendImageAttachmentMessageByIdAsync(ImageMessageByIdRequest imageMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendImageAttachmentMessageByIdAsync(ImageMessageByIdRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Image Message using Media Id
         /// </summary>
         /// <param name="imageMessage">ImageMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendImageAttachmentMessageById(ImageMessageByIdRequest imageMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendImageAttachmentMessageById(ImageMessageByIdRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Image Message using hyperlink
         /// </summary>
         /// <param name="imageMessage">ImageMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendImageAttachmentMessageByUrlAsync(ImageMessageByUrlRequest imageMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendImageAttachmentMessageByUrlAsync(ImageMessageByUrlRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Image Message using hyperlink
         /// </summary>
         /// <param name="imageMessage">ImageMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendImageAttachmentMessageByUrl(ImageMessageByUrlRequest imageMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendImageAttachmentMessageByUrl(ImageMessageByUrlRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Image Template Message
         /// </summary>
         /// <param name="imageTemplateMessageRequest">ImageTemplateMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendImageAttachmentTemplateMessageAsync(ImageTemplateMessageRequest imageTemplateMessageRequest, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendImageAttachmentTemplateMessageAsync(ImageTemplateMessageRequest imageTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Image Template Message
         /// </summary>
         /// <param name="imageTemplateMessageRequest">ImageTemplateMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendImageAttachmentTemplateMessage(ImageTemplateMessageRequest imageTemplateMessageRequest, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendImageAttachmentTemplateMessage(ImageTemplateMessageRequest imageTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Interactive List Message
         /// </summary>
         /// <param name="interactiveListMessage">InteractiveListMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendInteractiveListMessageAsync(InteractiveListMessageRequest interactiveListMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendInteractiveListMessageAsync(InteractiveListMessageRequest interactiveListMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Interactive List Message
         /// </summary>
         /// <param name="interactiveListMessage">InteractiveListMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendInteractiveListMessage(InteractiveListMessageRequest interactiveListMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendInteractiveListMessage(InteractiveListMessageRequest interactiveListMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Interactive Reply Button Message
         /// </summary>
         /// <param name="interactiveReplyButtonMessage">InteractiveReplyButtonMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendInteractiveReplyButtonMessageAsync(InteractiveReplyButtonMessageRequest interactiveReplyButtonMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendInteractiveReplyButtonMessageAsync(InteractiveReplyButtonMessageRequest interactiveReplyButtonMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Interactive Reply Button Message
         /// </summary>
         /// <param name="interactiveReplyButtonMessage">InteractiveReplyButtonMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendInteractiveReplyButtonMessage(InteractiveReplyButtonMessageRequest interactiveReplyButtonMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendInteractiveReplyButtonMessage(InteractiveReplyButtonMessageRequest interactiveReplyButtonMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Interactive Template Message
         /// </summary>
         /// <param name="interactiveTemplateMessageRequest">InteractiveTemplateMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendInteractiveTemplateMessageAsync(InteractiveTemplateMessageRequest interactiveTemplateMessageRequest, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendInteractiveTemplateMessageAsync(InteractiveTemplateMessageRequest interactiveTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Interactive Template Message
         /// </summary>
         /// <param name="interactiveTemplateMessageRequest">InteractiveTemplateMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendInteractiveTemplateMessage(InteractiveTemplateMessageRequest interactiveTemplateMessageRequest, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendInteractiveTemplateMessage(InteractiveTemplateMessageRequest interactiveTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Location Message
         /// </summary>
         /// <param name="locationMessageRequest">LocationMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendLocationMessageAsync(LocationMessageRequest locationMessageRequest, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendLocationMessageAsync(LocationMessageRequest locationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Location Message
         /// </summary>
         /// <param name="locationMessageRequest">LocationMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendLocationMessage(LocationMessageRequest locationMessageRequest, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendLocationMessage(LocationMessageRequest locationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
@@ -523,165 +550,185 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// Send reaction message reply
         /// </summary>
         /// <param name="reactionMessageReply">ReactionMessageReply Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendReactionMessageReply(ReactionMessageReplyRequest reactionMessageReply, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendReactionMessageReply(ReactionMessageReplyRequest reactionMessageReply, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send reaction message reply
         /// </summary>
         /// <param name="reactionMessageReply">ReactionMessageReply Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendReactionMessageReplyAsync(ReactionMessageReplyRequest reactionMessageReply, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendReactionMessageReplyAsync(ReactionMessageReplyRequest reactionMessageReply, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Sticker Message by Media Id
         /// </summary>
         /// <param name="stickerMessage">StickerMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendStickerMessageByIdAsync(StickerMessageByIdRequest stickerMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendStickerMessageByIdAsync(StickerMessageByIdRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Sticker Message by Media Id
         /// </summary>
         /// <param name="stickerMessage">StickerMessage Object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendStickerMessageById(StickerMessageByIdRequest stickerMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendStickerMessageById(StickerMessageByIdRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Sticker Message by hyperlink
         /// </summary>
         /// <param name="stickerMessage">StickerMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendStickerMessageByUrlAsync(StickerMessageByUrlRequest stickerMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendStickerMessageByUrlAsync(StickerMessageByUrlRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Sticker Message by hyperlink
         /// </summary>
         /// <param name="stickerMessage">StickerMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendStickerMessageByUrl(StickerMessageByUrlRequest stickerMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendStickerMessageByUrl(StickerMessageByUrlRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Text Message
         /// </summary>
         /// <param name="textMessage">TextMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendTextMessageAsync(TextMessageRequest textMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendTextMessageAsync(TextMessageRequest textMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Text Message
         /// </summary>
         /// <param name="textMessage">TextMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendTextMessage(TextMessageRequest textMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendTextMessage(TextMessageRequest textMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Template Text Message
         /// </summary>
         /// <param name="textTemplateMessageRequest">TextTemplateMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendTextMessageTemplateAsync(TextTemplateMessageRequest textTemplateMessageRequest, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendTextMessageTemplateAsync(TextTemplateMessageRequest textTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Template Text Message
         /// </summary>
         /// <param name="textTemplateMessageRequest">TextTemplateMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendTextMessageTemplate(TextTemplateMessageRequest textTemplateMessageRequest, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendTextMessageTemplate(TextTemplateMessageRequest textTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Video Message by Media Id
         /// </summary>
         /// <param name="videoMessage">VideoMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendVideoAttachmentMessageByIdAsync(VideoMessageByIdRequest videoMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendVideoAttachmentMessageByIdAsync(VideoMessageByIdRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Video Message by Template
         /// </summary>
         /// <param name="videoTemplateMessageRequest">VideoTemplateMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendVideoAttachmentTemplateMessage(VideoTemplateMessageRequest videoTemplateMessageRequest, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendVideoAttachmentTemplateMessage(VideoTemplateMessageRequest videoTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Video Message by Template
         /// </summary>
         /// <param name="videoTemplateMessageRequest">VideoTemplateMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendVideoAttachmentTemplateMessageAsync(VideoTemplateMessageRequest videoTemplateMessageRequest, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendVideoAttachmentTemplateMessageAsync(VideoTemplateMessageRequest videoTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Video Message by Media Id
         /// </summary>
         /// <param name="videoMessage">VideoMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendVideoAttachmentMessageById(VideoMessageByIdRequest videoMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendVideoAttachmentMessageById(VideoMessageByIdRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Video Message using hyperlink
         /// </summary>
         /// <param name="videoMessage">VideoMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendVideoAttachmentMessageByUrlAsync(VideoMessageByUrlRequest videoMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendVideoAttachmentMessageByUrlAsync(VideoMessageByUrlRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send Video Message using hyperlink
         /// </summary>
         /// <param name="videoMessage">VideoMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendVideoAttachmentMessageByUrl(VideoMessageByUrlRequest videoMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendVideoAttachmentMessageByUrl(VideoMessageByUrlRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To send a single product message, make a POST call to the /v14.0/phone_number/messages endpoint.
         /// This request uses an interactive object and parameter type should be set to interactive.The interactive parameter must also be set to the interactive object associated with the single product message.
         /// </summary>
         /// <param name="singleProductMessage">SingleProductMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendSingleProductMessageAsync(SingleProductMessageRequest singleProductMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendSingleProductMessageAsync(SingleProductMessageRequest singleProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To send a single product message, make a POST call to the /v14.0/phone_number/messages endpoint.
         /// This request uses an interactive object and parameter type should be set to interactive.The interactive parameter must also be set to the interactive object associated with the single product message.
         /// </summary>
         /// <param name="singleProductMessage">SingleProductMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendSingleProductMessage(SingleProductMessageRequest singleProductMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendSingleProductMessage(SingleProductMessageRequest singleProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To send a multi-product message, make a POST call to the /v14.0/phone_number/messages endpoint.
         /// This request uses an interactive object and parameter type should be set to interactive.The interactive parameter must also be set to the interactive object associated with the single product message.
         /// </summary>
         /// <param name="multiProductMessage">MultiProductMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        Task<WhatsAppResponse> SendMultipleProductMessageAsync(MultiProductMessageRequest multiProductMessage, CancellationToken cancellationToken = default);
+        Task<WhatsAppResponse> SendMultipleProductMessageAsync(MultiProductMessageRequest multiProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To send a multi-product message, make a POST call to the /v14.0/phone_number/messages endpoint.
         /// This request uses an interactive object and parameter type should be set to interactive.The interactive parameter must also be set to the interactive object associated with the single product message.
         /// </summary>
         /// <param name="multiProductMessage">MultiProductMessage object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        WhatsAppResponse SendMultipleProductMessage(MultiProductMessageRequest multiProductMessage, CancellationToken cancellationToken = default);
+        WhatsAppResponse SendMultipleProductMessage(MultiProductMessageRequest multiProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
         #endregion
 
         #region Two step verification code function
