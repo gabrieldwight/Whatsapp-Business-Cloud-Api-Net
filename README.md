@@ -9,12 +9,18 @@ Official API Documentation: [Meta for Developers](https://developers.facebook.co
 
 Sell Product and Services: [Product Message Configuration](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/sell-products-and-services)
 
+Account Metrics: [Account Metrics Configuration for analytics and conversation analytics](https://developers.facebook.com/docs/whatsapp/business-management-api/analytics)
+
+QR Code Message Management: [QR Code Messages for WhatsApp Business](https://developers.facebook.com/docs/whatsapp/business-management-api/qr-codes)
+
 Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
 
 WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/docs/whatsapp/cloud-api/support/error-codes)
 
 - [End User License](https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net/blob/master/LICENSE)
 - [NuGet Package](https://www.nuget.org/packages/WhatsappBusiness.CloudApi/)
+
+Take note: Sending a message to a phone number format `00[Country Code] xx xx xx` using the prefix `00` before the country code will make the cloud API to return invalid parameter error (#100) (Credits @Tekkharibo)
 
 ## Capabilities
 
@@ -37,6 +43,10 @@ WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/do
   - [x] Location
   - [x] Interactive (List, Reply)
   - [x] Button
+
+- [x] WhatsApp Business Management API
+  - [x] QR Code Message Management
+  - [x] Account Metrics
 
 ## Installation
 - PackageManager: ```PM> Install-Package WhatsappBusiness.CloudApi```
