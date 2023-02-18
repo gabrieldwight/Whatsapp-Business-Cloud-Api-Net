@@ -22,7 +22,7 @@ whatsAppConfig.WhatsAppBusinessAccountId = builder.Configuration.GetSection("Wha
 whatsAppConfig.WhatsAppBusinessId = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessId"];
 whatsAppConfig.AccessToken = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AccessToken"];
 
-builder.Services.AddWhatsAppBusinessCloudApiService(whatsAppConfig, isLatestGraphApiVersion: true);
+builder.Services.AddWhatsAppBusinessCloudApiService(whatsAppConfig);
 
 var app = builder.Build();
 
