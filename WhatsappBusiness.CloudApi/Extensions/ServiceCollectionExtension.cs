@@ -17,7 +17,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <param name="whatsAppBusinessPhoneNumberId"></param>
-        public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, bool isLatestGraphApiVersion = false)
+        public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig)
         {
             Random jitterer = new Random();
 
@@ -54,7 +54,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
             }).AddPolicyHandler(request => request.Method.Equals(HttpMethod.Get) ? retryPolicy : noOpPolicy);
         }
 
-        public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, bool isLatestGraphApiVersion = false) where THandler : HttpMessageHandler
+        public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig) where THandler : HttpMessageHandler
         {
             Random jitterer = new Random();
 
