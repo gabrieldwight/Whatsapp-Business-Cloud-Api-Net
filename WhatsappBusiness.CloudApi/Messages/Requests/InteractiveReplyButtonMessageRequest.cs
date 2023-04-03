@@ -26,10 +26,16 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonProperty("type")]
         public string Type { get; private set; } = "button";
 
-        [JsonProperty("body")]
+		[JsonProperty("header")]
+		public ReplyButtonHeader Header { get; set; }
+
+		[JsonProperty("body")]
         public ReplyButtonBody Body { get; set; }
 
-        [JsonProperty("action")]
+		[JsonProperty("footer")]
+		public ReplyButtonFooter Footer { get; set; }
+
+		[JsonProperty("action")]
         public ReplyButtonAction Action { get; set; }
     }
 
@@ -62,4 +68,19 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonProperty("text")]
         public string Text { get; set; }
     }
+
+	public class ReplyButtonHeader
+	{
+		[JsonProperty("type")]
+		public string Type { get; set; }
+
+		[JsonProperty("text")]
+		public string Text { get; set; }
+	}
+
+	public class ReplyButtonFooter
+	{
+		[JsonProperty("text")]
+		public string Text { get; set; }
+	}
 }

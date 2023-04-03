@@ -340,10 +340,17 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                     interactiveReplyButtonMessage.To = sendInteractiveMessageViewModel.RecipientPhoneNumber;
                     interactiveReplyButtonMessage.Interactive = new InteractiveReplyButtonMessage();
 
-                    interactiveReplyButtonMessage.Interactive.Body = new ReplyButtonBody();
+					interactiveReplyButtonMessage.Interactive.Header = new ReplyButtonHeader();
+					interactiveReplyButtonMessage.Interactive.Header.Type = "text";
+					interactiveReplyButtonMessage.Interactive.Header.Text = "Reply Button Header Sample Test";
+
+					interactiveReplyButtonMessage.Interactive.Body = new ReplyButtonBody();
                     interactiveReplyButtonMessage.Interactive.Body.Text = sendInteractiveMessageViewModel.Message;
 
-                    interactiveReplyButtonMessage.Interactive.Action = new ReplyButtonAction();
+					interactiveReplyButtonMessage.Interactive.Footer = new ReplyButtonFooter();
+					interactiveReplyButtonMessage.Interactive.Footer.Text = "Reply Button Footer Sample Test";
+
+					interactiveReplyButtonMessage.Interactive.Action = new ReplyButtonAction();
                     interactiveReplyButtonMessage.Interactive.Action.Buttons = new List<ReplyButton>()
                     {
                         new ReplyButton() 
