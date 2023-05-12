@@ -40,7 +40,6 @@ namespace WhatsappBusiness.CloudApi
         /// Initialize WhatsAppBusinessClient with httpclient factory
         /// </summary>
         /// <param name="whatsAppConfig">WhatsAppBusiness configuration</param>
-        /// <param name="isLatestGraphApiVersion">Set True if you want use v14, false if you want to use v13</param>
         public WhatsAppBusinessClient(WhatsAppBusinessCloudApiConfig whatsAppConfig)
         {
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
@@ -2068,14 +2067,16 @@ namespace WhatsappBusiness.CloudApi
         /// <returns>Response object</returns>
         /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
         private async Task<T> WhatsAppBusinessPostAsync<T>(string whatsAppBusinessEndpoint, string filePath, string fileContentType, CancellationToken cancellationToken = default, bool isMediaUpload = false) where T : new()
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
-            
+        { 
             if (!isMediaUpload) // Resumable upload
             {
-                _httpClient.DefaultRequestHeaders.Add("Content-Type", fileContentType);
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", _whatsAppConfig.AccessToken);
                 _httpClient.DefaultRequestHeaders.Add("file_offset", "0");
             }
+            else
+            {
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+			}
             
             T result = new();
             cancellationToken.ThrowIfCancellationRequested();
@@ -2086,7 +2087,9 @@ namespace WhatsappBusiness.CloudApi
             string boundary = $"----------{Guid.NewGuid():N}";
             var content = new MultipartFormDataContent(boundary);
 
-            if (isMediaUpload)
+			HttpResponseMessage? response;
+
+			if (isMediaUpload)
             {
                 ByteArrayContent mediaFileContent = new ByteArrayContent(uploaded_file);
                 mediaFileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
@@ -2103,21 +2106,24 @@ namespace WhatsappBusiness.CloudApi
 
                 content.Add(mediaFileContent);
                 content.Add(new StringContent(fileData.messaging_product), "messaging_product");
-            }
-            else
+
+				response = await _httpClient.PostAsync(whatsAppBusinessEndpoint, content, cancellationToken).ConfigureAwait(false);
+			}
+            else // Resumable upload
             {
-                ByteArrayContent mediaFileContent = new ByteArrayContent(uploaded_file);
-                mediaFileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-                {
-                    Name = "file",
-                    FileName = file.FullName,
-                };
-                content.Add(mediaFileContent);
-            }
+				ByteArrayContent mediaFileContent = new ByteArrayContent(uploaded_file);
 
-            var response = await _httpClient.PostAsync(whatsAppBusinessEndpoint, content, cancellationToken).ConfigureAwait(false);
+                HttpRequestMessage requestMessage = new HttpRequestMessage();
+                requestMessage.Method = HttpMethod.Post;
+                requestMessage.Content = mediaFileContent;
+                requestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
 
-            if (response.IsSuccessStatusCode)
+				requestMessage.RequestUri = new Uri($"{_httpClient.BaseAddress}{whatsAppBusinessEndpoint}");
+
+				response = await _httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+			}
+
+			if (response.IsSuccessStatusCode)
             {
 #if NET5_0_OR_GREATER
                 await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
@@ -2173,22 +2179,38 @@ namespace WhatsappBusiness.CloudApi
         /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
         private async Task<T> WhatsAppBusinessGetAsync<T>(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default, bool isCacheControlActive = false, bool isHeaderAccessTokenProvided = true) where T : new()
         {
-            if (isHeaderAccessTokenProvided)
+            if (isHeaderAccessTokenProvided && !isCacheControlActive)
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
             }
 
-            if (isCacheControlActive)
+            if (isCacheControlActive) // Resumable upload
             {
-                _httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", _whatsAppConfig.AccessToken);
+				_httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
                 {
                     NoCache = true,
                 };
-            }
+			}
 
             T result = new();
             cancellationToken.ThrowIfCancellationRequested();
-            var response = await _httpClient.GetAsync(whatsAppBusinessEndpoint, cancellationToken).ConfigureAwait(false);
+
+			HttpResponseMessage? response;
+
+            if (!isCacheControlActive)
+            {
+				response = await _httpClient.GetAsync(whatsAppBusinessEndpoint, cancellationToken).ConfigureAwait(false);
+			}
+            else
+            {
+				HttpRequestMessage requestMessage = new HttpRequestMessage();
+				requestMessage.Method = HttpMethod.Get;
+				requestMessage.RequestUri = new Uri($"{_httpClient.BaseAddress}{whatsAppBusinessEndpoint}");
+
+				response = await _httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+			}
+			
 
             if (response.IsSuccessStatusCode)
             {
