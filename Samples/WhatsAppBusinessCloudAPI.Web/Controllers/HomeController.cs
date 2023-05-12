@@ -798,45 +798,82 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
         public IActionResult UploadMedia()
         {
-            return View();
+			UploadMediaViewModel uploadMediaViewModel = new UploadMediaViewModel();
+			uploadMediaViewModel.UploadType = new List<SelectListItem>()
+			{
+				new SelectListItem(){ Text = "Normal Upload", Value = "Normal Upload" },
+				new SelectListItem(){ Text = "Resumable Upload", Value = "Resumable Upload" },
+			};
+
+			return View(uploadMediaViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UploadMedia(IFormFile mediaFile)
+        public async Task<IActionResult> UploadMedia(UploadMediaViewModel uploadMediaViewModel, IFormFile mediaFile)
         {
             try
             {
-                var fileName = Path.GetFileName(mediaFile.FileName).Trim('"');
+				var fileName = Path.GetFileName(mediaFile.FileName).Trim('"');
 
-                var rootPath = Path.Combine(_environment.WebRootPath, "Application_Files\\MediaUploads\\");
+				var rootPath = Path.Combine(_environment.WebRootPath, "Application_Files\\MediaUploads\\");
 
-                if (!Directory.Exists(rootPath))
+				if (!Directory.Exists(rootPath))
+				{
+					Directory.CreateDirectory(rootPath);
+				}
+
+				// Get the path of filename
+				var filePath = Path.Combine(_environment.WebRootPath, "Application_Files\\MediaUploads\\", fileName);
+
+				// Upload Csv file to the browser
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await mediaFile.CopyToAsync(stream);
+				}
+
+				if (uploadMediaViewModel.SelectedUploadType.Equals("Normal Upload", StringComparison.OrdinalIgnoreCase))
                 {
-                    Directory.CreateDirectory(rootPath);
-                }
+					UploadMediaRequest uploadMediaRequest = new UploadMediaRequest();
+					uploadMediaRequest.File = filePath;
+					uploadMediaRequest.Type = mediaFile.ContentType;
 
-                // Get the path of filename
-                var filePath = Path.Combine(_environment.WebRootPath, "Application_Files\\MediaUploads\\", fileName);
+					var uploadMediaResult = await _whatsAppBusinessClient.UploadMediaAsync(uploadMediaRequest);
 
-                // Upload Csv file to the browser
-                using (var stream = new FileStream(filePath, FileMode.Create))
+
+					ViewBag.MediaId = uploadMediaResult.MediaId;
+				}
+                else // Resumable upload generates header file response to be used for creating message templates
                 {
-                    await mediaFile.CopyToAsync(stream);
-                }
+                    var resumableUploadMediaResult = await _whatsAppBusinessClient.CreateResumableUploadSessionAsync(mediaFile.Length, mediaFile.ContentType, mediaFile.FileName);
 
-                UploadMediaRequest uploadMediaRequest = new UploadMediaRequest();
-                uploadMediaRequest.File = filePath;
-                uploadMediaRequest.Type = mediaFile.ContentType;
+                    if (resumableUploadMediaResult is not null)
+                    {
+                        var uploadSessionId = resumableUploadMediaResult.Id;
 
-                var uploadMediaResult = await _whatsAppBusinessClient.UploadMediaAsync(uploadMediaRequest);
-                ViewBag.MediaId = uploadMediaResult.MediaId;
-                return View().WithSuccess("Success", "Successfully upload media.");
+                        var resumableUploadResponse = await _whatsAppBusinessClient.UploadFileDataAsync(uploadSessionId, filePath, mediaFile.ContentType);
+
+                        var queryResumableUploadStatus = await _whatsAppBusinessClient.QueryFileUploadStatusAsync(uploadSessionId);
+
+                        if (resumableUploadResponse is not null)
+                        {
+							ViewBag.H = resumableUploadResponse.H;
+						}
+
+                        if (queryResumableUploadStatus is not null)
+                        {
+                            ViewBag.StatusId = queryResumableUploadStatus.Id;
+                            ViewBag.FileOffset = queryResumableUploadStatus.FileOffset;
+                        }
+                    }
+				}
+
+				return View(uploadMediaViewModel).WithSuccess("Success", "Successfully upload media.");
             }
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return View().WithDanger("Error", ex.Message);
+                return RedirectToAction(nameof(UploadMedia)).WithDanger("Error", ex.Message);
             }
         }
 
