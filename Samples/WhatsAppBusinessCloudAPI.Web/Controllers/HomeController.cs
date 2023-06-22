@@ -725,7 +725,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 if (results != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent video template message");
                 }
                 else
                 {
@@ -735,9 +735,67 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
             }
         }
+
+        public async Task<IActionResult> SendWhatsAppAuthenticationTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                AuthenticationTemplateMessageRequest authenticationTemplateMessageRequest = new();
+                authenticationTemplateMessageRequest.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+				authenticationTemplateMessageRequest.Template = new();
+				authenticationTemplateMessageRequest.Template.Name = sendTemplateMessageViewModel.TemplateName;
+				authenticationTemplateMessageRequest.Template.Language = new();
+				authenticationTemplateMessageRequest.Template.Language.Code = LanguageCode.English_US;
+                authenticationTemplateMessageRequest.Template.Components = new List<AuthenticationMessageComponent>()
+                {
+                    new AuthenticationMessageComponent()
+                    {
+                        Type = "body",
+                        Parameters = new List<AuthenticationMessageParameter>()
+                        {
+                            new AuthenticationMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "J$FpnYnP" // One time password value
+							}
+                        }
+                    },
+                    new AuthenticationMessageComponent()
+                    {
+                        Type = "button",
+                        SubType = "url",
+                        Index = 0,
+                        Parameters = new List<AuthenticationMessageParameter>()
+                        {
+                            new AuthenticationMessageParameter()
+                            {
+								Type = "text",
+								Text = "J$FpnYnP" // One time password value
+							}
+                        }
+                    }
+                };
+
+				var results = await _whatsAppBusinessClient.SendAuthenticationMessageTemplateAsync(authenticationTemplateMessageRequest);
+
+				if (results != null)
+				{
+					return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent authentication template message");
+				}
+				else
+				{
+					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+				}
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
+			}
+		}
 
         public IActionResult SendWhatsAppContactMessage()
         {
