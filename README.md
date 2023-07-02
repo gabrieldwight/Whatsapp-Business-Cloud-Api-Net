@@ -22,7 +22,9 @@ WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/do
 - [End User License](https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net/blob/master/LICENSE)
 - [NuGet Package](https://www.nuget.org/packages/WhatsappBusiness.CloudApi/)
 
-Take note: Sending a message to a phone number format `00[Country Code] xx xx xx` using the prefix `00` before the country code will make the cloud API return invalid parameter error (#100) (Credits @Tekkharibo)
+Take note: Sending a message to a phone number format `00[Country Code] xx xx xx` using the prefix `00` before the country code will make the cloud API return an invalid parameter error (#100) (Credits @Tekkharibo)
+
+Take note: Downloading media from the generated Whatsapp media URL will require one to specify the app name and version value to be set as useragent for the download media function to work. It is included as properties for the config class. (Credits @atmtrujillo)
 
 ## Capabilities
 
