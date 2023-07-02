@@ -7,7 +7,7 @@ namespace WhatsappBusiness.CloudApi
         /// <summary>
         /// WhatsApp Business Cloud API V15 BaseAddress
         /// </summary>
-        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v15.0/");
+        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v17.0/");
 
         /// <summary>
         /// To register your phone to WhatsApp Business
@@ -53,6 +53,11 @@ namespace WhatsappBusiness.CloudApi
         /// All media files sent through this endpoint are encrypted and persist for 30 days.
         /// </summary>
         public static string UploadMedia { get; private set; } = "{{Phone-Number-ID}}/media";
+
+        /// <summary>
+        /// Download media file from the generated whatsapp media url
+        /// </summary>
+        public static string DownloadMedia { get; private set; } = "{{Media-URL}}";
 
         /// <summary>
         /// To retrieve your media’s URL for downloading.

@@ -325,6 +325,32 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
+        /// To download media uploaded from whatsapp
+        /// </summary>
+        /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>byte[]</returns>
+        public byte[] DownloadMedia(string mediaUrl, CancellationToken cancellationToken = default)
+        {
+            string formattedWhatsAppEndpoint;
+            formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DownloadMedia.Replace("{{Media-URL}}", mediaUrl);
+            return WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// To download media uploaded from whatsapp
+        /// </summary>
+        /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>byte[]</returns>
+        public async Task<byte[]> DownloadMediaAsync(string mediaUrl, CancellationToken cancellationToken = default)
+        {
+            string formattedWhatsAppEndpoint;
+            formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DownloadMedia.Replace("{{Media-URL}}", mediaUrl);
+            return await WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
         /// The analytics field provides the number and type of messages sent and delivered by the phone numbers associated with a specific WABA
         /// </summary>
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
@@ -2239,7 +2265,24 @@ namespace WhatsappBusiness.CloudApi
             return result;
         }
 
-        
+        private async Task<byte[]> WhatsAppBusinessGetAsync(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default)
+        {
+            var productValue = new ProductInfoHeaderValue(_whatsAppConfig.AppName, _whatsAppConfig.Version);
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            _httpClient.DefaultRequestHeaders.UserAgent.Add(productValue);
+
+#if NET5_0_OR_GREATER
+            var bytesDownloaded = await _httpClient.GetByteArrayAsync(whatsAppBusinessEndpoint, cancellationToken).ConfigureAwait(false);
+#endif
+
+#if NETSTANDARD2_0_OR_GREATER
+            var bytesDownloaded = await _httpClient.GetByteArrayAsync(whatsAppBusinessEndpoint).ConfigureAwait(false);
+#endif
+
+            return bytesDownloaded;
+        }
+
         /// <summary>
         /// To perform WhatsAppBusiness Cloud API endpoint GET request 
         /// </summary>
@@ -2282,7 +2325,6 @@ namespace WhatsappBusiness.CloudApi
 
 				response = await _httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
 			}
-			
 
             if (response.IsSuccessStatusCode)
             {

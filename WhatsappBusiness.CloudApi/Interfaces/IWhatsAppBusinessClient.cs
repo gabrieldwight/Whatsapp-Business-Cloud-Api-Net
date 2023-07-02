@@ -183,6 +183,22 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
         BaseSuccessResponse DeleteMedia(string mediaId, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To download media uploaded from whatsapp
+        /// </summary>
+        /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>byte[]</returns>
+        Task<byte[]> DownloadMediaAsync(string mediaUrl, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// To download media uploaded from whatsapp
+        /// </summary>
+        /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>byte[]</returns>
+        byte[] DownloadMedia(string mediaUrl, CancellationToken cancellationToken = default);
         #endregion
 
         #region Phone Numbers functions

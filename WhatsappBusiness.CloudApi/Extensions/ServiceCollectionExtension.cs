@@ -34,7 +34,9 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 WhatsAppBusinessPhoneNumberId = whatsAppConfig.WhatsAppBusinessPhoneNumberId,
                 WhatsAppBusinessAccountId = whatsAppConfig.WhatsAppBusinessAccountId,
                 WhatsAppBusinessId = whatsAppConfig.WhatsAppBusinessId,
-                AccessToken = whatsAppConfig.AccessToken
+                AccessToken = whatsAppConfig.AccessToken,
+                AppName = whatsAppConfig.AppName,
+                Version = whatsAppConfig.Version
             });
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
@@ -71,7 +73,9 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 WhatsAppBusinessPhoneNumberId = whatsAppConfig.WhatsAppBusinessPhoneNumberId,
                 WhatsAppBusinessAccountId = whatsAppConfig.WhatsAppBusinessAccountId,
                 WhatsAppBusinessId = whatsAppConfig.WhatsAppBusinessId,
-                AccessToken = whatsAppConfig.AccessToken
+                AccessToken = whatsAppConfig.AccessToken,
+                AppName = whatsAppConfig.AppName,
+                Version = whatsAppConfig.Version
             });
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
