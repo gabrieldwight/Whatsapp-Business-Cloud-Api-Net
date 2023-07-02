@@ -18,9 +18,12 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private readonly ILogger<WhatsAppNotificationController> _logger;
         private readonly IWhatsAppBusinessClient _whatsAppBusinessClient;
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private string VerifyToken = "<YOUR VERIFY TOKEN STRING>";
         private List<TextMessage> textMessage;
+        private List<AudioMessage> audioMessage;
         private List<ImageMessage> imageMessage;
+        private List<DocumentMessage> documentMessage;
         private List<StickerMessage> stickerMessage;
         private List<ContactMessage> contactMessage;
         private List<LocationMessage> locationMessage;
@@ -29,11 +32,12 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private List<ListReplyButtonMessage> listReplyButtonMessage;
 
         public WhatsAppNotificationController(ILogger<WhatsAppNotificationController> logger, IWhatsAppBusinessClient whatsAppBusinessClient,
-            IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig)
+            IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _whatsAppBusinessClient = whatsAppBusinessClient;
             _whatsAppConfig = whatsAppConfig.Value;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // Required step for configuring webhook to WhatsApp Cloud API
@@ -154,6 +158,104 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         return Ok(new
                         {
                             Message = "Image Message received"
+                        });
+                    }
+
+                    if (messageType.Equals("audio"))
+                    {
+                        var audioMessageReceived = JsonConvert.DeserializeObject<AudioMessageReceived>(Convert.ToString(messageReceived)) as AudioMessageReceived;
+                        audioMessage = new List<AudioMessage>(audioMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                        _logger.LogInformation(JsonConvert.SerializeObject(audioMessage, Formatting.Indented));
+
+                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
+                        markMessageRequest.MessageId = audioMessage.SingleOrDefault().Id;
+                        markMessageRequest.Status = "read";
+
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+
+                        var mediaUrlResponse = await _whatsAppBusinessClient.GetMediaUrlAsync(audioMessage.SingleOrDefault().Audio.Id);
+
+                        _logger.LogInformation(mediaUrlResponse.Url);
+
+                        // To download media received sent by user
+                        var mediaFileDownloaded = await _whatsAppBusinessClient.DownloadMediaAsync(mediaUrlResponse.Url);
+
+                        var rootPath = Path.Combine(_webHostEnvironment.WebRootPath, "Application_Files\\MediaDownloads\\");
+
+                        if (!Directory.Exists(rootPath))
+                        {
+                            Directory.CreateDirectory(rootPath);
+                        }
+
+                        // Get the path of filename
+                        string filename = string.Empty;
+
+                        if (mediaUrlResponse.MimeType.Contains("audio/mpeg"))
+                        {
+                            filename = $"{mediaUrlResponse.Id}.mp3";
+                        }
+
+                        if (mediaUrlResponse.MimeType.Contains("audio/ogg"))
+                        {
+                            filename = $"{mediaUrlResponse.Id}.ogg";
+                        }
+
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Application_Files\\MediaDownloads\\", filename);
+
+                        await System.IO.File.WriteAllBytesAsync(filePath, mediaFileDownloaded);
+
+                        return Ok(new
+                        {
+                            Message = "Audio Message received"
+                        });
+                    }
+
+                    if (messageType.Equals("document"))
+                    {
+                        var documentMessageReceived = JsonConvert.DeserializeObject<DocumentMessageReceived>(Convert.ToString(messageReceived)) as DocumentMessageReceived;
+                        documentMessage = new List<DocumentMessage>(documentMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                        _logger.LogInformation(JsonConvert.SerializeObject(documentMessage, Formatting.Indented));
+
+                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
+                        markMessageRequest.MessageId = documentMessage.SingleOrDefault().Id;
+                        markMessageRequest.Status = "read";
+
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+
+                        var mediaUrlResponse = await _whatsAppBusinessClient.GetMediaUrlAsync(documentMessage.SingleOrDefault().Document.Id);
+
+                        _logger.LogInformation(mediaUrlResponse.Url);
+
+                        // To download media received sent by user
+                        var mediaFileDownloaded = await _whatsAppBusinessClient.DownloadMediaAsync(mediaUrlResponse.Url);
+
+                        var rootPath = Path.Combine(_webHostEnvironment.WebRootPath, "Application_Files\\MediaDownloads\\");
+
+                        if (!Directory.Exists(rootPath))
+                        {
+                            Directory.CreateDirectory(rootPath);
+                        }
+
+                        // Get the path of filename
+                        string filename = string.Empty;
+
+                        if (mediaUrlResponse.MimeType.Contains("audio/mpeg"))
+                        {
+                            filename = $"{mediaUrlResponse.Id}.mp3";
+                        }
+
+                        if (mediaUrlResponse.MimeType.Contains("audio/ogg"))
+                        {
+                            filename = $"{mediaUrlResponse.Id}.ogg";
+                        }
+
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Application_Files\\MediaDownloads\\", filename);
+
+                        await System.IO.File.WriteAllBytesAsync(filePath, mediaFileDownloaded);
+
+                        return Ok(new
+                        {
+                            Message = "Document Message received"
                         });
                     }
 

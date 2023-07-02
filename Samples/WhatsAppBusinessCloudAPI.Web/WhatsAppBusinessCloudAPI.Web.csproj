@@ -14,4 +14,8 @@
     <ProjectReference Include="..\..\WhatsappBusiness.CloudApi\WhatsappBusiness.CloudApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Application_Files\MediaDownloads\" />
+  </ItemGroup>
+
 </Project>
