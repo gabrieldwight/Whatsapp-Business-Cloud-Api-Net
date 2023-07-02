@@ -15,12 +15,14 @@ QR Code Message Management: [QR Code Messages for WhatsApp Business](https://dev
 
 Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
 
+Authentication Message Documentation: [Create and Send Authentication Message](https://developers.facebook.com/docs/whatsapp/business-management-api/authentication-templates)
+
 WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/docs/whatsapp/cloud-api/support/error-codes)
 
 - [End User License](https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net/blob/master/LICENSE)
 - [NuGet Package](https://www.nuget.org/packages/WhatsappBusiness.CloudApi/)
 
-Take note: Sending a message to a phone number format `00[Country Code] xx xx xx` using the prefix `00` before the country code will make the cloud API to return invalid parameter error (#100) (Credits @Tekkharibo)
+Take note: Sending a message to a phone number format `00[Country Code] xx xx xx` using the prefix `00` before the country code will make the cloud API return invalid parameter error (#100) (Credits @Tekkharibo)
 
 ## Capabilities
 
@@ -32,10 +34,11 @@ Take note: Sending a message to a phone number format `00[Country Code] xx xx xx
   - [x] Contact
   - [x] Location
   - [x] Interactive (List, Reply)
-  - [x] Template
-  - [x] Template Messages with parameters
+  - [x] Template (text, image, video, document, authentication, product message)
+  - [x] Template Messages with parameters (text, image, video, document, authentication, product message)
   - [x] Single Product Message
   - [x] Multiple Product Message
+  - [x] Authentication Message
 - [x] Receiving Message (via Webhook)
   - [x] Text
   - [x] Media (image, video, audio, document, sticker)
@@ -53,11 +56,11 @@ Take note: Sending a message to a phone number format `00[Country Code] xx xx xx
 - DotNetCLI: ```> dotnet add package WhatsappBusiness.CloudApi```
 
 ## Setting yourself for successful WhatsApp Business Cloud Api integration
-Before you proceed kindly aquaint yourself with WhatsApp Business Cloud Apis by going through the Docs in Meta's developer portal if you like.
+Before you proceed kindly acquaint yourself with WhatsApp Business Cloud Apis by going through the Docs in Meta's developer portal if you like.
 
 1.  Obtain Temporary access token for meta developers portal.
 
-2.  Ensure your project is running on the minimun supported versions of .Net 
+2.  Ensure your project is running on the minimum supported versions of .Net 
 
 3.  WhatsAppBusinessCloudAPi is dependency injection (DI) friendly and can be readily injected into your classes. You can read more on DI in Asp.Net core [**here**](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0). If you can't use DI you can always manually create a new instance of WhatsAppBusinessClient and pass in an httpClient instance in it's constructor. eg.
 
@@ -70,7 +73,7 @@ var httpClient = new HttpClient();
 httpClient.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
 	
 //create WhatsAppBusiness API client instance
-var whatsAppBusinessClient = new WhatsAppBusinessClient(httpClient, whatsAppConfig); //make sure to pass httpclient and whatsAppConfig intance as an argument
+var whatsAppBusinessClient = new WhatsAppBusinessClient(httpClient, whatsAppConfig); //make sure to pass httpclient and whatsAppConfig instance as an argument
 	
 ```
 I would recommend creating WhatsAppBusinessClient using Dependency Injection. [Optional] You can use any IOC container or Microsoft DI container in your legacy projects.
@@ -474,6 +477,48 @@ interactiveTemplateMessage.Template.Components.Add(new InteractiveMessageCompone
 });
 
 var results = await _whatsAppBusinessClient.SendInteractiveTemplateMessageAsync(interactiveTemplateMessage);
+```
+
+## Sending Authentication Message
+```c#
+// You need to create your authentication template message
+AuthenticationTemplateMessageRequest authenticationTemplateMessageRequest = new();
+authenticationTemplateMessageRequest.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+authenticationTemplateMessageRequest.Template = new();
+authenticationTemplateMessageRequest.Template.Name = sendTemplateMessageViewModel.TemplateName;
+authenticationTemplateMessageRequest.Template.Language = new();
+authenticationTemplateMessageRequest.Template.Language.Code = LanguageCode.English_US;
+authenticationTemplateMessageRequest.Template.Components = new List<AuthenticationMessageComponent>()
+{
+    new AuthenticationMessageComponent()
+    {
+	Type = "body",
+	Parameters = new List<AuthenticationMessageParameter>()
+	{
+	    new AuthenticationMessageParameter()
+	    {
+		Type = "text",
+		Text = "J$FpnYnP" // One time password value
+	    }
+	}
+    },
+    new AuthenticationMessageComponent()
+    {
+	Type = "button",
+	SubType = "url",
+	Index = 0,
+	Parameters = new List<AuthenticationMessageParameter>()
+	{
+	    new AuthenticationMessageParameter()
+	    {
+		Type = "text",
+		Text = "J$FpnYnP" // One time password value
+	    }
+	}
+    }
+};
+
+var results = await _whatsAppBusinessClient.SendAuthenticationMessageTemplateAsync(authenticationTemplateMessageRequest);
 ```
 
 ## Webhook Subscription
