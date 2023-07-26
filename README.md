@@ -582,12 +582,36 @@ public async Task<IActionResult> GetMessage()
 }
 ```
 
+## Verify Webhook X-Hub-Signature-256 (.NET 7 Minimal API) (Credits @sapharos)
+```c#
+app.Use((context, next) =>
+{
+	context.Request.EnableBuffering();
+	return next();
+});
+
+// Validation implementation
+
+string stringifiedBody;
+string xHubSignature256 = context.Request.Headers["X-Hub-Signature-256"].ToString();
+context.Request.Body.Seek(0, SeekOrigin.Begin);
+using (var sr = new StreamReader(context.Request.Body))
+{
+	stringifiedBody = await sr.ReadToEndAsync().ConfigureAwait(false);
+}
+string xHubSignature256Result = FacebookWebhookHelper.CalculateSignature(_config.GetValue<string("Facebook:AppSecret"), stringifiedBody);
+if (!String.Equals(xHubSignature256, xHubSignature256Result,StringComparison.InvariantCultureIgnoreCase))
+{
+	return Results.Unauthorized();
+}
+```
+
 ## Error handling
 WhatsAppBusinessClient Throws ```WhatsappBusinessCloudAPIException``` It is your role as the developer to catch
-the exception and continue processing in your aplication. Snippet below shows how you can catch the WhatsappBusinessCloudAPIException.
+the exception and continue processing in your application. Snippet below shows how you can catch the WhatsappBusinessCloudAPIException.
 
 ```c#
-using WhatsappBusiness.CloudApi.Exceptions; // add this to you class or namespace
+using WhatsappBusiness.CloudApi.Exceptions; // add this to your class or namespace
 
 try
 {	
@@ -600,11 +624,11 @@ catch (WhatsappBusinessCloudAPIException ex)
 ```
 ## Issues
 
-If you will face any issue with the usage of this package please raise one so as we can quickly fix it as soon as possible.
+If you will face any issues with the usage of this package please raise one so as we can quickly fix it as soon as possible.
 
 ## Contributing
 
-This is an opensource project under ```MIT License``` so any one is welcome to contribute from typo, to source code to documentation.
+This is an open-source project under ```MIT License``` so anyone is welcome to contribute from typos, to source code to documentation.
 
 ## Credits
 1. [Gabriel](https://github.com/gabrieldwight)
