@@ -23,7 +23,7 @@ namespace WhatsappBusiness.CloudApi.Response
         public ErrorData ErrorData { get; set; }
 
         [JsonProperty("error_subcode")]
-        public long ErrorSubcode { get; set; }
+        public long? ErrorSubcode { get; set; }
 
         [JsonProperty("fbtrace_id")]
         public string FbtraceId { get; set; }
