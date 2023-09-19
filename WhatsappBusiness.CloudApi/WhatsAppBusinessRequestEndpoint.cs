@@ -7,7 +7,7 @@ namespace WhatsappBusiness.CloudApi
         /// <summary>
         /// WhatsApp Business Cloud API V15 BaseAddress
         /// </summary>
-        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v17.0/");
+        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v18.0/");
 
         /// <summary>
         /// To register your phone to WhatsApp Business
