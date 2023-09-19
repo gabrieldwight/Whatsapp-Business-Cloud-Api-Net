@@ -38,6 +38,12 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		[JsonProperty("type")]
 		public string Type { get; set; }
 
+		[JsonProperty("add_security_recommendation", NullValueHandling = NullValueHandling.Ignore)]
+		public bool AddSecurityRecommendation { get; set; }
+
+		[JsonProperty("code_expiration_minutes", NullValueHandling = NullValueHandling.Ignore)]
+		public int CodeExpirationMinutes { get; set; }
+
 		[JsonProperty("parameters")]
 		public List<AuthenticationMessageParameter> Parameters { get; set; }
 
