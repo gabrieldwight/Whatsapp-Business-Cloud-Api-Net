@@ -739,7 +739,9 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> SendWhatsAppAuthenticationTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> SendWhatsAppAuthenticationTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
         {
             try
             {
@@ -797,7 +799,270 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			}
 		}
 
-        public IActionResult SendWhatsAppContactMessage()
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppCatalogueTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                CatalogTemplateMessageRequest catalogTemplateMessageRequest = new CatalogTemplateMessageRequest();
+				catalogTemplateMessageRequest.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+				catalogTemplateMessageRequest.Template = new();
+				catalogTemplateMessageRequest.Template.Name = sendTemplateMessageViewModel.TemplateName;
+				catalogTemplateMessageRequest.Template.Language = new();
+				catalogTemplateMessageRequest.Template.Language.Code = LanguageCode.English_US;
+                catalogTemplateMessageRequest.Template.Components = new List<CatalogMessageComponent>()
+                {
+                    new CatalogMessageComponent()
+                    {
+                        Type = "Body",
+                        Parameters = new List<CatalogTemplateMessageParameter>()
+                        {
+                            new CatalogTemplateMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "100"
+                            },
+							new CatalogTemplateMessageParameter()
+							{
+								Type = "text",
+								Text = "400"
+							},
+							new CatalogTemplateMessageParameter()
+							{
+								Type = "text",
+								Text = "3"
+							},
+						}
+                    },
+                    new CatalogMessageComponent()
+                    {
+                        Type = "button",
+                        SubType = "CATALOG",
+                        Index = 0,
+                        Parameters = new List<CatalogTemplateMessageParameter>()
+                        {
+                            new CatalogTemplateMessageParameter()
+                            {
+                                Type = "action",
+                                Action = new CatalogTemplateMessageAction()
+                                {
+                                    ThumbnailProductRetailerId = "2lc20305pt"
+								}
+                            }
+                        }
+                    }
+                };
+
+				var results = await _whatsAppBusinessClient.SendCatalogMessageTemplateAsync(catalogTemplateMessageRequest);
+
+				if (results != null)
+				{
+					return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent catalogue template message");
+				}
+				else
+				{
+					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+				}
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
+			}
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> SendWhatsAppCarouselTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+		{
+			try
+			{
+                CarouselTemplateMessageRequest carouselTemplateMessageRequest = new CarouselTemplateMessageRequest();
+				carouselTemplateMessageRequest.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+				carouselTemplateMessageRequest.Template = new();
+				carouselTemplateMessageRequest.Template.Name = sendTemplateMessageViewModel.TemplateName;
+				carouselTemplateMessageRequest.Template.Language = new();
+				carouselTemplateMessageRequest.Template.Language.Code = LanguageCode.English_US;
+                carouselTemplateMessageRequest.Template.Components = new List<CarouselMessageTemplateComponent>()
+                {
+                    new CarouselMessageTemplateComponent()
+                    {
+                        Type = "BODY",
+                        Parameters = new List<CarouselMessageParameter>()
+                        {
+                            new CarouselMessageParameter()
+                            {
+                                Type = "Text",
+                                Text = "20OFF"
+                            },
+                            new CarouselMessageParameter()
+                            {
+                                Type = "Text",
+                                Text = "20%"
+                            }
+                        }
+                    },
+                    new CarouselMessageTemplateComponent()
+                    {
+                        Type = "CAROUSEL",
+                        Cards = new List<CarouselMessageCard>()
+                        {
+                            new CarouselMessageCard()
+                            {
+                                CardIndex = 0,
+                                Components = new List<CarouselCardComponent>()
+                                {
+                                    new CarouselCardComponent()
+                                    {
+                                        Type = "HEADER",
+                                        Parameters = new List<CardMessageParameter>()
+                                        {
+                                            new CardMessageParameter()
+                                            {
+                                                Type = "IMAGE",
+                                                Image = new CardImage()
+                                                {
+                                                    Id = "24230790383178626"
+												}
+                                            }
+                                        }
+                                    },
+                                    new CarouselCardComponent()
+                                    {
+                                        Type = "BODY",
+                                        Parameters = new List<CardMessageParameter>()
+                                        {
+                                            new CardMessageParameter()
+                                            {
+                                                Type = "Text",
+                                                Text = "10OFF"
+                                            },
+											new CardMessageParameter()
+											{
+												Type = "Text",
+												Text = "10%"
+											}
+										}
+                                    },
+                                    new CarouselCardComponent()
+                                    {
+                                        Type = "BUTTON",
+                                        SubType = "QUICK_REPLY",
+                                        Index = 0,
+                                        Parameters = new List<CardMessageParameter>()
+                                        {
+                                            new CardMessageParameter()
+                                            {
+                                                Type = "PAYLOAD",
+                                                Payload = "59NqSd"
+											}
+                                        }
+                                    },
+                                    new CarouselCardComponent() 
+                                    {
+                                        Type = "button",
+                                        SubType = "URL",
+                                        Index = 1,
+										Parameters = new List<CardMessageParameter>()
+										{
+											new CardMessageParameter()
+											{
+												Type = "PAYLOAD",
+												Payload = "last_chance_2023"
+											}
+										}
+									}
+                                }
+                            }
+                        }
+                    },
+                };
+
+				var results = await _whatsAppBusinessClient.SendCarouselMessageTemplateAsync(carouselTemplateMessageRequest);
+
+				if (results != null)
+				{
+					return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent carousel template message");
+				}
+				else
+				{
+					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+				}
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
+			}
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> SendWhatsAppCouponCodeTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+		{
+			try
+			{
+                CouponCodeTemplateMessageRequest couponCodeTemplateMessageRequest = new CouponCodeTemplateMessageRequest();
+				couponCodeTemplateMessageRequest.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+				couponCodeTemplateMessageRequest.Template = new();
+				couponCodeTemplateMessageRequest.Template.Name = sendTemplateMessageViewModel.TemplateName;
+				couponCodeTemplateMessageRequest.Template.Language = new();
+				couponCodeTemplateMessageRequest.Template.Language.Code = LanguageCode.English_US;
+                couponCodeTemplateMessageRequest.Template.Components = new List<CouponCodeMessageComponent>()
+                {
+                    new CouponCodeMessageComponent()
+                    {
+                        Type = "body",
+                        Parameters = new List<CouponCodeMessageParameter>()
+                        {
+                            new CouponCodeMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "25OFF"
+                            },
+							new CouponCodeMessageParameter()
+							{
+								Type = "text",
+								Text = "25%"
+							}
+						}
+                    },
+                    new CouponCodeMessageComponent()
+                    {
+                        Type = "button",
+                        SubType = "COPY_CODE",
+                        Index = 1,
+                        Parameters = new List<CouponCodeMessageParameter>()
+                        {
+                            new CouponCodeMessageParameter()
+                            {
+                                Type = "coupon_code",
+                                Text = "25OFF"
+                            }
+                        }
+                    }
+                };
+
+				var results = await _whatsAppBusinessClient.SendCouponCodeMessageTemplateAsync(couponCodeTemplateMessageRequest);
+
+				if (results != null)
+				{
+					return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent coupon code template message");
+				}
+				else
+				{
+					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+				}
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
+			}
+		}
+
+		public IActionResult SendWhatsAppContactMessage()
         {
             return View();
         }
