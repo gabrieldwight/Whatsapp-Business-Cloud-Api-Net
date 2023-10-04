@@ -1062,6 +1062,100 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			}
 		}
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppLimitedTimeOfferTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                LimitedTimeOfferTemplateMessageRequest limitedTimeOfferTemplateMessageRequest = new LimitedTimeOfferTemplateMessageRequest();
+				limitedTimeOfferTemplateMessageRequest.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+				limitedTimeOfferTemplateMessageRequest.Template = new();
+				limitedTimeOfferTemplateMessageRequest.Template.Name = sendTemplateMessageViewModel.TemplateName;
+				limitedTimeOfferTemplateMessageRequest.Template.Language = new();
+				limitedTimeOfferTemplateMessageRequest.Template.Language.Code = LanguageCode.English_US;
+                limitedTimeOfferTemplateMessageRequest.Template.Components = new List<LimitedTimeOfferMessageComponent>()
+                {
+                    new LimitedTimeOfferMessageComponent()
+                    {
+                        Type = "body",
+                        Parameters = new List<LimitedTimeOfferMessageParameter>()
+                        {
+                            new LimitedTimeOfferMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "Pablo"
+                            },
+                            new LimitedTimeOfferMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "CARIBE25"
+							}
+                        }
+                    },
+                    new LimitedTimeOfferMessageComponent()
+                    {
+                        Type = "limited_time_offer",
+                        Parameters = new List<LimitedTimeOfferMessageParameter>()
+                        {
+                            new LimitedTimeOfferMessageParameter()
+                            {
+                                Type = "limited_time_offer",
+                                LimitedTimeOffer = new LimitedTimeOffer()
+                                {
+                                    ExpirationTimeMs = new DateTimeOffset(DateTime.UtcNow.AddHours(2)).ToUnixTimeMilliseconds()
+                                }
+							}
+                        }
+					},
+                    new LimitedTimeOfferMessageComponent()
+                    {
+                        Type = "button",
+                        SubType = "copy_code",
+                        Index = 0,
+                        Parameters = new List<LimitedTimeOfferMessageParameter>()
+                        {
+                            new LimitedTimeOfferMessageParameter()
+                            {
+                                Type = "coupon_code",
+                                CouponCode = "CARIBE25"
+							}
+                        }
+                    },
+                    new LimitedTimeOfferMessageComponent()
+                    {
+                        Type = "button",
+                        SubType = "url",
+                        Index = 1,
+                        Parameters = new List<LimitedTimeOfferMessageParameter>()
+                        {
+                            new LimitedTimeOfferMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "https://www.google.com/maps"
+							}
+                        }
+                    }
+                };
+
+				var results = await _whatsAppBusinessClient.SendLimitedTimeOfferMessageTemplateAsync(limitedTimeOfferTemplateMessageRequest);
+
+				if (results != null)
+				{
+					return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent limited time offer template message");
+				}
+				else
+				{
+					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+				}
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
+			}
+		}
+
 		public IActionResult SendWhatsAppContactMessage()
         {
             return View();
