@@ -38,9 +38,15 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		[JsonProperty("type")]
 		public string Type { get; set; }
 
+		/// <summary>
+		/// Only to be used for template creation do not set this property when sending auth template messages
+		/// </summary>
 		[JsonProperty("add_security_recommendation", NullValueHandling = NullValueHandling.Ignore)]
 		public bool AddSecurityRecommendation { get; set; }
 
+		/// <summary>
+		/// Only to be used for template creation do not set this property when sending auth template messages
+		/// </summary>
 		[JsonProperty("code_expiration_minutes", NullValueHandling = NullValueHandling.Ignore)]
 		public int CodeExpirationMinutes { get; set; }
 
@@ -52,6 +58,21 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
 		[JsonProperty("index", NullValueHandling = NullValueHandling.Ignore)]
 		public long? Index { get; set; }
+
+		[JsonIgnore]
+		public bool IsTemplateCreation { get; set; }
+
+		public bool ShouldSerializeCodeExpirationMinutes()
+		{
+			// Only to be used for template creation do not set this property when sending auth template messages
+			return CodeExpirationMinutes > 0;
+		}
+
+		public bool ShouldSerializeAddSecurityRecommendation()
+		{
+			// Only to be used for template creation do not set this property when sending auth template messages
+			return (IsTemplateCreation) ? AddSecurityRecommendation : false;
+		}
 	}
 
 	public class AuthenticationMessageParameter
