@@ -820,33 +820,45 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessGetAsync<PhoneNumberResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
-        /// We recommend marking incoming messages as read within 30 days of receipt.
-        /// Note: you cannot mark outgoing messages you sent as read.
-        /// You need to obtain the message_id of the incoming message from Webhooks.
-        /// </summary>
-        /// <param name="markMessage">MarkMessage Object</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>MarkMessageResponse</returns>
-        public MarkMessageResponse MarkMessageAsRead(MarkMessageRequest markMessage, CancellationToken cancellationToken = default)
+		/// <summary>
+		/// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
+		/// We recommend marking incoming messages as read within 30 days of receipt.
+		/// Note: you cannot mark outgoing messages you sent as read.
+		/// You need to obtain the message_id of the incoming message from Webhooks.
+		/// </summary>
+		/// <param name="markMessage">MarkMessage Object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>MarkMessageResponse</returns>
+		public MarkMessageResponse MarkMessageAsRead(MarkMessageRequest markMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.MarkMessageAsRead.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.MarkMessageAsRead.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
             return WhatsAppBusinessPostAsync<MarkMessageResponse>(markMessage, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
-        /// <summary>
-        /// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
-        /// We recommend marking incoming messages as read within 30 days of receipt.
-        /// Note: you cannot mark outgoing messages you sent as read.
-        /// You need to obtain the message_id of the incoming message from Webhooks.
-        /// </summary>
-        /// <param name="markMessage">MarkMessage Object</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>MarkMessageResponse</returns>
-        public async Task<MarkMessageResponse> MarkMessageAsReadAsync(MarkMessageRequest markMessage, CancellationToken cancellationToken = default)
+		/// <summary>
+		/// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
+		/// We recommend marking incoming messages as read within 30 days of receipt.
+		/// Note: you cannot mark outgoing messages you sent as read.
+		/// You need to obtain the message_id of the incoming message from Webhooks.
+		/// </summary>
+		/// <param name="markMessage">MarkMessage Object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>MarkMessageResponse</returns>
+		public async Task<MarkMessageResponse> MarkMessageAsReadAsync(MarkMessageRequest markMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.MarkMessageAsRead.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.MarkMessageAsRead.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
             return await WhatsAppBusinessPostAsync<MarkMessageResponse>(markMessage, formattedWhatsAppEndpoint, cancellationToken);
         }
 

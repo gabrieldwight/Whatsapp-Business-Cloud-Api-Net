@@ -540,27 +540,29 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <returns>WhatsAppResponse</returns>
         WhatsAppResponse SendLocationMessage(LocationMessageRequest locationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
-        /// We recommend marking incoming messages as read within 30 days of receipt.
-        /// Note: you cannot mark outgoing messages you sent as read.
-        /// You need to obtain the message_id of the incoming message from Webhooks.
-        /// </summary>
-        /// <param name="markMessage">MarkMessage Object</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>MarkMessageResponse</returns>
-        Task<MarkMessageResponse> MarkMessageAsReadAsync(MarkMessageRequest markMessage, CancellationToken cancellationToken = default);
+		/// <summary>
+		/// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
+		/// We recommend marking incoming messages as read within 30 days of receipt.
+		/// Note: you cannot mark outgoing messages you sent as read.
+		/// You need to obtain the message_id of the incoming message from Webhooks.
+		/// </summary>
+		/// <param name="markMessage">MarkMessage Object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>MarkMessageResponse</returns>
+		Task<MarkMessageResponse> MarkMessageAsReadAsync(MarkMessageRequest markMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
-        /// We recommend marking incoming messages as read within 30 days of receipt.
-        /// Note: you cannot mark outgoing messages you sent as read.
-        /// You need to obtain the message_id of the incoming message from Webhooks.
-        /// </summary>
-        /// <param name="markMessage">MarkMessage Object</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>MarkMessageResponse</returns>
-        MarkMessageResponse MarkMessageAsRead(MarkMessageRequest markMessage, CancellationToken cancellationToken = default);
+		/// <summary>
+		/// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
+		/// We recommend marking incoming messages as read within 30 days of receipt.
+		/// Note: you cannot mark outgoing messages you sent as read.
+		/// You need to obtain the message_id of the incoming message from Webhooks.
+		/// </summary>
+		/// <param name="markMessage">MarkMessage Object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>MarkMessageResponse</returns>
+		MarkMessageResponse MarkMessageAsRead(MarkMessageRequest markMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Send reaction message reply
