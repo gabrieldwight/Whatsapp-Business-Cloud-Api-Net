@@ -393,6 +393,64 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             }
         }
 
+        public IActionResult SendWhatsAppFlowMessage()
+        {
+			SendFlowMessageViewModel sendFlowMessageViewModel = new SendFlowMessageViewModel();
+			sendFlowMessageViewModel.FlowAction = new List<SelectListItem>()
+			{
+				new SelectListItem(){ Text = "Navigate", Value = "navigate" },
+				new SelectListItem(){ Text = "Data Exchange", Value = "data_exchange" }
+			};
+            sendFlowMessageViewModel.Mode = new List<SelectListItem>()
+            {
+                new SelectListItem(){ Text = "Draft", Value = "Draft" },
+                new SelectListItem(){ Text = "Published", Value = "Published" }
+            };
+			return View(sendFlowMessageViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppFlowMessage(SendFlowMessageViewModel sendFlowMessageViewModel)
+        {
+            try
+            {
+                FlowMessageRequest flowMessageRequest = new FlowMessageRequest();
+                flowMessageRequest.To = sendFlowMessageViewModel.RecipientPhoneNumber;
+                flowMessageRequest.Interactive = new FlowMessageInteractive();
+
+                flowMessageRequest.Interactive.Header = new FlowMessageHeader();
+                flowMessageRequest.Interactive.Header.Type = "text";
+                flowMessageRequest.Interactive.Header.Text = "Header flow";
+
+                flowMessageRequest.Interactive.Body = new FlowMessageBody();
+                flowMessageRequest.Interactive.Body.Text = "Body flow";
+
+                flowMessageRequest.Interactive.Footer = new FlowMessageFooter();
+                flowMessageRequest.Interactive.Footer.Text = "Footer flow";
+
+                flowMessageRequest.Interactive.Action = new FlowMessageAction();
+                flowMessageRequest.Interactive.Action.Parameters = new FlowMessageParameters();
+                flowMessageRequest.Interactive.Action.Parameters.FlowToken = sendFlowMessageViewModel.FlowToken;
+                flowMessageRequest.Interactive.Action.Parameters.FlowId = sendFlowMessageViewModel.FlowId;
+                flowMessageRequest.Interactive.Action.Parameters.FlowCta = sendFlowMessageViewModel.FlowButtonText;
+				flowMessageRequest.Interactive.Action.Parameters.FlowAction = sendFlowMessageViewModel.SelectedFlowAction;
+				flowMessageRequest.Interactive.Action.Parameters.IsInDraftMode = (sendFlowMessageViewModel.SelectedMode.Equals("Draft", StringComparison.OrdinalIgnoreCase));
+                
+                flowMessageRequest.Interactive.Action.Parameters.FlowActionPayload = new FlowActionPayload();
+                flowMessageRequest.Interactive.Action.Parameters.FlowActionPayload.Screen = sendFlowMessageViewModel.ScreenId;
+
+				var results = await _whatsAppBusinessClient.SendFlowMessageAsync(flowMessageRequest);
+
+				return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent flow message");
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(SendWhatsAppFlowMessage)).WithDanger("Error", ex.Message);
+			}
+		}
+
         public IActionResult SendWhatsAppTemplateMessage()
         {
             return View();
@@ -1155,6 +1213,57 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
 			}
 		}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendWhatsAppFlowTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        {
+            try
+            {
+                FlowTemplateMessageRequest flowTemplateMessageRequest = new FlowTemplateMessageRequest();
+                flowTemplateMessageRequest.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+                flowTemplateMessageRequest.Template = new();
+                flowTemplateMessageRequest.Template.Name = sendTemplateMessageViewModel.TemplateName;
+                flowTemplateMessageRequest.Template.Language = new();
+                flowTemplateMessageRequest.Template.Language.Code = LanguageCode.English_US;
+                flowTemplateMessageRequest.Template.Components = new List<FlowMessageComponent>()
+                {
+                    new FlowMessageComponent()
+                    {
+                        Type = "button",
+                        SubType = "flow",
+                        Index = 0,
+                        Parameters = new List<FlowTemplateMessageParameter>()
+                        {
+                            new FlowTemplateMessageParameter()
+                            {
+                                Type = "action",
+                                Action = new FlowTemplateMessageAction()
+                                {
+                                    FlowToken = "",
+                                }
+                            }
+                        }
+                    }
+                };
+
+                var results = await _whatsAppBusinessClient.SendFlowMessageTemplateAsync(flowTemplateMessageRequest);
+
+                if (results != null)
+                {
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent flow template message");
+                }
+                else
+                {
+                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+                }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
+            }
+        }
 
 		public IActionResult SendWhatsAppContactMessage()
         {

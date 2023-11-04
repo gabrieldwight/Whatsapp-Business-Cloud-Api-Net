@@ -1,0 +1,70 @@
+﻿@model SendFlowMessageViewModel
+@{
+	ViewData["Title"] = "Send WhatsApp Flow Message Page";
+	ViewData["CurrentPage"] = "Send WhatsApp Flow Message";
+	Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+	ViewData["ControllerName"] = nameof(HomeController).Replace("Controller", "");
+	ViewData["ActionName"] = nameof(HomeController.SendWhatsAppTextMessage);
+}
+
+<section class="content">
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-info">
+				<div class="card-header">
+					<h3 class="card-title">Send WhatsApp Text Message</h3>
+				</div> <!--/. card-header -->
+				<!--Form start -->
+				<form asp-action="SendWhatsAppTextMessage">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="card-body">
+						<div class="form-group">
+							<label class="control-label">Recipient Phone Number</label>
+							<input asp-for="RecipientPhoneNumber" class="form-control" />
+							<span asp-validation-for="RecipientPhoneNumber" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Flow Action</label>
+							<select class="form-control form-select form-select-lg mb-3" asp-for="SelectedFlowAction" asp-items="@Model.FlowAction"></select>
+							<span asp-validation-for="SelectedFlowAction" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Mode</label>
+							<select class="form-control form-select form-select-lg mb-3" asp-for="SelectedMode" asp-items="@Model.Mode"></select>
+							<span asp-validation-for="SelectedMode" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Screen Name or Id</label>
+							<input asp-for="ScreenId" class="form-control" />
+							<span asp-validation-for="ScreenId" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Flow Token</label>
+							<input asp-for="FlowToken" class="form-control" />
+							<span asp-validation-for="FlowToken" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Flow Id</label>
+							<input asp-for="FlowId" class="form-control" />
+							<span asp-validation-for="FlowId" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Flow Button Text</label>
+							<input asp-for="FlowButtonText" class="form-control" />
+							<span asp-validation-for="FlowButtonText" class="form-control" />
+						</div>
+					</div> <!--/. card-body -->
+					<div class="card-footer">
+						<button type="submit" name="submit" class="btn btn-primary">Send Message</button>
+					</div>
+				</form>
+			</div> <!-- /.card -->
+		</div>
+	</div>
+</section>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	} 

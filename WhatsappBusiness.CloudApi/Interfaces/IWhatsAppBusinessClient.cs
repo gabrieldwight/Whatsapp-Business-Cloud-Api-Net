@@ -873,7 +873,43 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
 		WhatsAppResponse SendLimitedTimeOfferMessageTemplate(LimitedTimeOfferTemplateMessageRequest limitedTimeOfferTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
-        #endregion
+
+		/// <summary>
+		/// Send Whatsapp Flow Messages
+		/// </summary>
+		/// <param name="flowMessageRequest">FlowMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>FlowMessageResponse</returns>
+		Task<FlowMessageResponse> SendFlowMessageAsync(FlowMessageRequest flowMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Whatsapp Flow Messages
+		/// </summary>
+		/// <param name="flowMessageRequest">FlowMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>FlowMessageResponse</returns>
+		FlowMessageResponse SendFlowMessage(FlowMessageRequest flowMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Whatsapp Flow Template Messages
+		/// </summary>
+		/// <param name="flowTemplateMessageRequest">FlowTemplateMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		Task<WhatsAppResponse> SendFlowMessageTemplateAsync(FlowTemplateMessageRequest flowTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Whatsapp Flow Template Messages
+		/// </summary>
+		/// <param name="flowTemplateMessageRequest">FlowTemplateMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		WhatsAppResponse SendFlowMessageTemplate(FlowTemplateMessageRequest flowTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		#endregion
 
 		#region Two step verification code function
 		/// <summary>
