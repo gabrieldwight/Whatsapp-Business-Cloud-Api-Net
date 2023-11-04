@@ -5,10 +5,10 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 	public class CatalogMessageRequest
 	{
 		[JsonProperty("messaging_product")]
-		public string MessagingProduct { get; set; }
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
 		[JsonProperty("recipient_type")]
-		public string RecipientType { get; set; }
+		public string RecipientType { get; private set; } = "individual";
 
 		[JsonProperty("to")]
 		public string To { get; set; }
