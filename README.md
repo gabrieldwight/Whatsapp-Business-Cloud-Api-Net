@@ -13,6 +13,8 @@ Account Metrics: [Account Metrics Configuration for analytics and conversation a
 
 QR Code Message Management: [QR Code Messages for WhatsApp Business](https://developers.facebook.com/docs/whatsapp/business-management-api/qr-codes)
 
+WhatsApp Flows: [Setting up WhatsApp Flows](https://developers.facebook.com/docs/whatsapp/flows/gettingstarted/)
+
 Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
 
 Authentication Message Documentation: [Create and Send Authentication Message](https://developers.facebook.com/docs/whatsapp/business-management-api/authentication-templates)
@@ -36,11 +38,12 @@ Take note: Downloading media from the generated Whatsapp media URL will require 
   - [x] Contact
   - [x] Location
   - [x] Interactive (List, Reply)
-  - [x] Template (text, image, video, document, authentication, product message)
+  - [x] Template (text, image, video, document, authentication, flow message, carousel, catalog message, limited-time offer message, product message)
   - [x] Template Messages with parameters (text, image, video, document, authentication, product message)
   - [x] Single Product Message
   - [x] Multiple Product Message
   - [x] Authentication Message
+  - [x] Flow Message
 - [x] Receiving Message (via Webhook)
   - [x] Text
   - [x] Media (image, video, audio, document, sticker)
@@ -60,7 +63,7 @@ Take note: Downloading media from the generated Whatsapp media URL will require 
 ## Setting yourself for successful WhatsApp Business Cloud Api integration
 Before you proceed kindly acquaint yourself with WhatsApp Business Cloud Apis by going through the Docs in Meta's developer portal if you like.
 
-1.  Obtain Temporary access token for meta developers portal.
+1.  Obtain a Temporary access token for the meta developers portal.
 
 2.  Ensure your project is running on the minimum supported versions of .Net 
 
@@ -523,8 +526,70 @@ authenticationTemplateMessageRequest.Template.Components = new List<Authenticati
 var results = await _whatsAppBusinessClient.SendAuthenticationMessageTemplateAsync(authenticationTemplateMessageRequest);
 ```
 
+## Sending Flow Message
+```c#
+FlowMessageRequest flowMessageRequest = new FlowMessageRequest();
+flowMessageRequest.To = sendFlowMessageViewModel.RecipientPhoneNumber;
+flowMessageRequest.Interactive = new FlowMessageInteractive();
+
+flowMessageRequest.Interactive.Header = new FlowMessageHeader();
+flowMessageRequest.Interactive.Header.Type = "text";
+flowMessageRequest.Interactive.Header.Text = "Header flow";
+
+flowMessageRequest.Interactive.Body = new FlowMessageBody();
+flowMessageRequest.Interactive.Body.Text = "Body flow";
+
+flowMessageRequest.Interactive.Footer = new FlowMessageFooter();
+flowMessageRequest.Interactive.Footer.Text = "Footer flow";
+
+flowMessageRequest.Interactive.Action = new FlowMessageAction();
+flowMessageRequest.Interactive.Action.Parameters = new FlowMessageParameters();
+flowMessageRequest.Interactive.Action.Parameters.FlowToken = sendFlowMessageViewModel.FlowToken;
+flowMessageRequest.Interactive.Action.Parameters.FlowId = sendFlowMessageViewModel.FlowId;
+flowMessageRequest.Interactive.Action.Parameters.FlowCta = sendFlowMessageViewModel.FlowButtonText;
+flowMessageRequest.Interactive.Action.Parameters.FlowAction = sendFlowMessageViewModel.SelectedFlowAction;
+flowMessageRequest.Interactive.Action.Parameters.IsInDraftMode = (sendFlowMessageViewModel.SelectedMode.Equals("Draft", StringComparison.OrdinalIgnoreCase));
+
+flowMessageRequest.Interactive.Action.Parameters.FlowActionPayload = new FlowActionPayload();
+flowMessageRequest.Interactive.Action.Parameters.FlowActionPayload.Screen = sendFlowMessageViewModel.ScreenId;
+
+var results = await _whatsAppBusinessClient.SendFlowMessageAsync(flowMessageRequest);
+```
+
+## Sending Flow Template Message
+```c#
+FlowTemplateMessageRequest flowTemplateMessageRequest = new FlowTemplateMessageRequest();
+flowTemplateMessageRequest.To = sendTemplateMessageViewModel.RecipientPhoneNumber;
+flowTemplateMessageRequest.Template = new();
+flowTemplateMessageRequest.Template.Name = sendTemplateMessageViewModel.TemplateName;
+flowTemplateMessageRequest.Template.Language = new();
+flowTemplateMessageRequest.Template.Language.Code = LanguageCode.English_US;
+flowTemplateMessageRequest.Template.Components = new List<FlowMessageComponent>()
+{
+    new FlowMessageComponent()
+    {
+        Type = "button",
+        SubType = "flow",
+        Index = 0,
+        Parameters = new List<FlowTemplateMessageParameter>()
+        {
+            new FlowTemplateMessageParameter()
+            {
+                Type = "action",
+                Action = new FlowTemplateMessageAction()
+                {
+                    FlowToken = "",
+                }
+            }
+        }
+    }
+};
+
+var results = await _whatsAppBusinessClient.SendFlowMessageTemplateAsync(flowTemplateMessageRequest);
+```
+
 ## Webhook Subscription
-First you need to setup callback url and verify token string for WhatsApp Cloud API to verify your callback url.
+First, you need to setup the callback url and verify the token string for WhatsApp Cloud API to verify your callback url.
 Verification part
 ```c#
 [HttpGet("<YOUR ENDPOINT ROUTE>")]
@@ -608,7 +673,7 @@ if (!String.Equals(xHubSignature256, xHubSignature256Result,StringComparison.Inv
 
 ## Error handling
 WhatsAppBusinessClient Throws ```WhatsappBusinessCloudAPIException``` It is your role as the developer to catch
-the exception and continue processing in your application. Snippet below shows how you can catch the WhatsappBusinessCloudAPIException.
+the exception and continue processing in your application. The snippet below shows how you can catch the WhatsappBusinessCloudAPIException.
 
 ```c#
 using WhatsappBusiness.CloudApi.Exceptions; // add this to your class or namespace
@@ -624,7 +689,7 @@ catch (WhatsappBusinessCloudAPIException ex)
 ```
 ## Issues
 
-If you will face any issues with the usage of this package please raise one so as we can quickly fix it as soon as possible.
+If you will face any issues with the usage of this package please raise one so that we can quickly fix it as soon as possible.
 
 ## Contributing
 
