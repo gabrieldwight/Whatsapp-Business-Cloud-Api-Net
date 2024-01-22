@@ -258,7 +258,8 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             sendInteractiveMessageViewModel.InteractiveType = new List<SelectListItem>()
             {
                 new SelectListItem(){ Text = "List Message", Value = "List Message" },
-                new SelectListItem(){ Text = "Reply Button", Value = "Reply Button" }
+                new SelectListItem(){ Text = "Reply Button", Value = "Reply Button" },
+                new SelectListItem(){ Text = "Location Request Message", Value = "Location Request Message" }
             };
             return View(sendInteractiveMessageViewModel);
         }
@@ -376,6 +377,18 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     results = await _whatsAppBusinessClient.SendInteractiveReplyButtonMessageAsync(interactiveReplyButtonMessage);
                 }
+
+                if (sendInteractiveMessageViewModel.SelectedInteractiveType.Equals("Location Request Message"))
+                {
+                    InteractiveLocationMessageRequest interactiveLocationMessageRequest = new InteractiveLocationMessageRequest();
+					interactiveLocationMessageRequest.To = sendInteractiveMessageViewModel.RecipientPhoneNumber;
+                    interactiveLocationMessageRequest.Interactive = new InteractiveLocationRequestMessage();
+                    interactiveLocationMessageRequest.Interactive.Body = new InteractiveLocationBody();
+                    interactiveLocationMessageRequest.Interactive.Body.Text = (!string.IsNullOrWhiteSpace(sendInteractiveMessageViewModel.Message)) ? sendInteractiveMessageViewModel.Message : "Let us start with your pickup. You can either manually *enter an address* or *share your current location*.";
+                    interactiveLocationMessageRequest.Interactive.Action = new InteractiveLocationAction();
+
+					results = await _whatsAppBusinessClient.SendLocationRequestMessageAsync(interactiveLocationMessageRequest);
+				}
 
                 if (results != null)
                 {
