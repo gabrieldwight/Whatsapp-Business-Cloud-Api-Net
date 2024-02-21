@@ -1379,6 +1379,9 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
 					var uploadMediaResult = await _whatsAppBusinessClient.UploadMediaAsync(uploadMediaRequest);
 
+                    //var mediaUrlResult = await _whatsAppBusinessClient.GetMediaUrlAsync(uploadMediaResult.MediaId);
+
+                    //var mediaBytes = await _whatsAppBusinessClient.DownloadMediaAsync(mediaUrlResult.Url);
 
 					ViewBag.MediaId = uploadMediaResult.MediaId;
 				}
