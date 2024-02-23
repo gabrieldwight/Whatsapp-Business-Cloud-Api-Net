@@ -25,31 +25,33 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
     public record SendTextPayload
     {
-        public required string PhoneNumber { get; set; }
+        public required string ToNum { get; set; }
         public string Message { get; set; } = "Hello";
         public bool PreviewUrl { get; set; } = false;
 	}
     
     public record SendMediaMessagePayload
     {
-        public string PhoneNumber { get; set; }
-        public string MediaType { get; set; }
-        public string MessageType { get; set; }
-        public string Message { get; set; }
+  //      public string ToNum { get; set; }
+		//public string Message { get; set; }
+
+        public SendTextPayload SendText { get; set; }
+		public string MessageType { get; set; }
+		public string MediaType { get; set; }     
         public string? MediaLink { get; set; }
         public string? MediaId { get; set; }
     }
    
     public record SendMediaURLPayload
     {
-        public string PhoneNumber { get; set; }
+        public string ToNum { get; set; }
         public string mediaURL { get; set; }
         public string Message { get; set; }
     }
 
     public record SendTemplate_text_ParameterPayload
     {
-        public string PhoneNumber { get; set; }
+        public string ToNum { get; set; }
         public string TemplateName { get; set; }
         public List<string> TemplateParams { get; set; }
 
@@ -57,7 +59,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
     public record SendTemplate_media_ParameterPayload
     {
-        public string phoneNumber { get; set; }
+        public string ToNum { get; set; }
         public string templateName { get; set; }
         public string mediaURL { get; set; }
         public string mediaID { get; set; }
@@ -125,7 +127,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		public async Task<ActionResult<WhatsAppResponse>> SendTextAsync(SendTextPayload payload)
         {
             TextMessageRequest textMessageRequest = new TextMessageRequest();
-            textMessageRequest.To = payload.PhoneNumber;
+            textMessageRequest.To = payload.ToNum;
             textMessageRequest.Text = new WhatsAppText();
             textMessageRequest.Text.Body = payload.Message;
             textMessageRequest.Text.PreviewUrl = payload.PreviewUrl;
@@ -154,11 +156,17 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 WhatsAppResponse results = null;
                 switch (payload.MessageType.ToUpper())
                 {
-                    case "AUDIO":
+
+CJM shorten code below::
+Id = !string.IsNullOrEmpty(payload.mediaID) ? payload.mediaID : null,
+Link = string.IsNullOrEmpty(payload.mediaID) ? payload.mediaURL : null,
+
+
+					case "AUDIO":
                         if (!string.IsNullOrWhiteSpace(payload.MediaId))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             AudioMessageByIdRequest audioMessage = new AudioMessageByIdRequest();
-                            audioMessage.To = payload.PhoneNumber;
+                            audioMessage.To = payload.SendText.ToNum;
                             audioMessage.Audio = new MediaAudio();
                             audioMessage.Audio.Id = payload.MediaId;
 
@@ -167,7 +175,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         else //if (!string.IsNullOrWhiteSpace(payload.MediaLink))
                         {
                             AudioMessageByUrlRequest audioMessage = new AudioMessageByUrlRequest();
-                            audioMessage.To = payload.PhoneNumber;
+                            audioMessage.To = payload.SendText.ToNum;
                             audioMessage.Audio = new MediaAudioUrl();
                             audioMessage.Audio.Link = payload.MediaLink;
 
@@ -179,20 +187,20 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         if (!string.IsNullOrWhiteSpace(payload.MediaId))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             DocumentMessageByIdRequest documentMessage = new DocumentMessageByIdRequest();
-                            documentMessage.To = payload.PhoneNumber;
+                            documentMessage.To = payload.SendText.ToNum;
                             documentMessage.Document = new MediaDocument();
                             documentMessage.Document.Id = payload.MediaId;
-                            documentMessage.Document.Caption = payload.Message;
+                            documentMessage.Document.Caption = payload.SendText.Message;
 
                             results = await _whatsAppBusinessClient.SendDocumentAttachmentMessageByIdAsync(documentMessage);
                         }
                         else //if (!string.IsNullOrWhiteSpace(payload.MediaLink))
                         {
                             DocumentMessageByUrlRequest documentMessage = new DocumentMessageByUrlRequest();
-                            documentMessage.To = payload.PhoneNumber;
+                            documentMessage.To = payload.ToNum;
                             documentMessage.Document = new MediaDocumentUrl();
                             documentMessage.Document.Link = payload.MediaLink;
-                            documentMessage.Document.Caption = payload.Message;
+                            documentMessage.Document.Caption = payload.SendText.Message;
 
                             results = await _whatsAppBusinessClient.SendDocumentAttachmentMessageByUrlAsync(documentMessage);
                         }
@@ -202,20 +210,20 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         if (!string.IsNullOrWhiteSpace(payload.MediaId))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             ImageMessageByIdRequest imageMessage = new ImageMessageByIdRequest();
-                            imageMessage.To = payload.PhoneNumber;
+                            imageMessage.To = payload.SendText.ToNum;
                             imageMessage.Image = new MediaImage();
                             imageMessage.Image.Id = payload.MediaId;
-                            imageMessage.Image.Caption = payload.Message;
+                            imageMessage.Image.Caption = payload.SendText.Message;
 
                             results = await _whatsAppBusinessClient.SendImageAttachmentMessageByIdAsync(imageMessage);
                         }
                         else //if (!string.IsNullOrWhiteSpace(payload.MediaLink))
                         {
                             ImageMessageByUrlRequest imageMessage = new ImageMessageByUrlRequest();
-                            imageMessage.To = payload.PhoneNumber;
+                            imageMessage.To = payload.SendText.ToNum;
                             imageMessage.Image = new MediaImageUrl();
                             imageMessage.Image.Link = payload.MediaLink;
-                            imageMessage.Image.Caption = payload.Message;
+                            imageMessage.Image.Caption = payload.SendText.Message;
 
                             results = await _whatsAppBusinessClient.SendImageAttachmentMessageByUrlAsync(imageMessage);
                         }
@@ -225,7 +233,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         if (!string.IsNullOrWhiteSpace(payload.MediaId))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             StickerMessageByIdRequest stickerMessage = new StickerMessageByIdRequest();
-                            stickerMessage.To = payload.PhoneNumber;
+                            stickerMessage.To = payload.SendText.ToNum;
                             stickerMessage.Sticker = new MediaSticker();
                             stickerMessage.Sticker.Id = payload.MediaId;
 
@@ -234,7 +242,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         else //if (!string.IsNullOrWhiteSpace(payload.MediaLink))
                         {
                             StickerMessageByUrlRequest stickerMessage = new StickerMessageByUrlRequest();
-                            stickerMessage.To = payload.PhoneNumber;
+                            stickerMessage.To = payload.SendText.ToNum;
                             stickerMessage.Sticker = new MediaStickerUrl();
                             stickerMessage.Sticker.Link = payload.MediaLink;
 
@@ -246,20 +254,20 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         if (!string.IsNullOrWhiteSpace(payload.MediaId))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             VideoMessageByIdRequest videoMessage = new VideoMessageByIdRequest();
-                            videoMessage.To = payload.PhoneNumber;
+                            videoMessage.To = payload.SendText.ToNum;
                             videoMessage.Video = new MediaVideo();
                             videoMessage.Video.Id = payload.MediaId;
-                            videoMessage.Video.Caption = payload.Message;
+                            videoMessage.Video.Caption = payload.SendText.Message;
 
                             results = await _whatsAppBusinessClient.SendVideoAttachmentMessageByIdAsync(videoMessage);
                         }
                         else //if (!string.IsNullOrWhiteSpace(payload.MediaLink))
                         {
                             VideoMessageByUrlRequest videoMessage = new VideoMessageByUrlRequest();
-                            videoMessage.To = payload.PhoneNumber;
+                            videoMessage.To = payload.SendText.ToNum;
                             videoMessage.Video = new MediaVideoUrl();
                             videoMessage.Video.Link = payload.MediaLink;
-                            videoMessage.Video.Caption = payload.Message;
+                            videoMessage.Video.Caption = payload.SendText.Message;
 
                             results = await _whatsAppBusinessClient.SendVideoAttachmentMessageByUrlAsync(videoMessage);
                         }
@@ -280,7 +288,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         {
             // For Text Template message with parameters supported component type is body only
             TextTemplateMessageRequest textTemplateMessage = new TextTemplateMessageRequest();
-            textTemplateMessage.To = payload.PhoneNumber;
+            textTemplateMessage.To = payload.ToNum;
             textTemplateMessage.Template = new TextMessageTemplate();
             textTemplateMessage.Template.Name = payload.TemplateName;
             textTemplateMessage.Template.Language = new TextMessageLanguage();
@@ -315,7 +323,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         {
             // Tested with facebook predefined template name: sample_movie_ticket_confirmation
             ImageTemplateMessageRequest imageTemplateMessage = new ImageTemplateMessageRequest();
-            imageTemplateMessage.To = payload.phoneNumber;
+            imageTemplateMessage.To = payload.ToNum;
             imageTemplateMessage.Template = new ImageMessageTemplate();
             imageTemplateMessage.Template.Name = payload.templateName;
             imageTemplateMessage.Template.Language = new ImageMessageLanguage();
@@ -370,7 +378,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             // Senbd a Video Template with Parameters
 
             VideoTemplateMessageRequest videoTemplateMessage = new();
-            videoTemplateMessage.To = payload.phoneNumber;
+            videoTemplateMessage.To = payload.ToNum;
             videoTemplateMessage.Template = new();
             videoTemplateMessage.Template.Name = payload.templateName;
             videoTemplateMessage.Template.Language = new();
@@ -422,6 +430,5 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
 			return results;
         }
-
-    }
+	}
 }

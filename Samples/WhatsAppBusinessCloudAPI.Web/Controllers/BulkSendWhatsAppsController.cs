@@ -146,7 +146,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 }
 
                 // Prep to send the WhatsApp
-                sendWhatsAppPayload.phoneNumber = wUpContact.WupNum;
+                sendWhatsAppPayload.ToNum = wUpContact.WupNum;
                 sendWhatsAppPayload.templateName = wUpContact.Template;
                 sendWhatsAppPayload.mediaText = wUpContact.WupAttCap;
 
