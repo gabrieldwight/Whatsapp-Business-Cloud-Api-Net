@@ -8,6 +8,15 @@
 		<nav class="mt-2">
 			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 				<li class="nav-item ">
+					<a asp-controller="Home" asp-action="BulkSendWhatsApps" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.BulkSendWhatsApps))">
+						<i class="nav-icon fa-solid fa-upload"></i>
+						<p>
+							Bulk Send WhatsApps
+						</p>
+					</a>
+				</li>
+				
+				<li class="nav-item ">
 					<a asp-controller="Home" asp-action="UploadMedia" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.UploadMedia))">
 						<i class="nav-icon fa-solid fa-upload"></i>
 						<p>

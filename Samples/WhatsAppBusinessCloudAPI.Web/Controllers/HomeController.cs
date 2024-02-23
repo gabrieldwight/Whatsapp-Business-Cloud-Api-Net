@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Diagnostics;
+using System.Text;
 using WhatsappBusiness.CloudApi;
 using WhatsappBusiness.CloudApi.AccountMetrics;
 using WhatsappBusiness.CloudApi.Configurations;
@@ -56,7 +59,12 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 var results = await _whatsAppBusinessClient.SendTextMessageAsync(textMessageRequest);
 
-                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent text message");
+                string WAMIds = GetWAMId(results);
+
+				// Process or perform operations with the record fields
+				Console.WriteLine($"List of WAMIds: '{WAMIds}'" );
+
+				return RedirectToAction(nameof(Index)).WithSuccess("Success", $"Successfully sent text message with WAMIds: '{WAMIds}' ");
             }
             catch (WhatsappBusinessCloudAPIException ex)
             {
@@ -65,7 +73,22 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             }
         }
 
-        public IActionResult SendWhatsAppMediaMessage()
+        public string GetWAMId(WhatsAppResponse whatsAppResponse)
+        {
+			// This is to try and get the WAMID
+
+			StringBuilder msgIDsBuilder = new StringBuilder();
+
+			foreach (Message msg in whatsAppResponse.Messages)
+			{
+				msgIDsBuilder.Append(msg.Id);
+				msgIDsBuilder.Append(", ");
+			}
+
+			return msgIDsBuilder.ToString();
+		}
+
+		public IActionResult SendWhatsAppMediaMessage()
         {
             SendMediaMessageViewModel sendMediaMessageViewModel = new SendMediaMessageViewModel();
             sendMediaMessageViewModel.MediaType = new List<SelectListItem>()
@@ -617,7 +640,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         {
                             new ImageMessageParameter()
                             {
-                                Type = "image",
+                                Type = "image",                              
                                 Image = new Image()
                                 {
                                     //Id = sendTemplateMessageViewModel.MediaId,
@@ -772,8 +795,8 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                                 Type = "video",
                                 Video = new Video()
                                 {
-                                    //Id = sendTemplateMessageViewModel.MediaId,
-                                    Link = sendTemplateMessageViewModel.LinkUrl // Link point where your document can be downloaded or retrieved by WhatsApp
+                                    Id = sendTemplateMessageViewModel.MediaId,
+                                    //Link = sendTemplateMessageViewModel.LinkUrl // Link point where your document can be downloaded or retrieved by WhatsApp
                                 }
                             }
                         },
@@ -783,6 +806,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         Type = "body",
                         Parameters = new List<VideoMessageParameter>()
                         {
+                            new VideoMessageParameter()
+                            {
+                                Type = "text",
+                                Text = "CJ"
+                            },
                             new VideoMessageParameter()
                             {
                                 Type = "text",
@@ -1335,7 +1363,39 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             }
         }
 
-        public IActionResult UploadMedia()
+		public IActionResult BulkSendWhatsApps()
+		{
+			BulkSendWhatsAppsViewModel bulkSendWhatsAppsViewModel = new BulkSendWhatsAppsViewModel();
+			
+			return View(bulkSendWhatsAppsViewModel);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> BulkSendWhatsApps(BulkSendWhatsAppsViewModel bulkSendWhatsAppsViewModel, IFormFile bulkFile)
+		{
+            try
+            { // This is to call the relevant methods to run through the file and Bulk Send WhatsApps
+
+                // Upload the Bulk File to the Local Server
+                FileInfo fileInfo = new();
+                FileManagmentController fileController = new(_logger, _whatsAppBusinessClient, _environment);                               
+                fileInfo = await fileController.UploadFileToLocalServer(bulkFile);
+
+                // Now go through the file and send the WhatsApps
+                BulkSendWhatsAppsController bulkSendWhatsAppsController = new(_logger, _whatsAppBusinessClient, _environment);
+                bulkSendWhatsAppsController.ReadAndTraverseCSV(fileInfo);
+
+                return View(bulkSendWhatsAppsViewModel);
+            }
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(bulkFile)).WithDanger("Error", ex.Message);
+			}
+        }
+
+		public IActionResult UploadMedia()
         {
 			UploadMediaViewModel uploadMediaViewModel = new UploadMediaViewModel();
 			uploadMediaViewModel.UploadType = new List<SelectListItem>()
@@ -1346,70 +1406,36 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
 			return View(uploadMediaViewModel);
         }
-
-        [HttpPost]
+		
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadMedia(UploadMediaViewModel uploadMediaViewModel, IFormFile mediaFile)
         {
             try
-            {
-				var fileName = Path.GetFileName(mediaFile.FileName).Trim('"');
-
-				var rootPath = Path.Combine(_environment.WebRootPath, "Application_Files\\MediaUploads\\");
-
-				if (!Directory.Exists(rootPath))
-				{
-					Directory.CreateDirectory(rootPath);
-				}
-
-				// Get the path of filename
-				var filePath = Path.Combine(_environment.WebRootPath, "Application_Files\\MediaUploads\\", fileName);
-
-				// Upload Csv file to the browser
-				using (var stream = new FileStream(filePath, FileMode.Create))
-				{
-					await mediaFile.CopyToAsync(stream);
-				}
+            {		                				
+				FileInfo fileInfo = new();
+				FileManagmentController fileToUpload = new(_logger, _whatsAppBusinessClient, _environment);				
+                
+                // Upload file to Local Server
+                fileInfo = await fileToUpload.UploadFileToLocalServer(mediaFile);
 
 				if (uploadMediaViewModel.SelectedUploadType.Equals("Normal Upload", StringComparison.OrdinalIgnoreCase))
-                {
-					UploadMediaRequest uploadMediaRequest = new UploadMediaRequest();
-					uploadMediaRequest.File = filePath;
-					uploadMediaRequest.Type = mediaFile.ContentType;
+                { // Do a Normal Upload
+					fileInfo.fileUploadMethod = "Normal";
 
-					var uploadMediaResult = await _whatsAppBusinessClient.UploadMediaAsync(uploadMediaRequest);
-
-                    //var mediaUrlResult = await _whatsAppBusinessClient.GetMediaUrlAsync(uploadMediaResult.MediaId);
-
-                    //var mediaBytes = await _whatsAppBusinessClient.DownloadMediaAsync(mediaUrlResult.Url);
-
-					ViewBag.MediaId = uploadMediaResult.MediaId;
+					fileInfo = await fileToUpload.UploadFileToWhatsApp(fileInfo);
+                    ViewBag.MediaId = fileInfo.fileWhatsAppID;
 				}
-                else // Resumable upload generates header file response to be used for creating message templates
-                {
-                    var resumableUploadMediaResult = await _whatsAppBusinessClient.CreateResumableUploadSessionAsync(mediaFile.Length, mediaFile.ContentType, mediaFile.FileName);
-
-                    if (resumableUploadMediaResult is not null)
-                    {
-                        var uploadSessionId = resumableUploadMediaResult.Id;
-
-                        var resumableUploadResponse = await _whatsAppBusinessClient.UploadFileDataAsync(uploadSessionId, filePath, mediaFile.ContentType);
-
-                        var queryResumableUploadStatus = await _whatsAppBusinessClient.QueryFileUploadStatusAsync(uploadSessionId);
-
-                        if (resumableUploadResponse is not null)
-                        {
-							ViewBag.H = resumableUploadResponse.H;
-						}
-
-                        if (queryResumableUploadStatus is not null)
-                        {
-                            ViewBag.StatusId = queryResumableUploadStatus.Id;
-                            ViewBag.FileOffset = queryResumableUploadStatus.FileOffset;
-                        }
-                    }
-				}
-
+                else
+                { // Do a Resumanble upload  ************* BUT ************** This is not presenting a Media ID so cannot be used after
+                    fileInfo.fileUploadMethod = "Resumable";
+				    //Upload file from Local Server to WhatsApp
+				    fileInfo = await fileToUpload.UploadFileToWhatsApp(fileInfo);
+                    ViewBag.H = fileInfo.fileResumableInfo.H;
+                    ViewBag.StatusId = fileInfo.fileResumableInfo.StatusID;
+				    ViewBag.FileOffset = fileInfo.fileResumableInfo.FileOffset;
+                }
+			    
 				return View(uploadMediaViewModel).WithSuccess("Success", "Successfully upload media.");
             }
             catch (WhatsappBusinessCloudAPIException ex)
