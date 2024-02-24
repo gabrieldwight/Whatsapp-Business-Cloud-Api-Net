@@ -748,19 +748,6 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         {
             try
             {
-				// Making use of SendMessageController
-				//SendMediaMessagePayload payload = new SendMediaMessagePayload();
-				//payload.SendText = new SendTextPayload()
-				//{
-				//	ToNum = sendTemplateMessageViewModel.RecipientPhoneNumber,
-				//	Message = sendTemplateMessageViewModel.Message
-				//};
-				//payload.MessageType = sendTemplateMessageViewModel.SelectedMediaType;
-				//payload.MediaType = "";
-				//payload.MediaURL = sendTemplateMessageViewModel.MediaLink;
-				//payload.MediaId = sendTemplateMessageViewModel.MediaId;
-
-
 				SendTemplate_media_ParameterPayload payload = new();
 				payload.SendText = new SendTextPayload()
 				{
@@ -770,7 +757,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				payload.Template.Name = sendTemplateMessageViewModel.TemplateName;
 
 				// CJM to add a Params Textbox on the Form
-				string strParams = "Cornelius#DAFP";
+				string strParams = sendTemplateMessageViewModel.TemplateParams;	// "Cornelius#DAFP";
 				List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
 
 				payload.Template.Params = listParams;
@@ -781,55 +768,6 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 					Type = "video"		//,
 					//	Caption = ""		// Caption does not work
 				};
-
-				//VideoTemplateMessageRequest videoTemplateMessage = new()
-				//{
-				//	To = sendTemplateMessageViewModel.RecipientPhoneNumber,
-				//	Template = new()
-				//	{
-				//		Name = sendTemplateMessageViewModel.TemplateName,
-				//		Language = new()
-				//		{
-				//			Code = LanguageCode.English_US
-				//		},
-				//		Components = new List<VideoMessageComponent>()
-				//		{
-				//			new VideoMessageComponent()
-				//			{
-				//				Type = "header",
-				//				Parameters = new List<VideoMessageParameter>()
-				//				{
-				//					new VideoMessageParameter()
-				//					{
-				//						Type = "video",
-				//						Video = new Video()
-				//						{
-				//							Id = sendTemplateMessageViewModel.MediaId,
-				//							//Link = sendTemplateMessageViewModel.LinkUrl // Link point where your document can be downloaded or retrieved by WhatsApp
-				//						}
-				//					}
-				//				},
-				//			},
-				//			new VideoMessageComponent()
-				//			{
-				//				Type = "body",
-				//				Parameters = new List<VideoMessageParameter>()
-				//				{
-				//					new VideoMessageParameter()
-				//					{
-				//						Type = "text",
-				//						Text = "CJ"
-				//					},
-				//					new VideoMessageParameter()
-				//					{
-				//						Type = "text",
-				//						Text = "Video Information"
-				//					},
-				//				}
-				//			}
-				//		}
-				//	}
-				//};
 
 				// Send the message and get the WAMId
 				string WAMIds = _sendMessageController.GetWAMId((await _sendMessageController.SendTemplate_video_ParameterAsync(payload)).Value);
@@ -843,17 +781,6 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				{
 					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
 				}
-
-				//var results = await _whatsAppBusinessClient.SendVideoAttachmentTemplateMessageAsync(videoTemplateMessage);
-
-				//if (results != null)
-				//{
-				//	return RedirectToAction(nameof(Index)).WithSuccess("Success", $"Successfully sent video template message with WAMId '{WAMIds}'");
-				//}
-				//else
-				//{
-				//	return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
-				//}
 			}
 
 			catch (WhatsappBusinessCloudAPIException ex)
