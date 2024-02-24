@@ -156,13 +156,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 WhatsAppResponse results = null;
                 switch (payload.MessageType.ToUpper())
                 {
-
-CJM shorten code below::
-Id = !string.IsNullOrEmpty(payload.mediaID) ? payload.mediaID : null,
-Link = string.IsNullOrEmpty(payload.mediaID) ? payload.mediaURL : null,
-
-
-					case "AUDIO":
+                    case "AUDIO":
                         if (!string.IsNullOrWhiteSpace(payload.MediaId))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             AudioMessageByIdRequest audioMessage = new AudioMessageByIdRequest();
@@ -197,7 +191,7 @@ Link = string.IsNullOrEmpty(payload.mediaID) ? payload.mediaURL : null,
                         else //if (!string.IsNullOrWhiteSpace(payload.MediaLink))
                         {
                             DocumentMessageByUrlRequest documentMessage = new DocumentMessageByUrlRequest();
-                            documentMessage.To = payload.ToNum;
+                            documentMessage.To = payload.SendText.ToNum;
                             documentMessage.Document = new MediaDocumentUrl();
                             documentMessage.Document.Link = payload.MediaLink;
                             documentMessage.Document.Caption = payload.SendText.Message;

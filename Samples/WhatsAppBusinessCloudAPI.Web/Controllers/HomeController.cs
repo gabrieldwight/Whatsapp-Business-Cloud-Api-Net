@@ -101,8 +101,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             try
             {
                 SendMediaMessagePayload payload = new SendMediaMessagePayload();
-				payload.SendText.ToNum = sendMediaMessage.RecipientPhoneNumber;
-				payload.SendText.Message = sendMediaMessage.Message;
+				payload.SendText = new SendTextPayload()
+				{
+					ToNum = sendMediaMessage.RecipientPhoneNumber,
+					Message = sendMediaMessage.Message
+				};
 				payload.MessageType = sendMediaMessage.SelectedMediaType;
 				payload.MediaType = "";
 				payload.MediaLink = sendMediaMessage.MediaLink;
