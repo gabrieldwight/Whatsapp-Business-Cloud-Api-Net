@@ -1,0 +1,58 @@
+﻿@model BulkSendWhatsAppsViewModel
+@{
+	ViewData["Title"] = "Bulk Send WhatsApps";
+	ViewData["CurrentPage"] = "Bulk Send WhatsApps";
+	Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+	ViewData["ControllerName"] = nameof(HomeController).Replace("Controller", "");
+	ViewData["ActionName"] = nameof(HomeController.BulkSendWhatsApps);
+}
+
+<section class="content">
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-info">
+				<div class="card-header">
+					<h3 class="card-title">Bulk WhatsApps</h3>
+				</div> <!--/. card-header -->
+				<!--Form start -->
+				<form asp-action="BulkSendWhatsApps" enctype="multipart/form-data">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="card-body">
+						<div class="form-group">
+							<label class="control-label">Bulk File (CSV)</label>
+							<div class="input-group">
+								<input type="file" class="custom-file-input" id="bulkFile" name="bulkFile" />
+								<label class="custom-file-label">Choose Bulk File</label>
+							</div>
+						</div>
+						
+						@if (ViewBag.SendStatus != null)
+						{
+							<p>Send Status: @ViewBag.SendStatus</p>
+						}
+
+						@if (ViewBag.H != null)
+						{
+							<p>H from WhatsApp: @ViewBag.H</p>
+						}
+
+						@if (ViewBag.StatusId != null)
+						{
+							<p>File Upload Status Id: @ViewBag.StatusId</p>
+							<p>File Offset: @ViewBag.FileOffset</p>
+						}
+					</div> <!--/. card-body -->
+					<div class="card-footer">
+						<button type="submit" name="submit" class="btn btn-primary">Upload Media</button>
+					</div>
+				</form>
+			</div> <!-- /.card -->
+		</div>
+	</div>
+</section>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	} 
