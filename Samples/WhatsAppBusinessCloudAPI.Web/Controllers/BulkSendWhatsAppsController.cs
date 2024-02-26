@@ -118,10 +118,13 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 wUpContact = ReplaceRecordData(wUpContact);
 
-                // Build the unique list of attachments, if a new attachment is found, upload it and get the ID
-                if (uniqueAttWithMediaID.ContainsKey(wUpContact.WupAtt))
+                sendWhatsAppPayload.Media = new WhatsAppMedia();
+				sendWhatsAppPayload.Media.Caption = wUpContact.WupAttCap;
+
+				// Build the unique list of attachments, if a new attachment is found, upload it and get the ID
+				if (uniqueAttWithMediaID.ContainsKey(wUpContact.WupAtt))
                 {
-                    sendWhatsAppPayload.mediaID = uniqueAttWithMediaID[wUpContact.WupAtt]; // Retrieve the corresponding mediaID                                                                             
+                    sendWhatsAppPayload.Media.ID = uniqueAttWithMediaID[wUpContact.WupAtt]; // Retrieve the corresponding ID                                                                             
                 }
                 else
                 {
@@ -136,29 +139,34 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                     {
                         //File Uploaded successfully
                         // string valueX = okResult?.Value?.ToString();
-                        sendWhatsAppPayload.mediaID = uploadMediaPayload.fileWhatsAppID;
+                        sendWhatsAppPayload.Media.ID = uploadMediaPayload.fileWhatsAppID;
                     }
                     else
                     {
-                        sendWhatsAppPayload.mediaID = "-1";
+                        sendWhatsAppPayload.Media.ID = "-1";
                     }
-                    uniqueAttWithMediaID.Add(wUpContact.WupAtt, sendWhatsAppPayload.mediaID); // Add the entry to the Dictionary if not found
+                    uniqueAttWithMediaID.Add(wUpContact.WupAtt, sendWhatsAppPayload.Media.ID); // Add the entry to the Dictionary if not found
                 }
-
-                // Prep to send the WhatsApp
-                sendWhatsAppPayload.phoneNumber = wUpContact.WupNum;
-                sendWhatsAppPayload.templateName = wUpContact.Template;
-                sendWhatsAppPayload.mediaText = wUpContact.WupAttCap;
+				
+				// Prep to send the WhatsApp
+				sendWhatsAppPayload.SendText = new SendTextPayload()
+                {
+                    ToNum = wUpContact.WupNum
+                };
 
 				// Split die Params into a List
 				string strParams = wUpContact.Params;
 				List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
 
-				sendWhatsAppPayload.templateParams = listParams;
-				
-                var result = await sendMessageController.SendTemplate_video_ParameterAsync(sendWhatsAppPayload);
+                sendWhatsAppPayload.Template = new WhatsappTemplate()
+                {
+                    Name = wUpContact.Template,
+                    Params = listParams
+                };
 
-				row["SendResult"] = sendMessageController.GetWAMId(result);
+				string WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendTemplate_video_ParameterAsync(sendWhatsAppPayload)).Value);				
+
+                row["SendResult"] = WAMIds;
 
             }
             
