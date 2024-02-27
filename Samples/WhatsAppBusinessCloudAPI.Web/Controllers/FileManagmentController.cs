@@ -154,7 +154,17 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
 					// Compile the Full path and File name
 					string fullpath = fileInfo.filePath ?? Path.Combine(_environment.WebRootPath, _localServerPaths.LocalFileUploadPath);
-					uploadMediaRequest.File = Path.Combine(fullpath, fileInfo.fileName);
+					// Check if the fullpath already contains the fileName
+					if (!fullpath.Contains(fileInfo.fileName))
+					{
+						// Combine the fullpath and fileName only if the fileName is not already in the fullpath
+						uploadMediaRequest.File = Path.Combine(fullpath, fileInfo.fileName);
+					}
+					else
+					{
+						// Set the file path directly without combining, as the fileName is already part of the fullpath
+						uploadMediaRequest.File = fullpath;
+					}
 
 					// If we do not know the File content type then get it
 					uploadMediaRequest.Type = fileInfo.fileContentType ?? GetFileType(uploadMediaRequest.File);
