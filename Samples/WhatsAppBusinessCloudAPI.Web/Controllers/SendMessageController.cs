@@ -44,26 +44,20 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		public List<string> Params { get; set; }
 	}
 
-	public record SendMediaMessagePayload
+    /// <summary>
+    /// This Payload cater for a message
+    /// 1. Text Only
+    /// 2. Media
+    /// 3. Templates
+    /// </summary>
+	public record SendWhatsAppPayload
     {
         public SendTextPayload SendText { get; set; }
 		public string MessageType { get; set; }
 		public WhatsAppMedia Media { get; set; }
-    }
-   
-    public record SendTemplate_text_ParameterPayload
-    {
-        public SendTextPayload SendText { get; set; }
-		public WhatsappTemplate Template { get; set; }
-
-	}
-
-    public record SendTemplate_media_ParameterPayload
-    {
-		public SendTextPayload SendText { get; set; }
         public WhatsappTemplate Template { get; set; }
-        public WhatsAppMedia Media { get; set; }
-	}
+    }
+ 
 
     public class SendMessageController : Controller
     {
@@ -127,25 +121,78 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             };
         }
 
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<ActionResult<WhatsAppResponse>> SendTextAsync(SendTextPayload payload)
-        {
-            TextMessageRequest textMessageRequest = new TextMessageRequest();
-            textMessageRequest.To = payload.ToNum;
-            textMessageRequest.Text = new WhatsAppText();
-            textMessageRequest.Text.Body = payload.Message;
-            textMessageRequest.Text.PreviewUrl = payload.PreviewUrl;
+		/// <summary>
+		/// Text With/Without Template With/Without Params
+		/// This is made to send Text Messages With or Without a Template
+		/// If with a Template then With or Without Parameters
+		/// </summary>
+		/// <param name="payload"></param>
+		/// <returns></returns>
+		[HttpPost]
+		[Route("[action]")]
+		public async Task<ActionResult<WhatsAppResponse>> SendWhatsApp_TextAsync(SendWhatsAppPayload payload)
+		{
+            try
+            {				
+                if (payload.Template == null)
+                {// Simple text only
+                    TextMessageRequest textMsgPayload = new();
+                    textMsgPayload.To = payload.SendText.ToNum;
+                    textMsgPayload.Text = new WhatsAppText();                    
+					textMsgPayload.Text.Body = payload.SendText.Message;
+					textMsgPayload.Text.PreviewUrl = payload.SendText.PreviewUrl;
 
-            var results = await _whatsAppBusinessClient.SendTextMessageAsync(textMessageRequest);
-			string WAMIds = GetWAMId(results);
+					var result = await _whatsAppBusinessClient.SendTextMessageAsync(textMsgPayload);
+					string WAMIds = GetWAMId(result);
+					_logger.LogInformation($"Sent Message: WAMID = '{WAMIds}'");
 
-			// Process or perform operations with the record fields
-			Console.WriteLine($"List of WAMIds: '{WAMIds}'");
+					return result;
+				}
+                else
+                {// Text Template
+                    TextTemplateMessageRequest textMsgPayload = new TextTemplateMessageRequest();
+			        textMsgPayload.To = payload.SendText.ToNum;
+			        textMsgPayload.Template = new TextMessageTemplate();
+			        textMsgPayload.Template.Name = payload.Template.Name;
+			        textMsgPayload.Template.Language = new TextMessageLanguage();
+			        textMsgPayload.Template.Language.Code = LanguageCode.English_US;
 
-			return results;
-        }
-		
+                    if(payload.Template.Params != null)
+                    {// Text Template with params
+                        // For Text WhatsappTemplate message with parameters supported component type is body only				
+			            textMsgPayload.Template.Components = new List<TextMessageComponent>();
+
+			            var parameters = new List<TextMessageParameter>();
+
+			            foreach (var txt in payload.Template.Params)
+			            {
+				            var param = new TextMessageParameter()
+				            {
+					            Type = "text",
+					            Text = txt
+				            };
+				            parameters.Add(param);
+			            }
+
+			            textMsgPayload.Template.Components.Add(new TextMessageComponent()
+			            {
+				            Type = "body",
+				            Parameters = parameters
+			            });
+                    }
+                    var result = await _whatsAppBusinessClient.SendTextMessageTemplateAsync(textMsgPayload);
+					string WAMIds = GetWAMId(result);
+					_logger.LogInformation($"Sent Message: WAMID = '{WAMIds}'");
+					return result;
+                }   
+            }
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return Ok(-1);
+			}
+		}
+
 		/// <summary>
 		/// This is to send NON WhatsappTemplate messages for:
 		///     Audio, Document, Image, Sticker, Video
@@ -154,7 +201,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		/// <returns></returns>
 		[HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult<WhatsAppResponse>> SendWhatsAppMediaMessage(SendMediaMessagePayload payload)
+        public async Task<ActionResult<WhatsAppResponse>> SendWhatsApp_MediaAsync(SendWhatsAppPayload payload)
         {
             try
             {
@@ -277,48 +324,13 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             catch (WhatsappBusinessCloudAPIException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return Ok(-1);      // RedirectToAction(nameof(SendWhatsAppMediaMessage)).WithDanger("Error", ex.Message);
+                return Ok(-1);      // RedirectToAction(nameof(SendWhatsApp_MediaAsync)).WithDanger("Error", ex.Message);
             }
-        }
-
-		[HttpPost]
-        [Route("[action]")]
-        public async Task<ActionResult<WhatsAppResponse>> SendTemplate_text_ParameterAsync(SendTemplate_text_ParameterPayload payload)
-        {
-            // For Text WhatsappTemplate message with parameters supported component type is body only
-            TextTemplateMessageRequest textTemplateMessage = new TextTemplateMessageRequest();
-            textTemplateMessage.To = payload.SendText.ToNum;
-            textTemplateMessage.Template = new TextMessageTemplate();
-            textTemplateMessage.Template.Name = payload.Template.Name;
-            textTemplateMessage.Template.Language = new TextMessageLanguage();
-            textTemplateMessage.Template.Language.Code = LanguageCode.English_US;
-            textTemplateMessage.Template.Components = new List<TextMessageComponent>();
-
-            var parameters = new List<TextMessageParameter>();
-
-            foreach (var txt in payload.Template.Params)
-            {
-                var param = new TextMessageParameter()
-                {
-                    Type = "text",
-                    Text = txt
-                };
-                parameters.Add(param);
-            }
-
-            textTemplateMessage.Template.Components.Add(new TextMessageComponent()
-            {
-                Type = "body",
-                Parameters = parameters
-            });
-
-            var results = await _whatsAppBusinessClient.SendTextMessageTemplateAsync(textTemplateMessage);
-            return results;
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult<WhatsAppResponse>> SendTemplate_image_ParameterAsync(SendTemplate_media_ParameterPayload payload)
+        public async Task<ActionResult<WhatsAppResponse>> SendWhatsApp_TemplateImage_ParameterAsync(SendWhatsAppPayload payload)
         {
             // Tested with facebook predefined template name: sample_movie_ticket_confirmation
             ImageTemplateMessageRequest imageTemplateMessage = new ImageTemplateMessageRequest();
@@ -328,43 +340,48 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             imageTemplateMessage.Template.Language = new ImageMessageLanguage();
             imageTemplateMessage.Template.Language.Code = LanguageCode.English_US;
 
-            // Loop and Compile Body Params
-            var bodyParams = new List<ImageMessageParameter>();
-
-            foreach (var txt in payload.Template.Params)
-            {
-                var param = new ImageMessageParameter()
-                {
-                    Type = "text",
-                    Text = txt
-                };
-                bodyParams.Add(param);
-            }
-
             imageTemplateMessage.Template.Components = new List<ImageMessageComponent>(); // Move this line here
 
             imageTemplateMessage.Template.Components.Add(new ImageMessageComponent()
             {
                 Type = "header",
                 Parameters = new List<ImageMessageParameter>()
-            {
-                new ImageMessageParameter()
                 {
-                    Type = "image",
-                    Image = new WhatsappBusiness.CloudApi.Messages.Requests.Image()
+                    new ImageMessageParameter()
                     {
-                        Link = payload.Media.URL
-                    }
-                }
-            },
+                        Type = "image",
+                        Image = new WhatsappBusiness.CloudApi.Messages.Requests.Image()
+                        {
+                            Id = !string.IsNullOrEmpty(payload.Media.ID) ? payload.Media.ID : null,
+							Link = string.IsNullOrEmpty(payload.Media.ID) ? payload.Media.URL : null,
+                            //Caption = !string.IsNullOrEmpty(payload.Caption) ? payload.Caption : null
+                        }
+					}
+                },
             });
 
-            // Add the Body Params
-            imageTemplateMessage.Template.Components.Add(new ImageMessageComponent()
+            if (payload.Template.Params != null)
             {
-                Type = "body",
-                Parameters = bodyParams
-            });
+                // Loop and Compile Body Params
+                var bodyParams = new List<ImageMessageParameter>();
+
+                foreach (var txt in payload.Template.Params)
+                {
+                    var param = new ImageMessageParameter()
+                    {
+                        Type = "text",
+                        Text = txt
+                    };
+                    bodyParams.Add(param);
+                }
+
+                // Add the Body Params
+                imageTemplateMessage.Template.Components.Add(new ImageMessageComponent()
+                {
+                    Type = "body",
+                    Parameters = bodyParams
+                });
+            }
 
             var results = await _whatsAppBusinessClient.SendImageAttachmentTemplateMessageAsync(imageTemplateMessage);
             return results;
@@ -372,7 +389,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
         [HttpPost]
         [Route("[action]")]		
-		public async Task<ActionResult<WhatsAppResponse>> SendTemplate_video_ParameterAsync(SendTemplate_media_ParameterPayload payload)
+		public async Task<ActionResult<WhatsAppResponse>> SendWhatsApp_TemplateVideo_ParameterAsync(SendWhatsAppPayload payload)
 		{
             // Senbd a Video WhatsappTemplate with Parameters
 
@@ -382,20 +399,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             videoTemplateMessage.Template.Name = payload.Template.Name;
             videoTemplateMessage.Template.Language = new();
             videoTemplateMessage.Template.Language.Code = LanguageCode.English_US;
-
-            // Loop and Compile Body Params
-            var bodyParams = new List<VideoMessageParameter>();
-
-            foreach (var txt in payload.Template.Params)
-            {
-                var param = new VideoMessageParameter()
-                {
-                    Type = "text",
-                    Text = txt
-                };
-                bodyParams.Add(param);
-            }
-
+            
             videoTemplateMessage.Template.Components = new List<VideoMessageComponent>();
 
             videoTemplateMessage.Template.Components.Add(new VideoMessageComponent()
@@ -407,9 +411,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                     {
                         Type = "video",
                         Video = new WhatsappBusiness.CloudApi.Messages.Requests.Video()
-                        {
-                            //Id = payload.ID
-                            //Link = payload.URL // Link point where your document can be downloaded or retrieved by WhatsApp
+                        {                            
                             Id = !string.IsNullOrEmpty(payload.Media.ID) ? payload.Media.ID : null,
                             Link = string.IsNullOrEmpty(payload.Media.ID) ? payload.Media.URL : null,
                             //Caption = !string.IsNullOrEmpty(payload.Caption) ? payload.Caption : null
@@ -418,12 +420,27 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 },
             });
 
-            // Add the Body Params
-            videoTemplateMessage.Template.Components.Add(new VideoMessageComponent()
-            {
-                Type = "body",
-                Parameters = bodyParams
-            });
+            if (payload.Template.Params != null)
+            { // There are Params, Loop and Compile Body Params
+                var bodyParams = new List<VideoMessageParameter>();
+
+                foreach (var txt in payload.Template.Params)
+                {
+                    var param = new VideoMessageParameter()
+                    {
+                        Type = "text",
+                        Text = txt
+                    };
+                    bodyParams.Add(param);
+                }
+
+                // Add the Body Params
+                videoTemplateMessage.Template.Components.Add(new VideoMessageComponent()
+                {
+                    Type = "body",
+                    Parameters = bodyParams
+                });
+            }
 
             var results = await _whatsAppBusinessClient.SendVideoAttachmentTemplateMessageAsync(videoTemplateMessage);
 
