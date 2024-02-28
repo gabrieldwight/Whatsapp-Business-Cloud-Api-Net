@@ -115,7 +115,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             // Use the SendMessageController
             SendMessageController sendMessageController = new(_logger, _whatsAppBusinessClient, _environment);
             FileManagmentController fileManagementController = new(_logger, _whatsAppBusinessClient, _environment );
-            SendTemplate_media_ParameterPayload sendWhatsAppPayload = new();
+			SendWhatsAppPayload sendWhatsAppPayload = new();
             FileInfo uploadMediaPayload = new();            
 
             // We will build a unique list of Attachments so we can upload the Attachments to WhatsApp and use the IDs
@@ -160,7 +160,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 if (_msgTypes.Any(msgType => msgType.Name == wUpContact.MsgType && msgType.HasAtt))
                 { 
 
-CJM - Move all instance creation to outside of the loop
+//CJM - Move all instance creation to outside of the loop
                     sendWhatsAppPayload.Media = new WhatsAppMedia();
 				    sendWhatsAppPayload.Media.Caption = wUpContact.WupAttCap;
 
@@ -211,7 +211,7 @@ CJM - Move all instance creation to outside of the loop
 
 
 
-				string WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendTemplate_video_ParameterAsync(sendWhatsAppPayload)).Value);				
+				string WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateVideo_ParameterAsync(sendWhatsAppPayload)).Value);				
 
                 row["SendResult"] = WAMIds;
 
