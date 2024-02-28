@@ -56,6 +56,12 @@ Take note: Downloading media from the generated Whatsapp media URL will require 
   - [x] QR Code Message Management
   - [x] Account Metrics
 
+- [x] Sample project
+  - [x] Read csv, and send over WhatsApp per record
+  - [x] Implements many of the samples of below
+  - [x] Upload files to local server, before uploading to WhatsApp
+     
+
 ## Installation
 - PackageManager: ```PM> Install-Package WhatsappBusiness.CloudApi```
 - DotNetCLI: ```> dotnet add package WhatsappBusiness.CloudApi```
