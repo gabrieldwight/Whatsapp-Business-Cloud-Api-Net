@@ -48,32 +48,6 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendWhatsAppTextMessage(SendTextMessageViewModel payload)
-        { // Functional Using SendMessageController
-            try
-            {
-				// AntiforgeryApplicationBuilderExtensions the Payload to send
-				SendWhatsAppPayload sendPayload = new();
-				sendPayload.SendText = new SendTextPayload()
-				{ ToNum = payload.RecipientPhoneNumber};
-				sendPayload.SendText.Message = payload.Message;
-				sendPayload.SendText.PreviewUrl = false;				
-
-				// Send the message and get the WAMId
-				string WAMIds = _sendMessageController.GetWAMId((await _sendMessageController.SendWhatsApp_TextAsync(sendPayload)).Value);
-				
-				return RedirectToAction(nameof(Index)).WithSuccess("Success", $"Successfully sent text message with WAMIds: '{WAMIds}' ");
-
-            }
-            catch (WhatsappBusinessCloudAPIException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return View().WithDanger("Error", ex.Message);
-            }
-        }
-
 		public IActionResult SendWhatsAppMediaMessage()
         {
 			SendMediaMessageViewModel sendMediaMessageViewModel = new SendMediaMessageViewModel
@@ -430,29 +404,43 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendWhatsAppTextTemplateMessage(SendTemplateMessageViewModel payload)
-        { // Functional using SendMessageController
-            try
-            {
-				// AntiforgeryApplicationBuilderExtensions the Payload to send
+		/// <summary>
+		/// This is to handle:
+		/// 1. Plain Text messgaes
+		/// 2. Text Templates (NO params)
+		/// 3. Text Templates with Params
+		/// </summary>
+		/// <param name="payload"></param>
+		/// <returns></returns>
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> SendWhatsAppTextMessage(SendTemplateMessageViewModel payload)
+		{ // Functional using SendMessageController
+			try
+			{
 				SendWhatsAppPayload sendPayload = new();
 				sendPayload.SendText = new SendTextPayload()
 				{ ToNum = payload.RecipientPhoneNumber };
 				sendPayload.SendText.PreviewUrl = false;
 
-
-				sendPayload.Template = new WhatsappTemplate();
-				sendPayload.Template.Name = payload.TemplateName;
-				
-				// CJM to add a Params Textbox on the Form
-				string strParams = payload.TemplateParams; // "Cornelius#DAFP";
-				if (strParams.ToUpper() != "NA" || strParams.Length == 0)
-				{
-					List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
-					sendPayload.Template.Params = listParams;
+				if (payload.Message != null)
+				{   // This is a normal plain Text Message
+					sendPayload.SendText.Message = payload.Message;
 				}
+				else
+				{   // This is a Template Test Message 
+					sendPayload.Template = new WhatsappTemplate();
+					sendPayload.Template.Name = payload.TemplateName;
+
+					// CJM to add a Params Textbox on the Form
+					string strParams = payload.TemplateParams; // "Cornelius#DAFP";
+					if (strParams.ToUpper() != "NA" || strParams.Length == 0)
+					{
+						List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
+						sendPayload.Template.Params = listParams;
+					}
+				}
+
 				// Send the message and get the WAMId
 				string WAMIds = _sendMessageController.GetWAMId((await _sendMessageController.SendWhatsApp_TextAsync(sendPayload)).Value);
 
@@ -465,16 +453,16 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				{
 					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
 				}
-				
-            }
-            catch (WhatsappBusinessCloudAPIException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
-            }
-        }       
 
-        [HttpPost]
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
+			}
+		}
+
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendWhatsAppInteractiveTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
         {
