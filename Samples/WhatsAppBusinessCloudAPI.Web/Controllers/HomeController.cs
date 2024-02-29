@@ -432,7 +432,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendWhatsAppTemplateMessage(SendTemplateMessageViewModel payload)
+        public async Task<IActionResult> SendWhatsAppTextTemplateMessage(SendTemplateMessageViewModel payload)
         { // Functional using SendMessageController
             try
             {
@@ -448,7 +448,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				
 				// CJM to add a Params Textbox on the Form
 				string strParams = payload.TemplateParams; // "Cornelius#DAFP";
-				if (strParams.ToUpper() != "BLANK" || strParams.Length == 0)
+				if (strParams.ToUpper() != "NA" || strParams.Length == 0)
 				{
 					List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
 					sendPayload.Template.Params = listParams;
@@ -472,63 +472,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 _logger.LogError(ex, ex.Message);
                 return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
             }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendWhatsAppTextTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
-        {
-            try
-            {
-				// For Text WhatsappTemplate message with parameters supported component type is body only
-				TextTemplateMessageRequest textTemplateMessage = new TextTemplateMessageRequest
-				{
-					To = sendTemplateMessageViewModel.RecipientPhoneNumber,
-					Template = new TextMessageTemplate
-					{
-						Name = sendTemplateMessageViewModel.TemplateName,
-						Language = new TextMessageLanguage
-						{
-							Code = LanguageCode.English_US
-						},
-						Components = new List<TextMessageComponent>()
-					}
-				};
-				textTemplateMessage.Template.Components.Add(new TextMessageComponent()
-                {
-                    Type = "body",
-                    Parameters = new List<TextMessageParameter>()
-                    {
-                        new TextMessageParameter()
-                        {
-                            Type = "text",
-                            Text = "Testing Parameter Placeholder Position 1"
-                        },
-                        new TextMessageParameter()
-                        {
-                            Type = "text",
-                            Text = "Testing Parameter Placeholder Position 2"
-                        }
-                    }
-                });
-
-                var results = await _whatsAppBusinessClient.SendTextMessageTemplateAsync(textTemplateMessage);
-
-                if (results != null)
-                {
-                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent template text message");
-                }
-                else
-                {
-                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
-                }
-            }
-            catch (WhatsappBusinessCloudAPIException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
-            }
-        }
+        }       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -746,6 +690,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             }
         }
 
+		/// <summary>
+		/// Making use of SendMessageController to send a WhatsApp Video Template with or without parameters
+		/// </summary>
+		/// <param name="sendTemplateMessageViewModel"></param>
+		/// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendWhatsAppVideoTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
@@ -762,7 +711,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
 				// CJM to add a Params Textbox on the Form
 				string strParams = sendTemplateMessageViewModel.TemplateParams; // "Cornelius#DAFP";
-				if (strParams.ToUpper() != "BLANK" || strParams.Length == 0)
+				if (strParams.ToUpper() != "NA" || strParams.Length == 0)
 				{
 					List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
 
@@ -1368,6 +1317,12 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			return View(bulkSendWhatsAppsViewModel);
 		}
 
+		/// <summary>
+		/// Make use of BulkSendWhatsAppController to read a CSV file, loop through the file and send whatsApp per record
+		/// </summary>
+		/// <param name="bulkSendWhatsAppsViewModel"></param>
+		/// <param name="bulkFile"></param>
+		/// <returns></returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> BulkSendWhatsApps(BulkSendWhatsAppsViewModel bulkSendWhatsAppsViewModel, IFormFile bulkFile)
@@ -1407,6 +1362,14 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			return View(uploadMediaViewModel);
         }
 		
+		/// <summary>
+		/// This is to Upload files to WhatsApp
+		/// NOTE: Resumable Uploads to WhatsApp does NOT provide a MediaID. To upload to WhatsApp ONLY use Normal Uploads
+		/// Changed to make use of FileManagmentController
+		/// </summary>
+		/// <param name="uploadMediaViewModel"></param>
+		/// <param name="mediaFile"></param>
+		/// <returns></returns>
 		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadMedia(UploadMediaViewModel uploadMediaViewModel, IFormFile mediaFile)
