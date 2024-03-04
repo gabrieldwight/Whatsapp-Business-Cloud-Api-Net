@@ -20,7 +20,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private readonly IWhatsAppBusinessClient _whatsAppBusinessClient;
 		private readonly ILogger<HomeController> _logger;		
 		private readonly IWebHostEnvironment _environment;
-        private readonly List<messageTypes> _msgTypes;
+        private readonly List<MessageType> _msgTypes;
 
 		public record WUpContactRecord
         {
@@ -29,7 +29,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			public string LastName { get; set; }
 			public string Email { get; set; }
 			public string WupNum { get; set; }
-			public string MsgType { get; set; }
+			public MessageType MsgType { get; set; }
 			public string WupMsg { get; set; }
 			public string Template { get; set; }
 			public string Params { get; set; }
@@ -37,10 +37,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			public string WupAttCap { get; set; }
 			public string SendResult { get; set; }
 		}
-
-        private record messageTypes(string Name ,bool HasAtt );
-        
-        
+		        
 		public BulkSendWhatsAppsController(ILogger<HomeController> logger, IWhatsAppBusinessClient whatsAppBusinessClient, IWebHostEnvironment environment)
 		{
 			_logger = logger;
@@ -48,14 +45,19 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			_environment = environment;
            
             // These are the implemente Message Types that BulkSend can handle
-			_msgTypes = new List<messageTypes>();
-            _msgTypes.Add(new messageTypes("Audio", true));
-			_msgTypes.Add(new messageTypes("Doc - N/T", true));
-			_msgTypes.Add(new messageTypes("Image - N/T", true));
-            _msgTypes.Add(new messageTypes("Text - N/T", false));
-			_msgTypes.Add(new messageTypes("Video - N/T", true));
+			_msgTypes = new List<MessageType>();
+            _msgTypes.Add(new MessageType(enumMessageType.Audio,false,true,false));
+			_msgTypes.Add(new MessageType(enumMessageType.Doc, true,true,true));
+			_msgTypes.Add(new MessageType(enumMessageType.Image, true,true,true));
+            _msgTypes.Add(new MessageType(enumMessageType.Text,true, false,false));
+			_msgTypes.Add(new MessageType(enumMessageType.Video,true, true,true));
 		}
 
+		/// <summary>
+		/// This helps with replacing Pipes  "|FN|", "|LN|", "|Email|", "|WupNum|"  with the data in the file
+		/// </summary>
+		/// <param name="record"></param>
+		/// <returns></returns>
 		private WUpContactRecord ReplaceRecordData(WUpContactRecord record)
         {   // Go through each property value, and check if any of the replacement strings can be found, and replace it
 
@@ -98,6 +100,42 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		}
 
         /// <summary>
+        /// This maps String to EnumMessageType
+        /// </summary>
+        /// <param name="MyType"></param>
+        /// <returns></returns>
+        private MessageType MapStringToMessageType (string MyType)
+        {
+            try
+            {
+                enumMessageType TypeToFind = new();
+                var ret = new MessageType(enumMessageType.Text, true, false, false);
+
+				// Convert String to Actual Enum Type
+				if (MyType.Contains("Audio", StringComparison.CurrentCultureIgnoreCase)) { TypeToFind = enumMessageType.Audio; }
+				else if (MyType.Contains("Image", StringComparison.CurrentCultureIgnoreCase)) { TypeToFind = enumMessageType.Image; }
+				else if (MyType.Contains("Doc", StringComparison.CurrentCultureIgnoreCase)) { TypeToFind = enumMessageType.Doc; }
+				else if (MyType.Contains("Video", StringComparison.CurrentCultureIgnoreCase)) { TypeToFind = enumMessageType.Video; }
+				else TypeToFind = enumMessageType.Text;
+
+                // Loop through _msgTypes to find the correct settings to return
+				foreach (MessageType i in _msgTypes)
+                {
+                    if (i.Type == TypeToFind) { ret = i; break; };
+                }
+
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                // Error occured, return Text
+				_logger.LogError(ex, ex.Message);
+                return new MessageType(enumMessageType.Text, true, false, false);
+
+			}
+		}
+
+        /// <summary>
         /// 1. Read the CSV file and go through each record
         /// 2. Prep the record data
         /// 3. Build the sendWhatsAppPayload so it can be used to send the WhatsApp
@@ -133,14 +171,8 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 					continue; 
                 }
 
-				wUpContact.MsgType = row["MsgType"].ToString();
-				//if (!_msgTypes.Contains(wUpContact.MsgType))   
-                if (_msgTypes.Any(msgType => msgType.Name != wUpContact.MsgType))    
-				{   // MsgType is not in the MsgTypeImplemented list, bounce to next record
-					row["SendResult"] = "ERROR: Message Type not implemented";
-					continue;
-				}
-                
+				wUpContact.MsgType = MapStringToMessageType(row["MsgType"].ToString());
+				                
                 // Get rest of the Data for this record
                 // string order = row["Order"].ToString();
                 wUpContact.FirstName = row["First Name"].ToString();
@@ -156,13 +188,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 // Search and Replace any valid Placeholders
                 wUpContact = ReplaceRecordData(wUpContact);
 
-                // For the following Message Types there MUST be an attachement
-                if (_msgTypes.Any(msgType => msgType.Name == wUpContact.MsgType && msgType.HasAtt))
+                // If the Attachement Prop is set then add Attachement
+                if (wUpContact.MsgType.Att)
                 { 
-
-//CJM - Move all instance creation to outside of the loop
                     sendWhatsAppPayload.Media = new WhatsAppMedia();
-				    sendWhatsAppPayload.Media.Caption = wUpContact.WupAttCap;
+                    if (wUpContact.MsgType.Cap) { sendWhatsAppPayload.Media.Caption = wUpContact.WupAttCap; }
 
 				    // Build the unique list of attachments, if a new attachment is found, upload it and get the ID
 				    if (uniqueAttWithMediaID.ContainsKey(wUpContact.WupAtt))
@@ -190,28 +220,66 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         uniqueAttWithMediaID.Add(wUpContact.WupAtt, sendWhatsAppPayload.Media.ID); // Add the entry to the Dictionary if not found
                     }
                 }
+                                
+                // Generate the list and check if Params exists
+                 List<string> listParams = new ();
+				// Split die Params into a List								
+				if (wUpContact.Params != null)
+				{
+					string strParams = wUpContact.Params;
+					listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();					
+				}
                 
+                // If Template Prop is set then add Template
+                if (wUpContact.MsgType.Template)
+                {
+					sendWhatsAppPayload.Template = new WhatsappTemplate()
+					{
+						Name = wUpContact.Template,
+						Params = listParams
+					};
+				}
 
-				
+
+                // Ready to start the sending
+                string WAMIds = "";
 				// Prep to send the WhatsApp
 				sendWhatsAppPayload.SendText = new SendTextPayload()
                 {
                     ToNum = wUpContact.WupNum
                 };
 
-				// Split die Params into a List
-				string strParams = wUpContact.Params;
-				List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
+                if (wUpContact.MsgType.Type == enumMessageType.Text)
+                {// Text messages is a simple send (with or without [params or templates]) NO attachments
+					WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TextAsync(sendWhatsAppPayload)).Value);
+				}
+                else if (!wUpContact.MsgType.Template)
+                {// NOT a template do a normal Media send (Audio, Doc, Image, Video)
+					WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_MediaAsync(sendWhatsAppPayload)).Value);
 
-                sendWhatsAppPayload.Template = new WhatsappTemplate()
-                {
-                    Name = wUpContact.Template,
-                    Params = listParams
-                };
+				}
+                else
+				{ // This is (Doc, Image, Video) WITH a template, cater for different calls
+
+					switch (wUpContact.MsgType.Type)
+					{					
+						case enumMessageType.Doc:
+							
+							break;
+
+						case enumMessageType.Image:
+							WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateImage_ParameterAsync(sendWhatsAppPayload)).Value);							
+							break;
+
+						case enumMessageType.Video:
+							WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateVideo_ParameterAsync(sendWhatsAppPayload)).Value);
+							break;
+					}
 
 
+				}
 
-				string WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateVideo_ParameterAsync(sendWhatsAppPayload)).Value);				
+				
 
                 row["SendResult"] = WAMIds;
 

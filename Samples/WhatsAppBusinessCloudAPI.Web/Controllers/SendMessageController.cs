@@ -23,7 +23,19 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         public string uploadType { get; set; }
     }
 
-    public record SendTextPayload
+
+	public enum enumMessageType
+	{
+		Audio,
+		Doc,
+		Image,
+		Text,
+		Video
+	}
+
+	public record MessageType(enumMessageType Type, bool Template, bool Att, bool Cap);
+
+	public record SendTextPayload
     {
         public required string ToNum { get; set; }
         public string Message { get; set; } = "Hello";
@@ -53,7 +65,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 	public record SendWhatsAppPayload
     {
         public SendTextPayload SendText { get; set; }
-		public string MessageType { get; set; }
+		public enumMessageType MessageType { get; set; }
 		public WhatsAppMedia Media { get; set; }
         public WhatsappTemplate Template { get; set; }
     }
@@ -206,16 +218,16 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             try
             {
                 WhatsAppResponse results = null;
-                switch (payload.MessageType.ToUpper())
+                switch (payload.MessageType)
                 {
-                    case "AUDIO":
+                    case enumMessageType.Audio:
                         if (!string.IsNullOrWhiteSpace(payload.Media.ID))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             AudioMessageByIdRequest audioMessage = new AudioMessageByIdRequest();
                             audioMessage.To = payload.SendText.ToNum;
                             audioMessage.Audio = new MediaAudio();
                             audioMessage.Audio.Id = payload.Media.ID;
-
+                            
                             results = await _whatsAppBusinessClient.SendAudioAttachmentMessageByIdAsync(audioMessage);
                         }
                         else //if (!string.IsNullOrWhiteSpace(payload.URL))
@@ -229,7 +241,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         }
                         break;
 
-                    case "DOCUMENT":
+                    case enumMessageType.Doc:
                         if (!string.IsNullOrWhiteSpace(payload.Media.ID))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             DocumentMessageByIdRequest documentMessage = new DocumentMessageByIdRequest();
@@ -252,7 +264,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         }
                         break;
 
-                    case "IMAGE":
+                    case enumMessageType.Image:
                         if (!string.IsNullOrWhiteSpace(payload.Media.ID))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             ImageMessageByIdRequest imageMessage = new ImageMessageByIdRequest();
@@ -275,28 +287,28 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         }
                         break;
 
-                    case "STICKER":
-                        if (!string.IsNullOrWhiteSpace(payload.Media.ID))
-                        {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
-                            StickerMessageByIdRequest stickerMessage = new StickerMessageByIdRequest();
-                            stickerMessage.To = payload.SendText.ToNum;
-                            stickerMessage.Sticker = new MediaSticker();
-                            stickerMessage.Sticker.Id = payload.Media.ID;
+                    //case "STICKER":
+                    //    if (!string.IsNullOrWhiteSpace(payload.Media.ID))
+                    //    {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
+                    //        StickerMessageByIdRequest stickerMessage = new StickerMessageByIdRequest();
+                    //        stickerMessage.To = payload.SendText.ToNum;
+                    //        stickerMessage.Sticker = new MediaSticker();
+                    //        stickerMessage.Sticker.Id = payload.Media.ID;
 
-                            results = await _whatsAppBusinessClient.SendStickerMessageByIdAsync(stickerMessage);
-                        }
-                        else //if (!string.IsNullOrWhiteSpace(payload.URL))
-                        {
-                            StickerMessageByUrlRequest stickerMessage = new StickerMessageByUrlRequest();
-                            stickerMessage.To = payload.SendText.ToNum;
-                            stickerMessage.Sticker = new MediaStickerUrl();
-                            stickerMessage.Sticker.Link = payload.Media.URL;
+                    //        results = await _whatsAppBusinessClient.SendStickerMessageByIdAsync(stickerMessage);
+                    //    }
+                    //    else //if (!string.IsNullOrWhiteSpace(payload.URL))
+                    //    {
+                    //        StickerMessageByUrlRequest stickerMessage = new StickerMessageByUrlRequest();
+                    //        stickerMessage.To = payload.SendText.ToNum;
+                    //        stickerMessage.Sticker = new MediaStickerUrl();
+                    //        stickerMessage.Sticker.Link = payload.Media.URL;
 
-                            results = await _whatsAppBusinessClient.SendStickerMessageByUrlAsync(stickerMessage);
-                        }
-                        break;
+                    //        results = await _whatsAppBusinessClient.SendStickerMessageByUrlAsync(stickerMessage);
+                    //    }
+                    //    break;
 
-                    case "VIDEO":
+                    case enumMessageType.Video:
                         if (!string.IsNullOrWhiteSpace(payload.Media.ID))
                         {  // Usaing IDs is much better, Upload the file to WhatsApp and then use the ID returned
                             VideoMessageByIdRequest videoMessage = new VideoMessageByIdRequest();
