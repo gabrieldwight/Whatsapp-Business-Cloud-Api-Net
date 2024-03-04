@@ -53,19 +53,26 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			SendMediaMessageViewModel sendMediaMessageViewModel = new SendMediaMessageViewModel
 			{
 				MediaType = new List<SelectListItem>()
-				{
-					new SelectListItem(){ Text = "Audio", Value = "Audio" },
-					new SelectListItem(){ Text = "Document", Value = "Document" },
-					new SelectListItem(){ Text = "Image", Value = "Image" },
-					new SelectListItem(){ Text = "Sticker", Value = "Sticker" },
-					new SelectListItem(){ Text = "Video", Value = "Video" },
-				}
+	{
+				new SelectListItem(){ Text = "Audio", Value = enumMessageType.Audio.ToString() },
+				new SelectListItem(){ Text = "Document", Value = enumMessageType.Doc.ToString() },
+				new SelectListItem(){ Text = "Image", Value = enumMessageType.Image.ToString() },
+				//new SelectListItem(){ Text = "Sticker", Value = enumMessageType.Sticker.ToString() },
+				new SelectListItem(){ Text = "Video", Value = enumMessageType.Video.ToString() },
+	}
 			};
 
 			return View(sendMediaMessageViewModel);
         }
 
-        [HttpPost]
+		/// <summary>
+		/// This is now using SendMessageController	
+		/// This will send Audio, Document, Image, Sticker, Video
+		/// This is NOT to send Templates with the above media
+		/// </summary>
+		/// <param name="sendMediaMessage"></param>
+		/// <returns></returns>
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendWhatsAppMediaMessage(SendMediaMessageViewModel sendMediaMessage)
         {
@@ -77,7 +84,9 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 					ToNum = sendMediaMessage.RecipientPhoneNumber,
 					Message = sendMediaMessage.Message
 				};
-				payload.MessageType = sendMediaMessage.SelectedMediaType;
+				payload.MessageType = (enumMessageType)Enum.Parse(typeof(enumMessageType), sendMediaMessage.SelectedMediaType);
+
+				//payload.MessageType = sendMediaMessage.SelectedMediaType;
 				payload.Media = new WhatsAppMedia()
 				{
 					Type = "",
@@ -432,10 +441,10 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 					sendPayload.Template = new WhatsappTemplate();
 					sendPayload.Template.Name = payload.TemplateName;
 
-					// CJM to add a Params Textbox on the Form
-					string strParams = payload.TemplateParams; // "Cornelius#DAFP";
-					if (strParams.ToUpper() != "NA" || strParams.Length == 0)
+					// CJM to add a Params Textbox on the Form					
+					if (payload.TemplateParams != null)
 					{
+						string strParams = payload.TemplateParams; // "Cornelius#DAFP";
 						List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
 						sendPayload.Template.Params = listParams;
 					}
@@ -697,10 +706,10 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				payload.Template = new WhatsappTemplate();
 				payload.Template.Name = sendTemplateMessageViewModel.TemplateName;
 
-				// CJM to add a Params Textbox on the Form
-				string strParams = sendTemplateMessageViewModel.TemplateParams; // "Cornelius#DAFP";
-				if (strParams.ToUpper() != "NA" || strParams.Length == 0)
+				// CJM to add a Params Textbox on the Form if it is empty then there are no params
+				if (sendTemplateMessageViewModel.TemplateParams != null)
 				{
+					string strParams = sendTemplateMessageViewModel.TemplateParams; // "Cornelius#DAFP";
 					List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
 
 					payload.Template.Params = listParams;

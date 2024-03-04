@@ -7,7 +7,7 @@
 		public string TemplateName { get; set; }
         public string? MediaId { get; set; }
         public string? LinkUrl { get; set; }
-        public string TemplateParams { get; set; }
+        public string? TemplateParams { get; set; }
 
     }
 }
