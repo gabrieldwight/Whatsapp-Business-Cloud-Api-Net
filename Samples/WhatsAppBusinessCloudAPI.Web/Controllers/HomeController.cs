@@ -527,90 +527,91 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         public async Task<IActionResult> SendWhatsAppMediaTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
         {
             try
-            {
-				// Tested with facebook predefined template name: sample_movie_ticket_confirmation
-				ImageTemplateMessageRequest imageTemplateMessage = new ImageTemplateMessageRequest
+			{
+				SendWhatsAppPayload payload = new();
+				payload.SendText = new SendTextPayload()
 				{
-					To = sendTemplateMessageViewModel.RecipientPhoneNumber,
-					Template = new ImageMessageTemplate
-					{
-						Name = sendTemplateMessageViewModel.TemplateName,
-						Language = new ImageMessageLanguage
-						{
-							Code = LanguageCode.English_US
-						},
-						Components = new List<ImageMessageComponent>()
+					ToNum = sendTemplateMessageViewModel.RecipientPhoneNumber
+				};
+				payload.Template = new WhatsappTemplate();
+				payload.Template.Name = sendTemplateMessageViewModel.TemplateName;
+
+				// CJM to add a Params Textbox on the Form if it is empty then there are no params
+				if (sendTemplateMessageViewModel.TemplateParams != null)
 				{
-					new ImageMessageComponent()
-					{
-						Type = "header",
-						Parameters = new List<ImageMessageParameter>()
-						{
-							new ImageMessageParameter()
-							{
-								Type = "image",
-								Image = new Image()
-								{
-                                    //Id = payload.MediaId,
-                                    Link = "https://otakukart.com/wp-content/uploads/2022/03/Upcoming-Marvel-Movies-In-2022-23.jpg"
-								}
-							}
-						},
-					},
-					new ImageMessageComponent()
-					{
-						Type = "body",
-						Parameters = new List<ImageMessageParameter>()
-						{
-							new ImageMessageParameter()
-							{
-								Type = "text",
-								Text = "Movie Testing"
-							},
+					string strParams = sendTemplateMessageViewModel.TemplateParams; // "Cornelius#DAFP";
+					List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
 
-							new ImageMessageParameter()
-							{
-								Type = "date_time",
-								DateTime = new ImageTemplateDateTime()
-								{
-									FallbackValue = DateTime.Now.ToString("dddd d, yyyy"),
-									DayOfWeek = (int)DateTime.Now.DayOfWeek,
-									Year = DateTime.Now.Year,
-									Month = DateTime.Now.Month,
-									DayOfMonth = DateTime.Now.Day,
-									Hour = DateTime.Now.Hour,
-									Minute = DateTime.Now.Minute,
-									Calendar = "GREGORIAN"
-								}
-							},
-
-							new ImageMessageParameter()
-							{
-								Type = "text",
-								Text = "Venue Test"
-							},
-
-							new ImageMessageParameter()
-							{
-								Type = "text",
-								Text = "Seat 1A, 2A, 3A and 4A"
-							}
-						}
-					}
-				}
-					}
+					payload.Template.Params = listParams;
 				};
 
-				var results = await _whatsAppBusinessClient.SendImageAttachmentTemplateMessageAsync(imageTemplateMessage);
+				payload.Media = new WhatsAppMedia
+				{
+					ID = !string.IsNullOrEmpty(sendTemplateMessageViewModel.MediaId) ? sendTemplateMessageViewModel.MediaId : null,
+					URL = string.IsNullOrEmpty(sendTemplateMessageViewModel.MediaId) ? sendTemplateMessageViewModel.LinkUrl : null,
+					Type = "image"      //,
+										//	Caption = ""		// Caption does not work
+				};
 
-                if (results != null)
-                {
-                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent image template message");
-                }
-                else
-                {
-                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
-                }
+				// Send the message and get the WAMId
+				string WAMIds = _sendMessageController.GetWAMId((await _sendMessageController.SendWhatsApp_TemplateImage_ParameterAsync(payload)).Value);
+
+
+				if (WAMIds != null)
+				{
+					return RedirectToAction(nameof(Index)).WithSuccess("Success", $"Successfully sent video template message with WAMId '{WAMIds}'");
+				}
+				else
+				{
+					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+				}
+				
+				// Remember Other types of Parameters could be used, for now we will focus on Text only
+
+				//			new ImageMessageComponent()
+				//			{
+				//				Type = "body",
+				//				Parameters = new List<ImageMessageParameter>()
+				//				{
+				//					new ImageMessageParameter()
+				//					{
+				//						Type = "text",
+				//						Text = "Movie Testing"
+				//					},
+
+				//					new ImageMessageParameter()
+				//					{
+				//						Type = "date_time",
+				//						DateTime = new ImageTemplateDateTime()
+				//						{
+				//							FallbackValue = DateTime.Now.ToString("dddd d, yyyy"),
+				//							DayOfWeek = (int)DateTime.Now.DayOfWeek,
+				//							Year = DateTime.Now.Year,
+				//							Month = DateTime.Now.Month,
+				//							DayOfMonth = DateTime.Now.Day,
+				//							Hour = DateTime.Now.Hour,
+				//							Minute = DateTime.Now.Minute,
+				//							Calendar = "GREGORIAN"
+				//						}
+				//					},
+
+				//					new ImageMessageParameter()
+				//					{
+				//						Type = "text",
+				//						Text = "Venue Test"
+				//					},
+
+				//					new ImageMessageParameter()
+				//					{
+				//						Type = "text",
+				//						Text = "Seat 1A, 2A, 3A and 4A"
+				//					}
+				//				}
+				//			}
+				//		}
+				//	}
+				//};
+
             }
             catch (WhatsappBusinessCloudAPIException ex)
             {
@@ -1326,6 +1327,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		{
             try
             { // This is to call the relevant methods to run through the file and Bulk Send WhatsApps
+			  //List<string> WAMIds = new List<string>();			
 
                 // Upload the Bulk File to the Local Server
                 FileInfo fileInfo = new();
@@ -1334,7 +1336,13 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                 // Now go through the file and send the WhatsApps
                 BulkSendWhatsAppsController bulkSendWhatsAppsController = new(_logger, _whatsAppBusinessClient, _environment);
-                bulkSendWhatsAppsController.ReadAndTraverseCSV(fileInfo);
+				var WAMIDs = bulkSendWhatsAppsController.ReadAndTraverseCSV(fileInfo);
+
+				
+
+
+				
+
 
                 return View(bulkSendWhatsAppsViewModel);
             }
