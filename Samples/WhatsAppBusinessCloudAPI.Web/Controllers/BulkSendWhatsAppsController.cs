@@ -147,147 +147,161 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         [Route("[action]")]
         public async Task<ActionResult> ReadAndTraverseCSV(FileInfo fileInfo)
         {
-            // Read the CSV File into a DT
-            DataTable dataTable = ReadCSVFile(fileInfo);
-
-            // Use the SendMessageController
-            SendMessageController sendMessageController = new(_logger, _whatsAppBusinessClient, _environment);
-            FileManagmentController fileManagementController = new(_logger, _whatsAppBusinessClient, _environment );
-			SendWhatsAppPayload sendWhatsAppPayload = new();
-            FileInfo uploadMediaPayload = new();            
-
-            // We will build a unique list of Attachments so we can upload the Attachments to WhatsApp and use the IDs
-            Dictionary<string, string> uniqueAttWithMediaID = new Dictionary<string, string>();
-
-            WUpContactRecord wUpContact = new WUpContactRecord();
-
-            foreach (DataRow row in dataTable.Rows)
+            try
             {
-                // First test Key elements, if any error continue to next record
-                wUpContact.WupNum = sendMessageController.PrepNumber(row["WUp Num"].ToString());    // Prep the number and return the prepped number
-                if (wUpContact.WupNum == "-1")
-				{   // Error on the number, bounce to next record
-					row["SendResult"] = "ERROR: Not a WhatsApp number?";
-					continue; 
-                }
+                // Return String
+                List<string> retWAMID = new List<string>();
 
-				wUpContact.MsgType = MapStringToMessageType(row["MsgType"].ToString());
-				                
-                // Get rest of the Data for this record
-                // string order = row["Order"].ToString();
-                wUpContact.FirstName = row["First Name"].ToString();
-				wUpContact.LastName = row["Last Name"].ToString();
-                wUpContact.Email = row["Email"].ToString();
-                wUpContact.WupMsg = row["WUp Msg"].ToString();
-                wUpContact.Template = row["Template"].ToString();
-                wUpContact.Params = row["Params"].ToString();
-				wUpContact.WupAtt = row["Att"].ToString();
-				wUpContact.WupAttCap = row["WUp Att Cap"].ToString();
-				wUpContact.SendResult = row["SendResult"].ToString();
+                // Read the CSV File into a DT
+                DataTable dataTable = ReadCSVFile(fileInfo);
 
-                // Search and Replace any valid Placeholders
-                wUpContact = ReplaceRecordData(wUpContact);
+                // Use the SendMessageController
+                SendMessageController sendMessageController = new(_logger, _whatsAppBusinessClient, _environment);
+                FileManagmentController fileManagementController = new(_logger, _whatsAppBusinessClient, _environment);
 
-                // If the Attachement Prop is set then add Attachement
-                if (wUpContact.MsgType.Att)
-                { 
-                    sendWhatsAppPayload.Media = new WhatsAppMedia();
-                    if (wUpContact.MsgType.Cap) { sendWhatsAppPayload.Media.Caption = wUpContact.WupAttCap; }
+                // We will build a unique list of Attachments so we can upload the Attachments to WhatsApp and use the IDs
+                Dictionary<string, string> uniqueAttWithMediaID = new Dictionary<string, string>();
 
-				    // Build the unique list of attachments, if a new attachment is found, upload it and get the ID
-				    if (uniqueAttWithMediaID.ContainsKey(wUpContact.WupAtt))
-                    {
-                        sendWhatsAppPayload.Media.ID = uniqueAttWithMediaID[wUpContact.WupAtt]; // Retrieve the corresponding ID                                                                             
+                //WUpContactRecord wUpContact = new WUpContactRecord();
+
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    // Better to start clean everytime reinitiate the Vatriables
+                    SendWhatsAppPayload sendWhatsAppPayload = new();
+                    WUpContactRecord wUpContact = new WUpContactRecord();
+                    // First test Key elements, if any error continue to next record
+                    wUpContact.WupNum = sendMessageController.PrepNumber(row["WUp Num"].ToString());    // Prep the number and return the prepped number
+                    if (wUpContact.WupNum == "-1")
+                    {   // Error on the number, bounce to next record
+                        row["SendResult"] = "ERROR: Not a WhatsApp number?";
+                        continue;
                     }
-                    else
+
+                    // Get rest of the Data for this record
+                    // string order = row["Order"].ToString();
+                    wUpContact.FirstName = row["First Name"].ToString();
+                    wUpContact.LastName = row["Last Name"].ToString();
+                    wUpContact.Email = row["Email"].ToString();
+                    wUpContact.WupMsg = row["WUp Msg"].ToString();
+                    wUpContact.Template = row["Template"].ToString();
+                    wUpContact.Params = row["Params"].ToString();
+                    wUpContact.WupAtt = row["Att"].ToString();
+                    wUpContact.WupAttCap = row["WUp Att Cap"].ToString();
+                    wUpContact.SendResult = row["SendResult"].ToString();
+
+                    // Have to set this to null else the replacement Method below fails: will reset to correct value later
+                    wUpContact.MsgType = null;
+                    // Search and Replace any valid Placeholders
+                    wUpContact = ReplaceRecordData(wUpContact);
+
+                    wUpContact.MsgType = MapStringToMessageType(row["MsgType"].ToString());
+                    sendWhatsAppPayload.MessageType = wUpContact.MsgType.Type;
+
+                    // If the Attachement Prop is set then add Attachement
+                    if (wUpContact.MsgType.Att && wUpContact.WupAtt.Length > 2)
                     {
-                        // wUpAtt is not in the Dictionary, so we will upload the Media to Whatsapp and get the Media ID for use
-                        uploadMediaPayload.fileUploadMethod = "Normal";
-                        uploadMediaPayload.filePath = Path.Combine(_environment.WebRootPath, fileManagementController._localServerPaths.LocalFileUploadPath);
-                        uploadMediaPayload.fileName = wUpContact.WupAtt;
+                        sendWhatsAppPayload.Media = new WhatsAppMedia();
+                        if (wUpContact.MsgType.Cap) { sendWhatsAppPayload.Media.Caption = wUpContact.WupAttCap; }
 
-                        FileInfo fileUploadedInfo = await fileManagementController.UploadFileToWhatsApp(uploadMediaPayload);                    
-
-                        if (uploadMediaPayload.fileUploadSuccess)
-                        {   //File Uploaded to WhatsApp successfully                     
-                            sendWhatsAppPayload.Media.ID = uploadMediaPayload.fileWhatsAppID;
+                        // Build the unique list of attachments, if a new attachment is found, upload it and get the ID
+                        if (uniqueAttWithMediaID.ContainsKey(wUpContact.WupAtt))
+                        {
+                            sendWhatsAppPayload.Media.ID = uniqueAttWithMediaID[wUpContact.WupAtt]; // Retrieve the corresponding ID                                                                             
                         }
                         else
-                        {   // The file was not uploaded to WhatsApp: This message cannot be sent, Skip to next record..
-						    row["SendResult"] = "ERROR: File could not be Uploaded to WhatsApp";
-						    continue;
-					    }
-                        uniqueAttWithMediaID.Add(wUpContact.WupAtt, sendWhatsAppPayload.Media.ID); // Add the entry to the Dictionary if not found
+                        {
+                            FileInfo uploadMediaPayload = new();
+                            // wUpAtt is not in the Dictionary, so we will upload the Media to Whatsapp and get the Media ID for use
+                            uploadMediaPayload.fileUploadMethod = "Normal";
+                            uploadMediaPayload.filePath = Path.Combine(_environment.WebRootPath, fileManagementController._localServerPaths.LocalFileUploadPath);
+                            uploadMediaPayload.fileName = wUpContact.WupAtt;
+
+                            FileInfo fileUploadedInfo = await fileManagementController.UploadFileToWhatsApp(uploadMediaPayload);
+
+                            if (uploadMediaPayload.fileUploadSuccess)
+                            {   //File Uploaded to WhatsApp successfully                     
+                                sendWhatsAppPayload.Media.ID = uploadMediaPayload.fileWhatsAppID;
+                            }
+                            else
+                            {   // The file was not uploaded to WhatsApp: This message cannot be sent, Skip to next record..
+                                row["SendResult"] = "ERROR: File could not be Uploaded to WhatsApp";
+                                continue;
+                            }
+                            uniqueAttWithMediaID.Add(wUpContact.WupAtt, sendWhatsAppPayload.Media.ID); // Add the entry to the Dictionary if not found
+                        }
                     }
+
+                    // If Template Prop is set then add Template If template property is set
+                    if (wUpContact.MsgType.Template && wUpContact.Template.Length > 0)
+                    {
+                        // Generate the list and check if Params exists
+                        List<string> listParams = new();
+                        // Split die Params into a List								
+                        if (wUpContact.Params.Length > 0)
+                        {
+                            string strParams = wUpContact.Params;
+                            listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
+                        }
+
+                        sendWhatsAppPayload.Template = new WhatsappTemplate()
+                        {
+                            Name = wUpContact.Template,
+                            Params = listParams
+                        };
+                    }
+
+                    // Ready to start the sending
+                    string WAMIds = "";
+                    // Prep to send the WhatsApp
+                    sendWhatsAppPayload.SendText = new SendTextPayload()
+                    {
+                        ToNum = wUpContact.WupNum,
+                        Message = wUpContact.WupMsg
+                    };
+
+                    if (wUpContact.MsgType.Type == enumMessageType.Text)
+                    {// Text messages is a simple send (with or without [params or templates]) NO attachments
+                        WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TextAsync(sendWhatsAppPayload)).Value);
+                    }
+                    else if (!wUpContact.MsgType.Template || (wUpContact.MsgType.Template && wUpContact.Template.Length == 0))
+                    {// NOT a template do a normal Media send (Audio, Doc, Image, Video)
+                        WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_MediaAsync(sendWhatsAppPayload)).Value);
+
+                    }
+                    else
+                    { // This is (Doc, Image, Video) WITH a template, cater for different calls
+
+                        switch (wUpContact.MsgType.Type)
+                        {
+                            case enumMessageType.Doc:
+
+                                break;
+
+                            case enumMessageType.Image:
+                                WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateImage_ParameterAsync(sendWhatsAppPayload)).Value);
+                                break;
+
+                            case enumMessageType.Video:
+                                WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateVideo_ParameterAsync(sendWhatsAppPayload)).Value);
+                                break;
+                        }
+                    }
+
+                    row["SendResult"] = WAMIds;
+                    retWAMID.Add($"'{wUpContact.WupNum}' '{WAMIds}'");
+
                 }
-                                
-                // Generate the list and check if Params exists
-                 List<string> listParams = new ();
-				// Split die Params into a List								
-				if (wUpContact.Params != null)
-				{
-					string strParams = wUpContact.Params;
-					listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();					
-				}
-                
-                // If Template Prop is set then add Template
-                if (wUpContact.MsgType.Template)
-                {
-					sendWhatsAppPayload.Template = new WhatsappTemplate()
-					{
-						Name = wUpContact.Template,
-						Params = listParams
-					};
-				}
 
+                WriteDataTableToCSV(dataTable, fileInfo);
 
-                // Ready to start the sending
-                string WAMIds = "";
-				// Prep to send the WhatsApp
-				sendWhatsAppPayload.SendText = new SendTextPayload()
-                {
-                    ToNum = wUpContact.WupNum
-                };
-
-                if (wUpContact.MsgType.Type == enumMessageType.Text)
-                {// Text messages is a simple send (with or without [params or templates]) NO attachments
-					WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TextAsync(sendWhatsAppPayload)).Value);
-				}
-                else if (!wUpContact.MsgType.Template)
-                {// NOT a template do a normal Media send (Audio, Doc, Image, Video)
-					WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_MediaAsync(sendWhatsAppPayload)).Value);
-
-				}
-                else
-				{ // This is (Doc, Image, Video) WITH a template, cater for different calls
-
-					switch (wUpContact.MsgType.Type)
-					{					
-						case enumMessageType.Doc:
-							
-							break;
-
-						case enumMessageType.Image:
-							WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateImage_ParameterAsync(sendWhatsAppPayload)).Value);							
-							break;
-
-						case enumMessageType.Video:
-							WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateVideo_ParameterAsync(sendWhatsAppPayload)).Value);
-							break;
-					}
-
-
-				}
-
-				
-
-                row["SendResult"] = WAMIds;
-
+                return Ok(retWAMID);
             }
-            
-            WriteDataTableToCSV(dataTable, fileInfo);
-
-            return Ok("All good");
+            catch
+            (Exception ex)
+            {
+				_logger.LogError(ex, ex.Message);
+				return Ok(-1);
+			}
         }
 
         private static DataTable ReadCSVFile(FileInfo fileInfo)
