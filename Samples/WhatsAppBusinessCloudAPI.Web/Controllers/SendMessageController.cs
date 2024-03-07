@@ -458,5 +458,65 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
 			return results;
         }
+
+		[HttpPost]
+		[Route("[action]")]
+		public async Task<ActionResult<WhatsAppResponse>> SendWhatsApp_TemplateDoc_ParameterAsync(SendWhatsAppPayload payload)
+		{
+			// Senbd a Video WhatsappTemplate with Parameters
+
+			DocumentTemplateMessageRequest docTemplateMessage = new();
+			docTemplateMessage.To = payload.SendText.ToNum;
+			docTemplateMessage.Template = new();
+			docTemplateMessage.Template.Name = payload.Template.Name;
+			docTemplateMessage.Template.Language = new();
+			docTemplateMessage.Template.Language.Code = LanguageCode.English_US;
+
+			docTemplateMessage.Template.Components = new List<DocumentMessageComponent>();
+
+			docTemplateMessage.Template.Components.Add(new DocumentMessageComponent()
+			{
+				Type = "header",
+				Parameters = new List<DocumentMessageParameter>()
+				{
+					new DocumentMessageParameter()
+					{
+						Type = "document",
+						Document = new WhatsappBusiness.CloudApi.Messages.Requests.Document()
+						{
+							Id = !string.IsNullOrEmpty(payload.Media.ID) ? payload.Media.ID : null,
+							Link = string.IsNullOrEmpty(payload.Media.ID) ? payload.Media.URL : null,
+                            //Caption = !string.IsNullOrEmpty(payload.Caption) ? payload.Caption : null
+                        }
+					}
+				},
+			});
+
+			if (payload.Template.Params != null)
+			{ // There are Params, Loop and Compile Body Params
+				var bodyParams = new List<DocumentMessageParameter>();
+
+				foreach (var txt in payload.Template.Params)
+				{
+					var param = new DocumentMessageParameter()
+					{
+						Type = "text",
+						Text = txt
+					};
+					bodyParams.Add(param);
+				}
+
+				// Add the Body Params
+				docTemplateMessage.Template.Components.Add(new DocumentMessageComponent()
+				{
+					Type = "body",
+					Parameters = bodyParams
+				});
+			}
+
+			var results = await _whatsAppBusinessClient.SendDocumentAttachmentTemplateMessageAsync(docTemplateMessage);
+
+			return results;
+		}
 	}
 }

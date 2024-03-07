@@ -274,8 +274,8 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         switch (wUpContact.MsgType.Type)
                         {
                             case enumMessageType.Doc:
-
-                                break;
+								WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateDoc_ParameterAsync(sendWhatsAppPayload)).Value);
+								break;
 
                             case enumMessageType.Image:
                                 WAMIds = sendMessageController.GetWAMId((await sendMessageController.SendWhatsApp_TemplateImage_ParameterAsync(sendWhatsAppPayload)).Value);
@@ -288,7 +288,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                     }
 
                     row["SendResult"] = WAMIds;
-                    retWAMID.Add($"'{wUpContact.WupNum}' '{WAMIds}'");
+                    retWAMID.Add($"{wUpContact.WupNum} - {WAMIds}");
 
                 }
 

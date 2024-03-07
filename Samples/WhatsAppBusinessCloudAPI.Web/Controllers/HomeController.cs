@@ -524,7 +524,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendWhatsAppMediaTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        public async Task<IActionResult> SendWhatsAppImageTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
         {
             try
 			{
@@ -620,73 +620,56 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendWhatsAppDocumentTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
-        {
-            try
-            {
-				DocumentTemplateMessageRequest documentTemplateMessage = new DocumentTemplateMessageRequest
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> SendWhatsAppDocTemplateMessageWithParameters(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+		{
+			try
+			{
+				SendWhatsAppPayload payload = new();
+				payload.SendText = new SendTextPayload()
 				{
-					To = sendTemplateMessageViewModel.RecipientPhoneNumber,
-					Template = new DocumentMessageTemplate
-					{
-						Name = sendTemplateMessageViewModel.TemplateName,
-						Language = new DocumentMessageLanguage
-						{
-							Code = LanguageCode.English_US
-						},
-						Components = new List<DocumentMessageComponent>()
-						{
-							new DocumentMessageComponent()
-							{
-								Type = "header",
-								Parameters = new List<DocumentMessageParameter>()
-								{
-									new DocumentMessageParameter()
-									{
-										Type = "document",
-										Document = new Document()
-										{
-											//Id = payload.MediaId,
-											Link = "<EXTERNAL_LINK_DOCUMENT>" // Link point where your document can be downloaded or retrieved by WhatsApp
-										}
-									}
-								},
-							},
-							new DocumentMessageComponent()
-							{
-								Type = "body",
-								Parameters = new List<DocumentMessageParameter>()
-								{
-									new DocumentMessageParameter()
-									{
-										Type = "text",
-										Text = "Order Invoice"
-									},
-								}
-							}
-						}
-					}
+					ToNum = sendTemplateMessageViewModel.RecipientPhoneNumber
+				};
+				payload.Template = new WhatsappTemplate();
+				payload.Template.Name = sendTemplateMessageViewModel.TemplateName;
+
+				// CJM to add a Params Textbox on the Form if it is empty then there are no params
+				if (sendTemplateMessageViewModel.TemplateParams != null)
+				{
+					string strParams = sendTemplateMessageViewModel.TemplateParams; // "Cornelius#DAFP";
+					List<string> listParams = strParams.Split(new string[] { "#" }, StringSplitOptions.None).ToList();
+
+					payload.Template.Params = listParams;
 				};
 
-				var results = await _whatsAppBusinessClient.SendDocumentAttachmentTemplateMessageAsync(documentTemplateMessage);
+				payload.Media = new WhatsAppMedia
+				{
+					ID = !string.IsNullOrEmpty(sendTemplateMessageViewModel.MediaId) ? sendTemplateMessageViewModel.MediaId : null,
+					URL = string.IsNullOrEmpty(sendTemplateMessageViewModel.MediaId) ? sendTemplateMessageViewModel.LinkUrl : null,
+					Type = "document"      
+				};
 
-                if (results != null)
-                {
-                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Successfully sent document template message");
-                }
-                else
-                {
-                    return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
-                }
-            }
-            catch (WhatsappBusinessCloudAPIException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
-            }
-        }
+				// Send the message and get the WAMId
+				string WAMIds = _sendMessageController.GetWAMId((await _sendMessageController.SendWhatsApp_TemplateDoc_ParameterAsync(payload)).Value);
+
+
+				if (WAMIds != null)
+				{
+					return RedirectToAction(nameof(Index)).WithSuccess("Success", $"Successfully sent Document template message with WAMId '{WAMIds}'");
+				}
+				else
+				{
+					return RedirectToAction(nameof(SendWhatsAppTemplateMessage));
+				}
+			}
+
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(SendWhatsAppTemplateMessage)).WithDanger("Error", ex.Message);
+			}
+		}		
 
 		/// <summary>
 		/// Making use of SendMessageController to send a WhatsApp Video Template with or without parameters
@@ -1327,9 +1310,8 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		{
             try
             { // This is to call the relevant methods to run through the file and Bulk Send WhatsApps
-			  //List<string> WAMIds = new List<string>();			
-
-                // Upload the Bulk File to the Local Server
+			  
+				// Upload the Bulk File to the Local Server
                 FileInfo fileInfo = new();
                 FileManagmentController fileController = new(_logger, _whatsAppBusinessClient, _environment);                               
                 fileInfo = await fileController.UploadFileToLocalServer(bulkFile);
@@ -1341,11 +1323,14 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				// Check if the result is of type OkObjectResult and contains a List<string>
 				if (result is OkObjectResult okResult && okResult.Value is List<string> WAMIds)
 				{
+					string ShowWamids = "";
 					// Loop through the list and write each element to the console
 					foreach (var item in WAMIds)
 					{
-						ViewBag.WAMIds += item + "\n";
+						ShowWamids += item + "\n";
 					}
+
+					ViewBag.WAMIds = ShowWamids;
 				}
 
 

@@ -29,26 +29,8 @@
 						@if (ViewBag.WAMIds != null)
 						{
 							<strong>Wamids:</strong>
-							<p>@ViewBag.WAMIds</p>
-						}
-
-						@* 
-						@if (ViewBag.SendStatus != null)
-						{
-							<p>Send Status: @ViewBag.SendStatus</p>
-						}
-
-						@if (ViewBag.H != null)
-						{
-							<p>H from WhatsApp: @ViewBag.H</p>
-						}
-
-						@if (ViewBag.StatusId != null)
-						{
-							<p>File Upload Status Id: @ViewBag.StatusId</p>
-							<p>File Offset: @ViewBag.FileOffset</p>
-						}
- *@
+							<p>@Html.Raw(ViewBag.WAMIds.Replace("\n", "<br>"))</p>
+						}						
 						
 					</div> <!--/. card-body -->
 					<div class="card-footer">
