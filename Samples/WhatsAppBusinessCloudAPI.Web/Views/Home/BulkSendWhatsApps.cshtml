@@ -25,7 +25,14 @@
 								<label class="custom-file-label">Choose Bulk File</label>
 							</div>
 						</div>
-						
+	
+						@if (ViewBag.WAMIds != null)
+						{
+							<strong>Wamids:</strong>
+							<p>@ViewBag.WAMIds</p>
+						}
+
+						@* 
 						@if (ViewBag.SendStatus != null)
 						{
 							<p>Send Status: @ViewBag.SendStatus</p>
@@ -41,6 +48,8 @@
 							<p>File Upload Status Id: @ViewBag.StatusId</p>
 							<p>File Offset: @ViewBag.FileOffset</p>
 						}
+ *@
+						
 					</div> <!--/. card-body -->
 					<div class="card-footer">
 						<button type="submit" name="submit" class="btn btn-primary">Upload Media</button>

@@ -1335,21 +1335,26 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 fileInfo = await fileController.UploadFileToLocalServer(bulkFile);
 
                 // Now go through the file and send the WhatsApps
-                BulkSendWhatsAppsController bulkSendWhatsAppsController = new(_logger, _whatsAppBusinessClient, _environment);
-				var WAMIDs = bulkSendWhatsAppsController.ReadAndTraverseCSV(fileInfo);
+                BulkSendWhatsAppsController bulkSendWhatsAppsController = new(_logger, _whatsAppBusinessClient, _environment);			
+				var result = await bulkSendWhatsAppsController.ReadAndTraverseCSV(fileInfo);
 
-				
+				// Check if the result is of type OkObjectResult and contains a List<string>
+				if (result is OkObjectResult okResult && okResult.Value is List<string> WAMIds)
+				{
+					// Loop through the list and write each element to the console
+					foreach (var item in WAMIds)
+					{
+						ViewBag.WAMIds += item + "\n";
+					}
+				}
 
 
-				
-
-
-                return View(bulkSendWhatsAppsViewModel);
+				return View(bulkSendWhatsAppsViewModel).WithSuccess("Success", "Successfully upload media."); ;
             }
 			catch (WhatsappBusinessCloudAPIException ex)
 			{
 				_logger.LogError(ex, ex.Message);
-				return RedirectToAction(nameof(bulkFile)).WithDanger("Error", ex.Message);
+				return RedirectToAction(nameof(BulkSendWhatsApps)).WithDanger("Error", ex.Message);
 			}
         }
 
