@@ -102,6 +102,40 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 			return msgIDsBuilder.ToString();
 		}
 
+        /// <summary>
+        /// This is to remove or replace any characters 
+        /// </summary>
+        /// <param name="TextToPrep"></param>
+        /// <returns></returns>
+        public string PrepText(string TextToPrep)
+        {
+            // Prep any text like removing or replacing characters 
+            string ret = "";
+            if ((TextToPrep == null) || (TextToPrep.Length == 0 ))
+            { // Length is empty or is null
+                return ret;
+            }
+
+			if (TextToPrep.Contains("\\n"))
+			{
+				// Replace the find string with the corresponding replacement
+				ret = TextToPrep.Replace("\\n", Environment.NewLine);
+			}
+			else if (TextToPrep.Contains("\r\n"))
+			{
+				// Replace the find string with the corresponding replacement
+				ret = TextToPrep.Replace("\r\n", "\n");
+                ret = ret.Replace("\n", Environment.NewLine);
+			}
+			else if (TextToPrep.Contains("\n"))
+			{
+				// Replace the find string with the corresponding replacement
+				ret = TextToPrep.Replace("\n", Environment.NewLine);
+			}
+
+            return ret;
+		}
+
 		/// <summary>
 		/// This is to prep the phone number to be in the correct length and form for whatsapp.
         /// 1. If the Phone number is Null return -1
@@ -150,8 +184,8 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 {// Simple text only
                     TextMessageRequest textMsgPayload = new();
                     textMsgPayload.To = payload.SendText.ToNum;
-                    textMsgPayload.Text = new WhatsAppText();                    
-					textMsgPayload.Text.Body = payload.SendText.Message;
+                    textMsgPayload.Text = new WhatsAppText();
+                    textMsgPayload.Text.Body = PrepText(payload.SendText.Message);
 					textMsgPayload.Text.PreviewUrl = payload.SendText.PreviewUrl;
 
 					var result = await _whatsAppBusinessClient.SendTextMessageAsync(textMsgPayload);
