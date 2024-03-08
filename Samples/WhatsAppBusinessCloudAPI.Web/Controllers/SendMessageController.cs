@@ -132,6 +132,8 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				// Replace the find string with the corresponding replacement
 				ret = TextToPrep.Replace("\n", Environment.NewLine);
 			}
+            else
+            { ret = TextToPrep; }
 
             return ret;
 		}
