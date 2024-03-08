@@ -1291,6 +1291,39 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             }
         }
 
+		public IActionResult Security()
+		{
+			SecurityViewModel SecurityViewModel = new();
+
+			return View(SecurityViewModel);
+		}
+
+		/// <summary>
+		/// This page is to assist with Security Stuff
+		/// </summary>
+		/// <param name="securityViewModel"></param>
+		/// <param name="payload"></param>
+		/// <returns></returns>
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Security(SecurityViewModel securityViewModel)
+		{
+			try
+			{
+				SecurityController sec = new(_logger);
+				string ret = sec.GenerateRandomString(securityViewModel.RandomStringLength);
+				securityViewModel.RandomString = ret;
+
+				ViewBag.RandomString = ret;
+				return View(securityViewModel).WithSuccess("Success", "Successfully completed.");
+			}
+			catch (WhatsappBusinessCloudAPIException ex)
+			{
+				_logger.LogError(ex, ex.Message);
+				return RedirectToAction(nameof(Security)).WithDanger("Error", ex.Message);
+			}			
+		}
+
 		public IActionResult BulkSendWhatsApps()
 		{
 			BulkSendWhatsAppsViewModel bulkSendWhatsAppsViewModel = new BulkSendWhatsAppsViewModel();

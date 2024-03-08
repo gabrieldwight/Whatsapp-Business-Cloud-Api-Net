@@ -140,6 +140,27 @@
 						</li>
 					</ul>
 				</li>
+
+				<li class="nav-item ">
+					<a href="#" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.Security))">
+						<i class="nav-icon fa-solid fa-chart-line"></i>
+						<p>
+							Security
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>					
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a asp-controller="Home" asp-action="Security" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.Security))">
+								<i class="nav-icon fa-solid fa-chart-line"></i>
+								<p>
+									Security
+								</p>
+							</a>
+						</li>
+						
+					</ul>
+				</li>
 			</ul>
 		</nav>
 	</div>

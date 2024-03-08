@@ -1,0 +1,52 @@
+﻿@model SecurityViewModel
+@{
+	ViewData["Title"] = "Security";
+	ViewData["CurrentPage"] = "Security";
+	Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+	ViewData["ControllerName"] = nameof(HomeController).Replace("Controller", "");
+	ViewData["ActionName"] = nameof(HomeController.Security);
+}
+
+<section class="content">
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-info">
+				<div class="card-header">
+					<h3 class="card-title">Security Stuff</h3>
+				</div> <!--/. card-header -->
+				<!--Form start -->
+				<form asp-action="Security" enctype="multipart/form-data">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="card-body">
+						<div class="form-group">
+							<label class="control-label">Random String Length</label>
+							<input asp-for="RandomStringLength" class="form-control" />
+							<span asp-validation-for="RandomStringLength" class="text-danger"></span>
+						</div>
+						<div class="form-group">
+							<label class="control-label">Random String</label>
+							<textarea asp-for="RandomString" class="form-control"></textarea>
+							<span asp-validation-for="RandomString" class="text-danger"></span>
+						</div>
+	
+						@if (ViewBag.RandomString != null)
+						{
+							<strong>Random String:</strong>
+							<p>@ViewBag.RandomString</p>
+						}						
+						
+					</div> <!--/. card-body -->
+					<div class="card-footer">
+						<button type="submit" name="submit" class="btn btn-primary">Security Submit</button>
+					</div>
+				</form>
+			</div> <!-- /.card -->
+		</div>
+	</div>
+</section>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	} 

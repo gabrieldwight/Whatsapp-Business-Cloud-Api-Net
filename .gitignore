@@ -361,7 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/Samples/WhatsAppBusinessCloudAPI.Web/appsettings.json
-/Samples/WhatsAppBusinessCloudAPI.Web/appsettings.Development.json
-/Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/Application_Files/MediaUploads
-/Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/Application_Files/MediaDownloads
+
+# This prevent your secrets from being uploaded (App Settings)
+/Samples/WhatsAppBusinessCloudAPI.Web/appsettings.*
+/Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/

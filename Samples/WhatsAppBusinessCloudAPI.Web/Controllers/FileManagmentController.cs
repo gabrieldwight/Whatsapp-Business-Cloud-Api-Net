@@ -58,10 +58,10 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 				.Build();
 
-			// Access values
+			// Access values			
 			_localServerPaths.LocalFileUploadPath = configuration["AppInfo:LocalServerUploadPath"] ?? "Application_Files\\MediaUploads\\";
 			_localServerPaths.LocalFileDownloadPath = configuration["AppInfo:LocalServerDownloadPath"] ?? "Application_Files\\MediaDownload\\";
-
+		
 
 		}
        
