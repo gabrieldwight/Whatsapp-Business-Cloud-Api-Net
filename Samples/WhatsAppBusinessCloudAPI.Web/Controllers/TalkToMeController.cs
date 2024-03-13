@@ -12,10 +12,9 @@ using WhatsappBusiness.CloudApi.Response;
 using WhatsappBusiness.CloudApi.Webhook;
 using static System.Net.Mime.MediaTypeNames;
 using System;
-using SQLitePCL;
 
 namespace WhatsAppBusinessCloudAPI.Web.Controllers
-{	
+{		
 	public class TalkToMeController : ControllerBase
 	{
 		private readonly IWhatsAppBusinessClient _whatsAppBusinessClient;
@@ -23,6 +22,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		private readonly IWebHostEnvironment _environment;
 		private readonly List<MessageType> _msgTypes;
 		private readonly string _webHookToken;
+		public string MessagesReceived;
 
 		public TalkToMeController ()
 		{
@@ -33,6 +33,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
 			// Access values
 			_webHookToken = configuration["WhatsApp:WebHookToken"] ?? "Cannot be Null";
+			MessagesReceived = "";
 		}
 
 		[HttpGet]
@@ -40,13 +41,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		public ActionResult<string> ConfigureWhatsAppMessageWebhook([FromQuery(Name = "hub.mode")] string hubMode,
 																		 [FromQuery(Name = "hub.challenge")] int hubChallenge,
 																		 [FromQuery(Name = "hub.verify_token")] string hubVerifyToken)
-		{
-			
+		{	
 			if (hubVerifyToken != _webHookToken)
 			{
 				// Tokens not equal Stop processing
 				return Ok(-1);
-
 			}
 
 			Console.WriteLine("______________________ Auth ____________________________");
@@ -59,6 +58,9 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 		[Route("Home/TalkToMe")]
 		public IActionResult ReceiveWhatsAppTextMessage([FromBody] dynamic messageReceived)
 		{
+			MessagesReceived += Environment.NewLine + "______________________ ReciveMessage ____________________________" + 
+				Environment.NewLine + messageReceived;
+
 			Console.WriteLine("______________________ ReciveMessage ____________________________");
 			Console.WriteLine($"{messageReceived}");
 

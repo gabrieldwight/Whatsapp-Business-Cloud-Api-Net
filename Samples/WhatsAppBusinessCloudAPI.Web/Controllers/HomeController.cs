@@ -26,6 +26,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
         private readonly IWebHostEnvironment _environment;
         private readonly SendMessageController _sendMessageController;
+		private readonly TalkToMeController _TalkBackWebHooks;
 
         public HomeController(ILogger<HomeController> logger, IWhatsAppBusinessClient whatsAppBusinessClient,
             IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IWebHostEnvironment environment)
@@ -36,6 +37,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             _environment = environment;
 
             _sendMessageController = new(_logger, _whatsAppBusinessClient, _environment);
+			_TalkBackWebHooks = new();			
         }
 
         public IActionResult Index()

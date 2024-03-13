@@ -9,7 +9,12 @@
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="31.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Application_Files\MediaDownloads\" />
-    <Folder Include="wwwroot\Application_Files\DataBase\" />
   </ItemGroup>
 
 </Project>
