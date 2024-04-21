@@ -3,7 +3,7 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "font-awesome@6.5.1",
+      "library": "font-awesome@6.5.2",
       "destination": "wwwroot/lib/font-awesome/",
       "files": [
         "css/all.min.css",
