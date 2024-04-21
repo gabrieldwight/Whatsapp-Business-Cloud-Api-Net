@@ -55,6 +55,7 @@ Take note: Downloading media from the generated Whatsapp media URL will require 
 - [x] WhatsApp Business Management API
   - [x] QR Code Message Management
   - [x] Account Metrics
+  - [X] Template Management
 
 - [x] Sample project
   - [x] Read csv, and send over WhatsApp per record
