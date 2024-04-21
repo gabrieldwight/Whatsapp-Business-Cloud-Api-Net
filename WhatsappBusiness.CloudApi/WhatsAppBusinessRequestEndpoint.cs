@@ -5,9 +5,9 @@ namespace WhatsappBusiness.CloudApi
     public static class WhatsAppBusinessRequestEndpoint
     {
         /// <summary>
-        /// WhatsApp Business Cloud API V15 BaseAddress
+        /// WhatsApp Business Cloud API V19 BaseAddress
         /// </summary>
-        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v18.0/");
+        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v19.0/");
 
         /// <summary>
         /// To register your phone to WhatsApp Business
@@ -153,5 +153,16 @@ namespace WhatsappBusiness.CloudApi
         public static string UpdateQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}?prefilled_message={{new-message-text}}&access_token={{user-access-token}}";
 
         public static string DeleteQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}&access_token={{user-access-token}}";
-    }
+
+        public static string GetTemplateById { get; private set; } = "{{TEMPLATE_ID}}";
+
+        public static string GetTemplateByName { get; private set; } = "{{WABA-ID}}/message_templates?name={{TEMPLATE_NAME}}";
+
+        public static string GetTemplateNamespace { get; private set; } = "{{WABA-ID}}?fields=message_template_namespace";
+
+        public static string CreateTemplateMessage { get; private set; } = "{{WABA-ID}}/message_templates";
+
+        public static string DeleteTemplateMessage { get; private set; } = "{{WABA-ID}}/message_templates?hsm_id={{HSM_ID}}&name={{NAME}}";
+
+	}
 }

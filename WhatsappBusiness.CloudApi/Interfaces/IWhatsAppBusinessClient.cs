@@ -1212,5 +1212,131 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <returns>BaseSuccessResponse</returns>
         Task<BaseSuccessResponse> DeleteQRCodeMessageAsync(string qrCodeId, CancellationToken cancellationToken = default);
         #endregion
-    }
+
+        #region Template Management
+        /// <summary>
+        /// Create Whatsapp template message
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="template">Message template type</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Template Message Creation Response</returns>
+        Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, object template, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Create Whatsapp template message
+		/// </summary>
+		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+		/// <param name="template">Message template type</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>Template Message Creation Response</returns>
+		TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, object  template, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get Whatsapp template message by namespace
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>TemplateNamespaceResponse</returns>
+        Task<TemplateNamespaceResponse> GetTemplateNamespaceAsync(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Get Whatsapp template message by namespace
+		/// </summary>
+		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>TemplateNamespaceResponse</returns>
+		TemplateNamespaceResponse GetTemplateNamespace(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get Whatsapp Template Message by Id
+        /// </summary>
+        /// <param name="templateId">Template Id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>TemplateByIdResponse</returns>
+        Task<TemplateByIdResponse> GetTemplateByIdAsync(string templateId, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Get Whatsapp Template Message by Id
+		/// </summary>
+		/// <param name="templateId">Template Id</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>TemplateByIdResponse</returns>
+		TemplateByIdResponse GetTemplateById(string templateId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get Whatsapp Template Message by Name
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="templateName">Template Name</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>TemplateByNameResponse</returns>
+        Task<TemplateByNameResponse> GetTemplateByNameAsync(string whatsAppBusinessAccountId, string templateName, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Get Whatsapp Template Message by Name
+		/// </summary>
+		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+		/// <param name="templateName">Template Name</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>TemplateByNameResponse</returns>
+		TemplateByNameResponse GetTemplateByName(string whatsAppBusinessAccountId, string templateName, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Edit Message Template for update
+        /// </summary>
+        /// <param name="messageTemplate">MessageTemplate Object</param>
+        /// <param name="templateId">Template Id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>BaseSuccessResponse</returns>
+        Task<BaseSuccessResponse> EditTemplateAsync(object messageTemplate, string templateId, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Edit Message Template for update
+		/// </summary>
+		/// <param name="messageTemplate">MessageTemplate Object</param>
+		/// <param name="templateId">Template Id</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		BaseSuccessResponse EditTemplate(object messageTemplate, string templateId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Delete Message Template By Template Name
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="templateName">Template Name</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>BaseSuccessResponse</returns>
+        Task<BaseSuccessResponse> DeleteTemplateByNameAsync(string whatsAppBusinessAccountId, string templateName, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Delete Message Template By Template Name
+		/// </summary>
+		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+		/// <param name="templateName">Template Name</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		BaseSuccessResponse DeleteTemplateByName(string whatsAppBusinessAccountId, string templateName, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Delete Message Template by Template Id
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="templateId">Template Id</param>
+        /// <param name="templateName">Template Name</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>BaseSuccessResponse</returns>
+        Task<BaseSuccessResponse> DeleteTemplateByIdAsync(string whatsAppBusinessAccountId, string templateId, string templateName, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Delete Message Template by Template Id
+		/// </summary>
+		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+		/// <param name="templateId">Template Id</param>
+		/// <param name="templateName">Template Name</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		BaseSuccessResponse DeleteTemplatebyId(string whatsAppBusinessAccountId, string templateId, string templateName, CancellationToken cancellationToken = default);
+        #endregion
+	}
 }
