@@ -29,24 +29,30 @@
 							<span asp-validation-for="TemplateName" class="form-control" />
 						</div>
 						<div class="form-group">
+							<label class="control-label">Parameters Separate with #. e.g. Dog#Cat. Leave Blank if no Params </label>
+							<input asp-for="TemplateParams" class="form-control" />
+							<span asp-validation-for="TemplateParams" class="form-control" />
+						</div>
+						<div class="form-group">
 							<label class="control-label">Media Id</label>
 							<input asp-for="MediaId" class="form-control" />
 							<span asp-validation-for="MediaId" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label class="control-label">Link Url</label>
-							<input asp-for="MediaId" class="form-control" />
+							<input asp-for="LinkUrl" class="form-control" />
 							<span asp-validation-for="LinkUrl" class="form-control" />
 						</div>
+
 					</div> <!--/. card-body -->
 					<div class="card-footer">
 						<div class="form-group">
-							<button asp-action="SendWhatsAppTemplateMessage" asp-controller="Home" class="btn btn-primary">Send Template Message</button>
-							<button asp-action="SendWhatsAppTextTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Text Template Message With Parameters</button>
-							<button asp-action="SendWhatsAppInteractiveTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Interactive Template Message With Parameters</button>
-							<button asp-action="SendWhatsAppMediaTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Media Template Message With Parameters</button>
+							<button asp-action="SendWhatsAppTextMessage" asp-controller="Home" class="btn btn-primary">Send Text Template Message (with Params or not)</button>
+							<button asp-action="SendWhatsAppMediaTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Image Template Message With Parameters</button>
+							<button asp-action="SendWhatsAppVideoTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Video Template Message (with Params or not)</button>
+
 							<button asp-action="SendWhatsAppDocumentTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Document Template Message With Parameters</button>
-							<button asp-action="SendWhatsAppVideoTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Video Template Message With Parameters</button>
+							<button asp-action="SendWhatsAppInteractiveTemplateMessageWithParameters" asp-controller="Home" class="btn btn-primary">Send Interactive Template Message With Parameters</button>
 							<button asp-action="SendWhatsAppAuthenticationTemplateMessage" asp-controller="Home" class="btn btn-primary">Send Authentication Template Message</button>
 							<button asp-action="SendWhatsAppCatalogueTemplateMessage" asp-controller="Home" class="btn btn-primary">Send Catalogue Template Message</button>
 							<button asp-action="SendWhatsAppCarouselTemplateMessage" asp-controller="Home" class="btn btn-primary">Send Carousel Template Message</button>
