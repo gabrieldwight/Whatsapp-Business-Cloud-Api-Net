@@ -160,6 +160,8 @@ namespace WhatsappBusiness.CloudApi
 
         public static string GetTemplateNamespace { get; private set; } = "{{WABA-ID}}?fields=message_template_namespace";
 
+        public static string GetAllTemplateMessage { get; private set; } = "{{WABA-ID}}/message_templates";
+
         public static string CreateTemplateMessage { get; private set; } = "{{WABA-ID}}/message_templates";
 
         public static string DeleteTemplateMessage { get; private set; } = "{{WABA-ID}}/message_templates?hsm_id={{HSM_ID}}&name={{NAME}}";

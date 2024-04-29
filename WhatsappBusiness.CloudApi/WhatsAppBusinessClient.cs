@@ -206,7 +206,7 @@ namespace WhatsappBusiness.CloudApi
 		public async Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, object template, CancellationToken cancellationToken = default)
         {
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.CreateTemplateMessage.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
-			return await WhatsAppBusinessPostAsync<TemplateMessageCreationResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessPostAsync<TemplateMessageCreationResponse>(template, formattedWhatsAppEndpoint, cancellationToken);
 		}
 
 		/// <summary>
@@ -219,7 +219,7 @@ namespace WhatsappBusiness.CloudApi
 		public TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, object template, CancellationToken cancellationToken = default)
         {
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.CreateTemplateMessage.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
-			return WhatsAppBusinessPostAsync<TemplateMessageCreationResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessPostAsync<TemplateMessageCreationResponse>(template, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
 		/// <summary>
@@ -966,13 +966,47 @@ namespace WhatsappBusiness.CloudApi
 			return WhatsAppBusinessGetAsync<TemplateByNameResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
-		/// <summary>
-		/// List all the current app subscriptions to a given WhatsApp Business Account.
-		/// </summary>
-		/// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
-		/// <param name="cancellationToken">Cancellation token</param>
-		/// <returns>SubscribedAppsResponse</returns>
-		public SubscribedAppsResponse GetWABASubscribedApps(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Get All templates for the whatsapp business account
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>TemplateResponse</returns>
+        public async Task<TemplateResponse> GetAllTemplatesAsync(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.GetAllTemplateMessage);
+            builder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// Get All templates for the whatsapp business account
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>TemplateResponse</returns>
+        public TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(WhatsAppBusinessRequestEndpoint.GetAllTemplateMessage);
+            builder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+
+            var formattedWhatsAppEndpoint = builder.ToString();
+            return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// List all the current app subscriptions to a given WhatsApp Business Account.
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>SubscribedAppsResponse</returns>
+        public SubscribedAppsResponse GetWABASubscribedApps(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetSubscribedApps.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
             return WhatsAppBusinessGetAsync<SubscribedAppsResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
