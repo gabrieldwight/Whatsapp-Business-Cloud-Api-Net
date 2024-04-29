@@ -1283,6 +1283,22 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 		TemplateByNameResponse GetTemplateByName(string whatsAppBusinessAccountId, string templateName, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get All templates for the whatsapp business account
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>TemplateResponse</returns>
+        Task<TemplateResponse> GetAllTemplatesAsync(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get All templates for the whatsapp business account
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>TemplateResponse</returns>
+        TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Edit Message Template for update
         /// </summary>
         /// <param name="messageTemplate">MessageTemplate Object</param>
