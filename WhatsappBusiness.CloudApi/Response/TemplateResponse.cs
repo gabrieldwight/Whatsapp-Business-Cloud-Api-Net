@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
-	public class TemplateByNameResponse : TemplateBaseResponse
-	{
+    public class TemplateResponse : TemplateBaseResponse
+    {
         public Dictionary<string, object> AdditionalFields { get; set; }
     }
 }
