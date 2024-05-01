@@ -7,7 +7,7 @@
     /// </summary>
     public class SendTextMessageViewModel
     {
-        //public string RecipientPhoneNumber { get; set; }
-        //public string Message { get; set; }
+        public string RecipientPhoneNumber { get; set; }
+        public string Message { get; set; }
     }
 }

@@ -436,11 +436,11 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>byte[]</returns>
-        public byte[] DownloadMedia(string mediaUrl, CancellationToken cancellationToken = default)
+        public byte[] DownloadMedia(string mediaUrl, string appName = null, string version = null, CancellationToken cancellationToken = default)
         {
             string formattedWhatsAppEndpoint;
             formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DownloadMedia.Replace("{{Media-URL}}", mediaUrl);
-            return WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+            return WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, appName, version, cancellationToken).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -449,11 +449,11 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>byte[]</returns>
-        public async Task<byte[]> DownloadMediaAsync(string mediaUrl, CancellationToken cancellationToken = default)
+        public async Task<byte[]> DownloadMediaAsync(string mediaUrl, string appName = null, string version = null, CancellationToken cancellationToken = default)
         {
             string formattedWhatsAppEndpoint;
             formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DownloadMedia.Replace("{{Media-URL}}", mediaUrl);
-            return await WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, cancellationToken);
+            return await WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, appName, version, cancellationToken);
         }
 
 		/// <summary>
@@ -2889,9 +2889,18 @@ namespace WhatsappBusiness.CloudApi
             return result;
         }
 
-        private async Task<byte[]> WhatsAppBusinessGetAsync(string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default)
+        private async Task<byte[]> WhatsAppBusinessGetAsync(string whatsAppBusinessEndpoint, string AppName = null, string version = null, CancellationToken cancellationToken = default)
         {
-            var productValue = new ProductInfoHeaderValue(_whatsAppConfig.AppName, _whatsAppConfig.Version);
+            ProductInfoHeaderValue productValue;
+
+            if (!string.IsNullOrWhiteSpace(AppName) && !string.IsNullOrWhiteSpace(version))
+            {
+                productValue = new ProductInfoHeaderValue(AppName, version);
+            }
+            else
+            {
+                productValue = new ProductInfoHeaderValue(_whatsAppConfig.AppName, _whatsAppConfig.Version);
+            }
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
             _httpClient.DefaultRequestHeaders.UserAgent.Add(productValue);

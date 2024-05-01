@@ -190,7 +190,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>byte[]</returns>
-        Task<byte[]> DownloadMediaAsync(string mediaUrl, CancellationToken cancellationToken = default);
+        Task<byte[]> DownloadMediaAsync(string mediaUrl, string appName = null, string version = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To download media uploaded from whatsapp
@@ -198,7 +198,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>byte[]</returns>
-        byte[] DownloadMedia(string mediaUrl, CancellationToken cancellationToken = default);
+        byte[] DownloadMedia(string mediaUrl, string appName = null, string version = null, CancellationToken cancellationToken = default);
         #endregion
 
         #region Phone Numbers functions
