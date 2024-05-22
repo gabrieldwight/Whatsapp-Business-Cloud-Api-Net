@@ -466,7 +466,7 @@ namespace WhatsappBusiness.CloudApi
 		public async Task<BaseSuccessResponse> EditTemplateAsync(object messageTemplate, string templateId, CancellationToken cancellationToken = default)
         {
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
-			return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(messageTemplate, formattedWhatsAppEndpoint, cancellationToken);
 		}
 
 		/// <summary>
@@ -479,7 +479,7 @@ namespace WhatsappBusiness.CloudApi
 		public BaseSuccessResponse EditTemplate(object messageTemplate, string templateId, CancellationToken cancellationToken = default)
         {
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
-			return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessPostAsync<BaseSuccessResponse>(messageTemplate, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
 		/// <summary>
