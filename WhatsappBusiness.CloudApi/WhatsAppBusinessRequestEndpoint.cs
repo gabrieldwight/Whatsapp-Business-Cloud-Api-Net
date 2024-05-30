@@ -166,5 +166,8 @@ namespace WhatsappBusiness.CloudApi
 
         public static string DeleteTemplateMessage { get; private set; } = "{{WABA-ID}}/message_templates?hsm_id={{HSM_ID}}&name={{NAME}}";
 
+        public static string SetConversationAutomation { get; private set; } = "{{Phone-Number-ID}}/conversational_automation";
+
+        public static string GetConversationAutomation { get; private set; } = "{{Phone-Number-ID}}?fields=conversational_automation";
 	}
 }
