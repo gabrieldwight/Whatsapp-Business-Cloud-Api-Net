@@ -46,6 +46,7 @@ Take note: Downloading media from the generated Whatsapp media URL will require 
   - [x] Multiple Product Message
   - [x] Authentication Message
   - [x] Flow Message
+  - [x] Conversational Components
 - [x] Receiving Message (via Webhook)
   - [x] Text
   - [x] Media (image, video, audio, document, sticker)
