@@ -15,6 +15,8 @@ QR Code Message Management: [QR Code Messages for WhatsApp Business](https://dev
 
 WhatsApp Flows: [Setting up WhatsApp Flows](https://developers.facebook.com/docs/whatsapp/flows/gettingstarted/)
 
+WhatsApp Welcome Message: [Setting up Conversational Components](https://developers.facebook.com/docs/whatsapp/cloud-api/phone-numbers/conversational-components)
+
 Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
 
 Authentication Message Documentation: [Create and Send Authentication Message](https://developers.facebook.com/docs/whatsapp/business-management-api/authentication-templates)
