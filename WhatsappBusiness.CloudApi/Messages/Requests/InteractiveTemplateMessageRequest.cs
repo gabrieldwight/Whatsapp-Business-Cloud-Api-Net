@@ -67,6 +67,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
         [JsonProperty("payload", NullValueHandling = NullValueHandling.Ignore)]
         public string Payload { get; set; }
+
+        [JsonProperty("document", NullValueHandling = NullValueHandling.Ignore)]
+        public InteractiveMessageDocument Document { get; set; }
     }
 
     public class InteractiveMessageCurrency
@@ -118,6 +121,18 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
         [JsonProperty("caption")]
         public string Caption { get; set; }
+    }
+
+    public class InteractiveMessageDocument
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("link")]
+        public string Link { get; set; }
+
+        [JsonProperty("filename")]
+        public string FileName { get; set; }
     }
 
     public class InteractiveMessageLanguage
