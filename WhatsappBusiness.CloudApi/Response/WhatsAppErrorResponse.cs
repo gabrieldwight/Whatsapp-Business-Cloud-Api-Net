@@ -19,8 +19,14 @@ namespace WhatsappBusiness.CloudApi.Response
         [JsonProperty("code")]
         public long Code { get; set; }
 
+        [JsonProperty("error_user_title")]
+        public string? ErrorUserTitle { get; set; }
+
+        [JsonProperty("error_user_msg")]
+        public string? ErrorUserMsg { get; set; }
+
         [JsonProperty("error_data")]
-        public ErrorData ErrorData { get; set; }
+        public ErrorData? ErrorData { get; set; }
 
         [JsonProperty("error_subcode")]
         public long? ErrorSubcode { get; set; }
