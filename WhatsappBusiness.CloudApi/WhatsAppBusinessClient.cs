@@ -324,14 +324,32 @@ namespace WhatsappBusiness.CloudApi
 			return await WhatsAppBusinessPostAsync<TemplateMessageCreationResponse>(template, formattedWhatsAppEndpoint, cancellationToken);
 		}
 
-		/// <summary>
+        /// <summary>
 		/// Create Whatsapp template message
 		/// </summary>
 		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
 		/// <param name="template">Message template type</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>Template Message Creation Response</returns>
-		public TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, object template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public async Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, BaseCreateTemplateMessageRequest template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.CreateTemplateMessage.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            return await WhatsAppBusinessPostAsync<TemplateMessageCreationResponse>(template, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// Create Whatsapp template message
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="template">Message template type</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Template Message Creation Response</returns>
+        public TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, object template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -342,14 +360,32 @@ namespace WhatsappBusiness.CloudApi
 			return WhatsAppBusinessPostAsync<TemplateMessageCreationResponse>(template, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
-		/// <summary>
-		/// To delete media, make a DELETE call to the ID of the media you want to delete.
-		/// </summary>
-		/// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
-		/// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
-		/// <param name="cancellationToken">Cancellation token</param>
-		/// <returns>BaseSuccessResponse</returns>
-		public BaseSuccessResponse DeleteMedia(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Create Whatsapp template message
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="template">Message template type</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Template Message Creation Response</returns>
+        public TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, BaseCreateTemplateMessageRequest template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.CreateTemplateMessage.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            return WhatsAppBusinessPostAsync<TemplateMessageCreationResponse>(template, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// To delete media, make a DELETE call to the ID of the media you want to delete.
+        /// </summary>
+        /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>BaseSuccessResponse</returns>
+        public BaseSuccessResponse DeleteMedia(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {

@@ -1241,14 +1241,32 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <returns>Template Message Creation Response</returns>
         Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, object template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
-		/// <summary>
-		/// Create Whatsapp template message
-		/// </summary>
-		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
-		/// <param name="template">Message template type</param>
-		/// <param name="cancellationToken">Cancellation token</param>
-		/// <returns>Template Message Creation Response</returns>
-		TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, object  template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Create Whatsapp template message
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="template">Message template type</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Template Message Creation Response</returns>
+        Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, BaseCreateTemplateMessageRequest template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Create Whatsapp template message
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="template">Message template type</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Template Message Creation Response</returns>
+        TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, BaseCreateTemplateMessageRequest template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Create Whatsapp template message
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="template">Message template type</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Template Message Creation Response</returns>
+        TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, object template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get Whatsapp template message by namespace
