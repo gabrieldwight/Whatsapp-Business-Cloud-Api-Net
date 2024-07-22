@@ -70,7 +70,10 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
         [JsonProperty("document", NullValueHandling = NullValueHandling.Ignore)]
         public InteractiveMessageDocument Document { get; set; }
-    }
+
+		[JsonProperty("video", NullValueHandling = NullValueHandling.Ignore)]
+		public InteractiveMessageVideo Video { get; set; }
+	}
 
     public class InteractiveMessageCurrency
     {
@@ -113,31 +116,55 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
     public class InteractiveMessageImage
     {
-        [JsonProperty("id")]
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }
 
-        [JsonProperty("link")]
+        [JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
         public string Link { get; set; }
 
-        [JsonProperty("caption")]
+        [JsonProperty("caption", NullValueHandling = NullValueHandling.Ignore)]
         public string Caption { get; set; }
-    }
+
+		[JsonProperty("provider", NullValueHandling = NullValueHandling.Ignore)]
+		public Provider Provider { get; set; }
+	}
 
     public class InteractiveMessageDocument
     {
-        [JsonProperty("id")]
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }
 
-        [JsonProperty("link")]
+        [JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
         public string Link { get; set; }
 
-        [JsonProperty("filename")]
+        [JsonProperty("filename", NullValueHandling = NullValueHandling.Ignore)]
         public string FileName { get; set; }
-    }
 
-    public class InteractiveMessageLanguage
+		[JsonProperty("provider", NullValueHandling = NullValueHandling.Ignore)]
+		public Provider Provider { get; set; }
+	}
+
+	public class InteractiveMessageVideo
+	{
+		[JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+		public string Id { get; set; }
+
+		[JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
+		public string Link { get; set; }
+
+        [JsonProperty("provider", NullValueHandling = NullValueHandling.Ignore)]
+        public Provider Provider { get; set; }
+	}
+
+	public class InteractiveMessageLanguage
     {
         [JsonProperty("code")]
         public string Code { get; set; }
+    }
+
+    public class Provider
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 }
