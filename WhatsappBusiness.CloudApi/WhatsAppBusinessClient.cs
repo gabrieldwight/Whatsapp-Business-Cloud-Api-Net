@@ -3103,6 +3103,36 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
+        /// To upload a profile picture to your business profile, make a POST call to the named endpoint v14.0/{{Upload-ID}}, where Upload-ID is the value you received from Resumable Upload - Create an Upload Session.
+        /// </summary>
+        /// <param name="uploadId">Upload id Session</param>
+        /// <param name="fileName">Name of the file</param>
+        /// <param name="fileContentType">File content type</param>
+        /// <param name="fileData">Full file content data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>ResumableUploadResponse</returns>
+        public ResumableUploadResponse UploadFileData(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
+            return WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, fileName, fileContentType, fileData, cancellationToken).GetAwaiter().GetResult();
+        }
+        
+        /// <summary>
+        /// To upload a profile picture to your business profile, make a POST call to the named endpoint v14.0/{{Upload-ID}}, where Upload-ID is the value you received from Resumable Upload - Create an Upload Session.
+        /// </summary>
+        /// <param name="uploadId">Upload id Session</param>
+        /// <param name="fileName">Name of the file</param>
+        /// <param name="fileContentType">File content type</param>
+        /// <param name="fileData">Full file content data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>ResumableUploadResponse</returns>
+        public async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
+            return await WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, fileName, fileContentType, fileData, cancellationToken);
+        }
+
+        /// <summary>
         /// Upload Media: Image, Document, Audio, Video, Sticker
         /// </summary>
         /// <param name="uploadMediaRequest">UploadMediaRequest object</param>
@@ -3134,6 +3164,40 @@ namespace WhatsappBusiness.CloudApi
 
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UploadMedia.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
             return await WhatsAppBusinessPostAsync<MediaUploadResponse>(formattedWhatsAppEndpoint, uploadMediaRequest.File, uploadMediaRequest.Type, cancellationToken, true);
+        }
+        
+        /// <summary>
+        /// Upload Media: Image, Document, Audio, Video, Sticker
+        /// </summary>
+        /// <param name="uploadMediaDataRequest">UploadMediaDataRequest object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>MediaUploadResponse</returns>
+        public MediaUploadResponse UploadMedia(UploadMediaDataRequest uploadMediaDataRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UploadMedia.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<MediaUploadResponse>(formattedWhatsAppEndpoint, uploadMediaDataRequest.FileName, uploadMediaDataRequest.Type, uploadMediaDataRequest.Data, cancellationToken, true).GetAwaiter().GetResult();
+        }
+        
+        /// <summary>
+        /// Upload Media: Image, Document, Audio, Video, Sticker
+        /// </summary>
+        /// <param name="uploadMediaDataRequest">UploadMediaDataRequest object</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>MediaUploadResponse</returns>
+        public async Task<MediaUploadResponse> UploadMediaAsync(UploadMediaDataRequest uploadMediaDataRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UploadMedia.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<MediaUploadResponse>(formattedWhatsAppEndpoint, uploadMediaDataRequest.FileName, uploadMediaDataRequest.Type, uploadMediaDataRequest.Data, cancellationToken, true);
         }
 
         /// <summary>
@@ -3308,6 +3372,28 @@ namespace WhatsappBusiness.CloudApi
         /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
         private async Task<T> WhatsAppBusinessPostAsync<T>(string whatsAppBusinessEndpoint, string filePath, string fileContentType, CancellationToken cancellationToken = default, bool isMediaUpload = false) where T : new()
         { 
+            var file = new FileInfo(filePath);
+#if NET5_0_OR_GREATER
+            var fileData = await File.ReadAllBytesAsync(filePath, cancellationToken);
+#else
+            var fileData = File.ReadAllBytes(filePath);
+#endif
+            return await WhatsAppBusinessPostAsync<T>(whatsAppBusinessEndpoint, file.FullName, fileContentType, fileData, cancellationToken, isMediaUpload);
+        }
+
+        /// <summary>
+        /// To upload a profile picture to your business profile and media upload.
+        /// </summary>
+        /// <typeparam name="T">Response Class</typeparam>
+        /// <param name="whatsAppBusinessEndpoint">WhatsApp Business Media Upload endpoint</param>
+        /// <param name="fileName">File name</param>
+        /// <param name="fileContentType">File content type</param>
+        /// <param name="fileData">Full file content data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Response object</returns>
+        /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
+        private async Task<T> WhatsAppBusinessPostAsync<T>(string whatsAppBusinessEndpoint, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default, bool isMediaUpload = false) where T : new()
+        {
             if (!isMediaUpload) // Resumable upload
             {
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", _whatsAppConfig.AccessToken);
@@ -3321,39 +3407,36 @@ namespace WhatsappBusiness.CloudApi
             T result = new();
             cancellationToken.ThrowIfCancellationRequested();
 
-            FileInfo file = new FileInfo(filePath);
-            var uploaded_file = System.IO.File.ReadAllBytes(filePath);
-
-            string boundary = $"----------{Guid.NewGuid():N}";
+            var boundary = $"----------{Guid.NewGuid():N}";
             var content = new MultipartFormDataContent(boundary);
 
 			HttpResponseMessage? response;
 
 			if (isMediaUpload)
             {
-                ByteArrayContent mediaFileContent = new ByteArrayContent(uploaded_file);
+                var mediaFileContent = new ByteArrayContent(fileData);
                 mediaFileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
                 {
                     Name = "file",
-                    FileName = file.FullName,
+                    FileName = fileName,
                 };
                 mediaFileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(fileContentType);
 
-                var fileData = new
+                var fileValues = new
                 {
                     messaging_product = "whatsapp"
                 };
 
                 content.Add(mediaFileContent);
-                content.Add(new StringContent(fileData.messaging_product), "messaging_product");
+                content.Add(new StringContent(fileValues.messaging_product), "messaging_product");
 
 				response = await _httpClient.PostAsync(whatsAppBusinessEndpoint, content, cancellationToken).ConfigureAwait(false);
 			}
             else // Resumable upload
             {
-				ByteArrayContent mediaFileContent = new ByteArrayContent(uploaded_file);
+				var mediaFileContent = new ByteArrayContent(fileData);
 
-                HttpRequestMessage requestMessage = new HttpRequestMessage();
+                var requestMessage = new HttpRequestMessage();
                 requestMessage.Method = HttpMethod.Post;
                 requestMessage.Content = mediaFileContent;
                 requestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
