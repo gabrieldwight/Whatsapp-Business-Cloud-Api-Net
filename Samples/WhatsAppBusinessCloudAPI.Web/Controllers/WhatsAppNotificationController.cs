@@ -30,6 +30,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private List<QuickReplyButtonMessage> quickReplyButtonMessage;
         private List<ReplyButtonMessage> replyButtonMessage;
         private List<ListReplyButtonMessage> listReplyButtonMessage;
+        private List<FlowMessage> flowMessage;
 
         public WhatsAppNotificationController(ILogger<WhatsAppNotificationController> logger, IWhatsAppBusinessClient whatsAppBusinessClient,
             IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IWebHostEnvironment webHostEnvironment)
@@ -381,6 +382,25 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                             return Ok(new
                             {
                                 Message = "List Reply Message Received"
+                            });
+                        }
+
+                        if (getInteractiveType.Equals("nfm_reply")) // Flow message rceived
+                        {
+                            var flowMessageReceived = JsonConvert.DeserializeObject<FlowMessageReceived>(Convert.ToString(messageReceived)) as FlowMessageReceived;
+                            flowMessage = new List<FlowMessage>(flowMessageReceived.Messages);
+                            _logger.LogInformation(JsonConvert.SerializeObject(flowMessage, Formatting.Indented));
+                            _logger.LogInformation($"User flow message sent: {flowMessage.SingleOrDefault().Interactive.NfmReply.Body}\n{flowMessage.SingleOrDefault().Interactive.NfmReply.ResponseJson}");
+
+							MarkMessageRequest markMessageRequest = new MarkMessageRequest();
+							markMessageRequest.MessageId = flowMessage.SingleOrDefault().Id;
+							markMessageRequest.Status = "read";
+
+							await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+
+							return Ok(new
+                            {
+                                Message = "Flow Message Received"
                             });
                         }
                     }
