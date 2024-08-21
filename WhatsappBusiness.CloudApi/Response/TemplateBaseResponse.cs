@@ -18,7 +18,7 @@ namespace WhatsappBusiness.CloudApi.Response
         public string Name { get; set; }
 
         [JsonProperty("components")]
-        public List<object> Components { get; set; }
+        public List<WhatsAppBusinessHSMWhatsAppHSMComponentGet> Components { get; set; }
 
         [JsonProperty("language")]
         public string Language { get; set; }
