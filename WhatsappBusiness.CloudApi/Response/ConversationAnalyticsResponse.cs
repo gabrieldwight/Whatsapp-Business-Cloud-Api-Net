@@ -7,7 +7,10 @@ namespace WhatsappBusiness.CloudApi.Response
     {
         [JsonProperty("conversation_analytics")]
         public ConversationAnalytics ConversationAnalytics { get; set; }
-    }
+
+		[JsonProperty("id")]
+		public string Id { get; set; }
+	}
 
     public class ConversationAnalytics
     {
@@ -34,6 +37,9 @@ namespace WhatsappBusiness.CloudApi.Response
 
         [JsonProperty("phone_number")]
         public string PhoneNumber { get; set; }
+
+        [JsonProperty("country")]
+        public string Country { get; set; }
 
         [JsonProperty("conversation_type")]
         public string ConversationType { get; set; }
