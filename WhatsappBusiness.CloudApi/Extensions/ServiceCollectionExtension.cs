@@ -17,7 +17,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <param name="whatsAppBusinessPhoneNumberId"></param>
-        public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig)
+        public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, string graphAPIVersion = null)
         {
             Random jitterer = new Random();
 
@@ -41,7 +41,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
             {
-                options.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
+                options.BaseAddress = (string.IsNullOrWhiteSpace(graphAPIVersion)) ? WhatsAppBusinessRequestEndpoint.BaseAddress : new Uri(WhatsAppBusinessRequestEndpoint.GraphApiVersionBaseAddress.ToString().Replace("{{api-version}}", graphAPIVersion));
                 options.Timeout = TimeSpan.FromMinutes(10);
             }).ConfigurePrimaryHttpMessageHandler(messageHandler =>
             {
@@ -56,7 +56,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
             }).AddPolicyHandler(request => request.Method.Equals(HttpMethod.Get) ? retryPolicy : noOpPolicy);
         }
 
-        public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig) where THandler : HttpMessageHandler
+        public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, string graphAPIVersion = null) where THandler : HttpMessageHandler
         {
             Random jitterer = new Random();
 
@@ -80,7 +80,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
             {
-                options.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
+                options.BaseAddress = (string.IsNullOrWhiteSpace(graphAPIVersion)) ? WhatsAppBusinessRequestEndpoint.BaseAddress : new Uri(WhatsAppBusinessRequestEndpoint.GraphApiVersionBaseAddress.ToString().Replace("{{api-version}}", graphAPIVersion));
                 options.Timeout = TimeSpan.FromMinutes(10);
             }).SetHandlerLifetime(Timeout.InfiniteTimeSpan)
               .ConfigurePrimaryHttpMessageHandler<THandler>()

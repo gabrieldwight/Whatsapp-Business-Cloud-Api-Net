@@ -40,7 +40,7 @@ namespace WhatsappBusiness.CloudApi
         /// Initialize WhatsAppBusinessClient with httpclient factory
         /// </summary>
         /// <param name="whatsAppConfig">WhatsAppBusiness configuration</param>
-        public WhatsAppBusinessClient(WhatsAppBusinessCloudApiConfig whatsAppConfig)
+        public WhatsAppBusinessClient(WhatsAppBusinessCloudApiConfig whatsAppConfig, string graphAPIVersion = null)
         {
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
                 .WaitAndRetryAsync(1, retryAttempt =>
@@ -53,7 +53,7 @@ namespace WhatsappBusiness.CloudApi
             var services = new ServiceCollection();
             services.AddHttpClient("WhatsAppBusinessApiClient", client =>
             {
-                client.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
+                client.BaseAddress = (string.IsNullOrWhiteSpace(graphAPIVersion)) ? WhatsAppBusinessRequestEndpoint.BaseAddress : new Uri(WhatsAppBusinessRequestEndpoint.GraphApiVersionBaseAddress.ToString().Replace("{{api-version}}", graphAPIVersion));
                 client.Timeout = TimeSpan.FromMinutes(10);
             }).ConfigurePrimaryHttpMessageHandler(messageHandler =>
             {
@@ -75,12 +75,12 @@ namespace WhatsappBusiness.CloudApi
             _whatsAppConfig = whatsAppConfig;
         }
 
-        /// <summary>
-        /// Initialize WhatsAppBusinessClient with dependency injection
-        /// </summary>
-        /// <param name="httpClient">WhatsAppBusiness configuration</param>
-        /// <param name="whatsAppConfig">Set True if you want use v14, false if you want to use v13</param>
-        public WhatsAppBusinessClient(HttpClient httpClient, WhatsAppBusinessCloudApiConfig whatsAppConfig)
+		/// <summary>
+		/// Initialize WhatsAppBusinessClient with dependency injection
+		/// </summary>
+		/// <param name="httpClient">httpclient object</param>
+		/// <param name="whatsAppConfig">WhatsAppBusiness configuration</param>
+		public WhatsAppBusinessClient(HttpClient httpClient, WhatsAppBusinessCloudApiConfig whatsAppConfig)
         {
             _httpClient = httpClient;
             _whatsAppConfig = whatsAppConfig;
@@ -828,10 +828,10 @@ namespace WhatsappBusiness.CloudApi
             analyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
             analyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
             analyticUrlBuilder.Replace("{{granularity}}", granularity);
-            analyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
-            analyticUrlBuilder.Append($".product_types({JsonConvert.SerializeObject(productTypes)})");
-            analyticUrlBuilder.Append($".country_codes({JsonConvert.SerializeObject(countryCodes)})");
-            analyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
+			analyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
+			analyticUrlBuilder.Append($".product_types({JsonConvert.SerializeObject(productTypes)})");
+			analyticUrlBuilder.Append($".country_codes({JsonConvert.SerializeObject(countryCodes)})");
+			analyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
 
             formattedWhatsAppEndpoint = analyticUrlBuilder.ToString();
 
@@ -956,7 +956,7 @@ namespace WhatsappBusiness.CloudApi
                 dimensions = new();
             }
 
-            conversationAnalyticUrlBuilder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+			conversationAnalyticUrlBuilder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
             conversationAnalyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
             conversationAnalyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
             conversationAnalyticUrlBuilder.Replace("{{granularity}}", granularity);
