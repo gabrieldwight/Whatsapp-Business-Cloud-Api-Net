@@ -5,10 +5,13 @@ namespace WhatsappBusiness.CloudApi
     public static class WhatsAppBusinessRequestEndpoint
     {
         /// <summary>
-        /// WhatsApp Business Cloud API V19 BaseAddress
+        /// WhatsApp Business Cloud API V21 BaseAddress
         /// </summary>
         public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v21.0/");
 
+        /// <summary>
+        /// Specified WhatsApp Business Cloud API Version BaseAddress
+        /// </summary>
         public static Uri GraphApiVersionBaseAddress { get; private set; } = new Uri("https://graph.facebook.com/{{api-version}}/");
 
         /// <summary>
