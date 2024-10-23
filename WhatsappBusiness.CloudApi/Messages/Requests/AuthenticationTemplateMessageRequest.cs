@@ -50,7 +50,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		[JsonProperty("code_expiration_minutes", NullValueHandling = NullValueHandling.Ignore)]
 		public int CodeExpirationMinutes { get; set; }
 
-		[JsonProperty("parameters")]
+		[JsonProperty("parameters", NullValueHandling = NullValueHandling.Ignore)]
 		public List<AuthenticationMessageParameter> Parameters { get; set; }
 
 		[JsonProperty("sub_type", NullValueHandling = NullValueHandling.Ignore)]
@@ -61,6 +61,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
 		[JsonIgnore]
 		public bool IsTemplateCreation { get; set; }
+
+		[JsonProperty("buttons", NullValueHandling = NullValueHandling.Ignore)]
+		public List<AuthenticationMessageButton> Buttons { get; set; }
 
 		public bool ShouldSerializeCodeExpirationMinutes()
 		{
@@ -73,6 +76,36 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 			// Only to be used for template creation do not set this property when sending auth template messages
 			return (IsTemplateCreation) ? AddSecurityRecommendation : false;
 		}
+	}
+
+	public class AuthenticationMessageButton
+	{
+		[JsonProperty("type")]
+		public string Type { get; set; }
+
+		[JsonProperty("otp_type")]
+		public string OtpType { get; set; }
+
+		[JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
+		public string Text { get; set; }
+
+		[JsonProperty("autofill_text", NullValueHandling = NullValueHandling.Ignore)]
+		public string AutofillText { get; set; }
+
+		[JsonProperty("zero_tap_terms_accepted", NullValueHandling = NullValueHandling.Ignore)]
+		public string ZeroTapTermsAccepted { get; set; }
+
+		[JsonProperty("supported_apps", NullValueHandling = NullValueHandling.Ignore)]
+		public List<AuthenticationMessageSupportedApps> SupportedApps { get; set; }
+	}
+
+	public class AuthenticationMessageSupportedApps
+	{
+		[JsonProperty("package_name")]
+		public string PackageName { get; set; }
+
+		[JsonProperty("signature_hash")]
+		public string SignatureHash { get; set; }
 	}
 
 	public class AuthenticationMessageParameter
