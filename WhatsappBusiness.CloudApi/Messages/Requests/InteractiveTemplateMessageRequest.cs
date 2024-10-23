@@ -92,25 +92,25 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonProperty("fallback_value")]
         public string FallbackValue { get; set; }
 
-        [JsonProperty("day_of_week")]
+        [JsonProperty("day_of_week", NullValueHandling = NullValueHandling.Ignore)]
         public long DayOfWeek { get; set; }
 
-        [JsonProperty("year")]
+        [JsonProperty("year", NullValueHandling = NullValueHandling.Ignore)]
         public long Year { get; set; }
 
-        [JsonProperty("month")]
+        [JsonProperty("month", NullValueHandling = NullValueHandling.Ignore)]
         public long Month { get; set; }
 
-        [JsonProperty("day_of_month")]
+        [JsonProperty("day_of_month", NullValueHandling = NullValueHandling.Ignore)]
         public long DayOfMonth { get; set; }
 
-        [JsonProperty("hour")]
+        [JsonProperty("hour", NullValueHandling = NullValueHandling.Ignore)]
         public long Hour { get; set; }
 
-        [JsonProperty("minute")]
+        [JsonProperty("minute", NullValueHandling = NullValueHandling.Ignore)]
         public long Minute { get; set; }
 
-        [JsonProperty("calendar")]
+        [JsonProperty("calendar", NullValueHandling = NullValueHandling.Ignore)]
         public string Calendar { get; set; }
     }
 
