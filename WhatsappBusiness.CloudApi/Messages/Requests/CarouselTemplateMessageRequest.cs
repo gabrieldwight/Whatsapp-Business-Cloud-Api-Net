@@ -59,6 +59,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		[JsonProperty("type")]
 		public string Type { get; set; }
 
+		[JsonProperty("format", NullValueHandling = NullValueHandling.Ignore)]
+		public string Format { get; set; }
+
 		[JsonProperty("parameters")]
 		public List<CardMessageParameter> Parameters { get; set; }
 
@@ -67,6 +70,18 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
 		[JsonProperty("index", NullValueHandling = NullValueHandling.Ignore)]
 		public long? Index { get; set; }
+
+		[JsonProperty("buttons", NullValueHandling = NullValueHandling.Ignore)]
+		public List<CardMessageButton> Buttons { get; set; }
+	}
+
+	public class CardMessageButton
+	{
+		[JsonProperty("type")]
+		public string Type { get; set; }
+
+		[JsonProperty("text")]
+		public string Text { get; set; }
 	}
 
 	public class CardMessageParameter
