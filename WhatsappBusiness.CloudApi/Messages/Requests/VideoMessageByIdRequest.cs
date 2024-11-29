@@ -18,7 +18,10 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
         [JsonProperty("video")]
         public MediaVideo Video { get; set; }
-    }
+
+		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		public string BizOpaqueCallbackData { get; set; }
+	}
 
     public class MediaVideo
     {

@@ -19,6 +19,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
 		[JsonProperty("template")]
 		public MPMTemplate Template { get; set; }
+
+		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class MPMTemplate

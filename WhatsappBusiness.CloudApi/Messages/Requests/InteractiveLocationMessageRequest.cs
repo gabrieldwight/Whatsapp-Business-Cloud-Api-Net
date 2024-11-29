@@ -18,6 +18,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
 		[JsonProperty("interactive")]
 		public InteractiveLocationRequestMessage Interactive { get; set; }
+
+		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class InteractiveLocationRequestMessage
