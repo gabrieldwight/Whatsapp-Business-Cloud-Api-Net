@@ -3540,7 +3540,10 @@ namespace WhatsappBusiness.CloudApi
             }
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
-            _httpClient.DefaultRequestHeaders.UserAgent.Add(productValue);
+            if (!_httpClient.DefaultRequestHeaders.UserAgent.Contains(productValue))
+            {
+                _httpClient.DefaultRequestHeaders.UserAgent.Add(productValue);
+            }
 
 #if NET5_0_OR_GREATER
             var bytesDownloaded = await _httpClient.GetByteArrayAsync(whatsAppBusinessEndpoint, cancellationToken).ConfigureAwait(false);
