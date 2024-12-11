@@ -56,6 +56,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		[JsonProperty("type")]
 		public string Type { get; set; }
 
+		[JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+		public string ParameterName { get; set; }
+
 		[JsonProperty("action", NullValueHandling = NullValueHandling.Ignore)]
 		public FlowTemplateMessageAction Action { get; set; }
 	}

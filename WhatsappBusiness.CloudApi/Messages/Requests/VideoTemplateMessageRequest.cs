@@ -50,7 +50,10 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonProperty("video", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+		public string ParameterName { get; set; }
+
+		[JsonProperty("video", NullValueHandling = NullValueHandling.Ignore)]
         public Video Video { get; set; }
 
         [JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]

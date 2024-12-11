@@ -50,6 +50,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonProperty("type")]
         public string Type { get; set; }
 
+        [JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+        public string ParameterName { get; set; }
+
         [JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
         public TemplateImage Image { get; set; }
 
