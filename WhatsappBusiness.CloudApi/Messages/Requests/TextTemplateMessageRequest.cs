@@ -43,6 +43,12 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
         [JsonProperty("parameters")]
         public List<TextMessageParameter> Parameters { get; set; }
+
+        [JsonProperty("sub_type", NullValueHandling = NullValueHandling.Ignore)]
+        public string SubType { get; set; }
+
+        [JsonProperty("index", NullValueHandling = NullValueHandling.Ignore)]
+        public string Index { get; set; }
     }
 
     public class TextMessageParameter
@@ -64,6 +70,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
         [JsonProperty("date_time", NullValueHandling = NullValueHandling.Ignore)]
         public TemplateDateTime DateTime { get; set; }
+
+        [JsonProperty("payload", NullValueHandling = NullValueHandling.Ignore)]
+        public string Payload { get; set; }
     }
 
     public class TemplateCurrency
