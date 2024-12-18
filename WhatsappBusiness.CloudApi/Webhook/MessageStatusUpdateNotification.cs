@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
-    /// <summary>
-    /// The WhatsApp Business API sends notifications to inform you of the status of the messages between you and users. When a message is sent successfully, you receive a notification when the message is sent, delivered, and read. The order of these notifications in your app may not reflect the actual timing of the message status. You can view the timestamp to determine the timing.
-    /// </summary>
-    public class MessageStatusUpdateNotification
+	/// <summary>
+	/// The WhatsApp Business API sends notifications to inform you of the status of the messages between you and users. When a message is sent successfully, you receive a notification when the message is sent, delivered, and read. The order of these notifications in your app may not reflect the actual timing of the message status. You can view the timestamp to determine the timing.
+	/// </summary>
+	public class MessageStatusUpdateNotification
     {
         [JsonProperty("object")]
         public string Object { get; set; }
@@ -67,5 +67,41 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonProperty("recipient_id")]
         public string RecipientId { get; set; }
-    }
+
+		[JsonProperty("conversation")]
+		public MessageConversation Conversation { get; set; }
+
+		[JsonProperty("pricing")]
+		public MessagePricing Pricing { get; set; }
+	}
+
+    public class MessageConversation
+    {
+		[JsonProperty("id")]
+		public string Id { get; set; }
+
+		[JsonProperty("expiration_timestamp")]
+		public string ExpirationTimestamp { get; set; }
+
+		[JsonProperty("origin")]
+		public MessageOrigin Origin { get; set; }
+	}
+
+	public class MessageOrigin
+	{
+		[JsonProperty("type")]
+		public string Type { get; set; }
+	}
+
+	public class MessagePricing
+	{
+		[JsonProperty("pricing_model")]
+		public string PricingModel { get; set; }
+
+		[JsonProperty("billable")]
+		public string Billable { get; set; }
+
+		[JsonProperty("category")]
+		public string Category { get; set; }
+	}
 }

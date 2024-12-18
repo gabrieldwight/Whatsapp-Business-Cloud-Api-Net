@@ -106,6 +106,10 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageStatus.Equals("read"))
                     {
+                        var messageStatusReceived = JsonConvert.DeserializeObject<MessageStatusUpdateNotification>(Convert.ToString(messageReceived)) as MessageStatusUpdateNotification;
+                        var messageStatusResults = new List<MessageStatus>(messageStatusReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Statuses));
+                        _logger.LogInformation(JsonConvert.SerializeObject(messageStatusResults, Formatting.Indented));
+
                         return Ok(new
                         {
                             Message = $"Message Status Received: {messageStatus}"
