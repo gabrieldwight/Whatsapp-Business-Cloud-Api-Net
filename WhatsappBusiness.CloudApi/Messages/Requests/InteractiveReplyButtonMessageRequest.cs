@@ -77,13 +77,49 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		[JsonProperty("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("text")]
+		[JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
 		public string Text { get; set; }
+
+		[JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
+		public ReplyButtonImage ReplyButtonImage { get; set; }
+
+		[JsonProperty("document", NullValueHandling = NullValueHandling.Ignore)]
+		public ReplyButtonDocument ReplyButtonDocument { get; set; }
+
+		[JsonProperty("video", NullValueHandling = NullValueHandling.Ignore)]
+		public ReplyButtonVideo ReplyButtonVideo { get; set; }
 	}
 
 	public class ReplyButtonFooter
 	{
 		[JsonProperty("text")]
 		public string Text { get; set; }
+	}
+
+    public class ReplyButtonImage
+    {
+		[JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+		public string MediaId { get; set; }
+
+		[JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
+		public string MediaUrl { get; set; }
+    }
+
+	public class ReplyButtonDocument
+	{
+		[JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+		public string MediaId { get; set; }
+
+		[JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
+		public string MediaUrl { get; set; }
+	}
+
+	public class ReplyButtonVideo
+	{
+		[JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+		public string MediaId { get; set; }
+
+		[JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
+		public string MediaUrl { get; set; }
 	}
 }
