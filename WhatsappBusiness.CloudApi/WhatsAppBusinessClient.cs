@@ -652,11 +652,16 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>byte[]</returns>
-        public byte[] DownloadMedia(string mediaUrl, string appName = null, string version = null, CancellationToken cancellationToken = default)
+        public byte[] DownloadMedia(string mediaUrl, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            string formattedWhatsAppEndpoint;
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			string formattedWhatsAppEndpoint;
             formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DownloadMedia.Replace("{{Media-URL}}", mediaUrl);
-            return WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, appName, version, cancellationToken).GetAwaiter().GetResult();
+            return WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, _whatsAppConfig.AppName, _whatsAppConfig.Version, cancellationToken).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -665,11 +670,16 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>byte[]</returns>
-        public async Task<byte[]> DownloadMediaAsync(string mediaUrl, string appName = null, string version = null, CancellationToken cancellationToken = default)
+        public async Task<byte[]> DownloadMediaAsync(string mediaUrl, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            string formattedWhatsAppEndpoint;
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			string formattedWhatsAppEndpoint;
             formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DownloadMedia.Replace("{{Media-URL}}", mediaUrl);
-            return await WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, appName, version, cancellationToken);
+            return await WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, _whatsAppConfig.AppName, _whatsAppConfig.Version, cancellationToken);
         }
 
 		/// <summary>
