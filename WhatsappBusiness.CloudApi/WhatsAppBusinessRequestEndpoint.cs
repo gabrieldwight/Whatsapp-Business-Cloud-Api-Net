@@ -155,9 +155,9 @@ namespace WhatsappBusiness.CloudApi
 
         public static string GetQRCodeMessageById { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}";
 
-        public static string UpdateQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}?prefilled_message={{new-message-text}}&access_token={{user-access-token}}";
+        public static string UpdateQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}";
 
-        public static string DeleteQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}&access_token={{user-access-token}}";
+        public static string DeleteQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls/{{qr-code-id}}";
 
         public static string GetTemplateById { get; private set; } = "{{TEMPLATE_ID}}";
 

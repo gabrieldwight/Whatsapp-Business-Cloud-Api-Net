@@ -194,12 +194,16 @@ namespace WhatsappBusiness.CloudApi
 
             builder.Append(WhatsAppBusinessRequestEndpoint.CreateQRCodeMessage);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            builder.Replace("{{message-text}}", messageText);
-            builder.Replace("{{image-format}}", qrImageFormat);
-            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
 
             var formattedWhatsAppEndpoint = builder.ToString();
-            return WhatsAppBusinessPostAsync<QRCodeMessageResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false).GetAwaiter().GetResult();
+
+			QRCodeMessageRequest qRCodeMessageRequest = new QRCodeMessageRequest
+			{
+				PrefilledMessage = messageText,
+				GenerateQRImage = qrImageFormat
+			};
+
+			return WhatsAppBusinessPostAsync<QRCodeMessageResponse>(qRCodeMessageRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -220,12 +224,16 @@ namespace WhatsappBusiness.CloudApi
 
             builder.Append(WhatsAppBusinessRequestEndpoint.CreateQRCodeMessage);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            builder.Replace("{{message-text}}", messageText);
-            builder.Replace("{{image-format}}", qrImageFormat);
-            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
 
             var formattedWhatsAppEndpoint = builder.ToString();
-            return await WhatsAppBusinessPostAsync<QRCodeMessageResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
+
+            QRCodeMessageRequest qRCodeMessageRequest = new QRCodeMessageRequest
+			{
+				PrefilledMessage = messageText,
+				GenerateQRImage = qrImageFormat
+			};
+
+			return await WhatsAppBusinessPostAsync<QRCodeMessageResponse>(qRCodeMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
         }
 
         /// <summary>
@@ -448,10 +456,9 @@ namespace WhatsappBusiness.CloudApi
             builder.Append(WhatsAppBusinessRequestEndpoint.DeleteQRCodeMessage);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
             builder.Replace("{{qr-code-id}}", qrCodeId);
-            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
 
             var formattedWhatsAppEndpoint = builder.ToString();
-            return WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false).GetAwaiter().GetResult();
+            return WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: true).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -472,10 +479,9 @@ namespace WhatsappBusiness.CloudApi
             builder.Append(WhatsAppBusinessRequestEndpoint.DeleteQRCodeMessage);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
             builder.Replace("{{qr-code-id}}", qrCodeId);
-            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
 
             var formattedWhatsAppEndpoint = builder.ToString();
-            return await WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
+            return await WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: true);
         }
 
 		/// <summary>
@@ -3086,12 +3092,16 @@ namespace WhatsappBusiness.CloudApi
 
             builder.Append(WhatsAppBusinessRequestEndpoint.UpdateQRCodeMessage);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            builder.Replace("{{qr-code-id}}", qrCodeId);
-            builder.Replace("{{new-message-text}}", messageText);
-            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
 
             var formattedWhatsAppEndpoint = builder.ToString();
-            return WhatsAppBusinessPostAsync<QRCodeMessageResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false).GetAwaiter().GetResult();
+
+			QRCodeMessageRequest qRCodeMessageRequest = new QRCodeMessageRequest
+			{
+				PrefilledMessage = messageText,
+				Code = qrCodeId
+			};
+
+			return WhatsAppBusinessPostAsync<QRCodeMessageResponse>(qRCodeMessageRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -3112,12 +3122,16 @@ namespace WhatsappBusiness.CloudApi
 
             builder.Append(WhatsAppBusinessRequestEndpoint.UpdateQRCodeMessage);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            builder.Replace("{{qr-code-id}}", qrCodeId);
-            builder.Replace("{{new-message-text}}", messageText);
-            builder.Replace("{{user-access-token}}", _whatsAppConfig.AccessToken);
 
             var formattedWhatsAppEndpoint = builder.ToString();
-            return await WhatsAppBusinessPostAsync<QRCodeMessageResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
+
+			QRCodeMessageRequest qRCodeMessageRequest = new QRCodeMessageRequest
+			{
+				PrefilledMessage = messageText,
+				Code = qrCodeId
+			};
+
+			return await WhatsAppBusinessPostAsync<QRCodeMessageResponse>(qRCodeMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
         }
 
         /// <summary>
