@@ -149,7 +149,7 @@ namespace WhatsappBusiness.CloudApi
         /// </summary>
         public static string ConversationAnalyticsAccountMetrics { get; private set; } = "{{WABA-ID}}?fields=conversation_analytics.start({{start-date}}).end({{end-date}}).granularity({{granularity}})";
 
-        public static string CreateQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls?prefilled_message={{message-text}}&generate_qr_image={{image-format}}&access_token={{user-access-token}}";
+        public static string CreateQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls";
 
         public static string GetQRCodeMessage { get; private set; } = "{{Phone-Number-ID}}/message_qrdls";
 
