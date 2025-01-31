@@ -68,6 +68,9 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonProperty("recipient_id")]
         public string RecipientId { get; set; }
 
+		[JsonProperty("errors", NullValueHandling = NullValueHandling.Ignore)]
+		public List<FailedMessageError> Errors { get; set; }
+
 		[JsonProperty("conversation")]
 		public MessageConversation Conversation { get; set; }
 
@@ -103,5 +106,32 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
 		[JsonProperty("category")]
 		public string Category { get; set; }
+	}
+
+	public class FailedMessageError
+	{
+		[JsonProperty("code")]
+		public long Code { get; set; }
+
+        [JsonProperty("details", NullValueHandling = NullValueHandling.Ignore)]
+		public string Details { get; set; }
+
+		[JsonProperty("title")]
+		public string Title { get; set; }
+
+        [JsonProperty("error_data", NullValueHandling = NullValueHandling.Ignore)]
+        public MessageErrorData MessageErrorData { get; set; }
+
+		[JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
+        public string Message { get; set; }
+
+        [JsonProperty("href", NullValueHandling = NullValueHandling.Ignore)]
+        public string Href { get; set; }
+	}
+
+	public class MessageErrorData
+	{
+		[JsonProperty("details")]
+		public string Details { get; set; }
 	}
 }
