@@ -47,7 +47,7 @@ namespace WhatsappBusiness.CloudApi
         /// <summary>
         /// Get WhatsApp Business Profile Account
         /// </summary>
-        public static string GetBusinessProfileId { get; private set; } = "{{Phone-Number-ID}}/whatsapp_business_profile";
+        public static string GetBusinessProfileId { get; private set; } = "{{Phone-Number-ID}}/whatsapp_business_profile?fields=about,address,description,email,profile_picture_url,websites,vertical";
 
         /// <summary>
         /// Update WhatsApp Business Profile Account

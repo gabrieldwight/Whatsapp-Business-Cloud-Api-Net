@@ -23,7 +23,7 @@ namespace WhatsappBusiness.CloudApi.BusinessProfile.Requests
         [JsonProperty("websites")]
         public List<string> Websites { get; set; }
 
-        [JsonProperty("profile_picture_url")]
-        public string ProfilePictureUrl { get; set; }
-    }
+		[JsonProperty("profile_picture_handle", NullValueHandling = NullValueHandling.Ignore)]
+		public string ProfilePictureHandle { get; set; }
+	}
 }
