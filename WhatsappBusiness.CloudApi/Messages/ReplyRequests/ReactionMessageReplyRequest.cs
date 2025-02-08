@@ -1,31 +1,31 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.ReplyRequests
 {
     public class ReactionMessageReplyRequest
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
+        [JsonPropertyName("recipient_type")]
         public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; private set; } = "reaction";
 
-        [JsonProperty("reaction")]
+        [JsonPropertyName("reaction")]
         public Reaction Reaction { get; set; }
     }
 
     public class Reaction
     {
-        [JsonProperty("message_id")]
+        [JsonPropertyName("message_id")]
         public string MessageId { get; set; }
 
-        [JsonProperty("emoji")]
+        [JsonPropertyName("emoji")]
         public string Emoji { get; set; }
     }
 }

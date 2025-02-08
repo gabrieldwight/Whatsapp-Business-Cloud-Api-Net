@@ -1,29 +1,32 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class BaseCreateTemplateMessageRequest
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("category")]
+        [JsonPropertyName("category")]
         public string Category { get; set; }
 
-        [JsonProperty("allow_category_change", NullValueHandling = NullValueHandling.Ignore)]
-        public bool? AllowCategoryChange { get; set; }
+        [JsonPropertyName("allow_category_change")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public bool? AllowCategoryChange { get; set; }
 
-        [JsonProperty("language")]
+        [JsonPropertyName("language")]
         public string Language { get; set; }
 
-        [JsonProperty("library_template_name", NullValueHandling = NullValueHandling.Ignore)]
-        public string? LibraryTemplateName { get; set; }
+        [JsonPropertyName("library_template_name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string? LibraryTemplateName { get; set; }
 
-        [JsonProperty("LIBRARY_TEMPLATE_BUTTON_INPUTS", NullValueHandling = NullValueHandling.Ignore)]
-        public List<object>? LibraryTemplateButtonInputs { get; set; }
+        [JsonPropertyName("LIBRARY_TEMPLATE_BUTTON_INPUTS")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public List<object>? LibraryTemplateButtonInputs { get; set; }
 
-        [JsonProperty("components")]
+        [JsonPropertyName("components")]
         public List<object> Components { get; set; }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -8,97 +8,97 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class UserDeletedMessageStatus
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<UserDeletedMessageEntry> Entry { get; set; }
     }
 
     public class UserDeletedMessageEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<UserDeletedMessageChange> Changes { get; set; }
     }
 
     public class UserDeletedMessageChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public UserDeletedMessageValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class UserDeletedMessageValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public UserDeletedMessageMetadata Metadata { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<UserDeletedMessageContact> Contacts { get; set; }
 
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         public List<UserDeletedMessage> Messages { get; set; }
     }
 
     public class UserDeletedMessageContact
     {
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public UserDeletedMessageProfile Profile { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
 
     public class UserDeletedMessageProfile
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public class UserDeletedMessage
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("errors")]
+        [JsonPropertyName("errors")]
         public List<UserDeletedMessageError> Errors { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class UserDeletedMessageError
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public long Code { get; set; }
 
-        [JsonProperty("details")]
+        [JsonPropertyName("details")]
         public string Details { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
     }
 
     public class UserDeletedMessageMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 }

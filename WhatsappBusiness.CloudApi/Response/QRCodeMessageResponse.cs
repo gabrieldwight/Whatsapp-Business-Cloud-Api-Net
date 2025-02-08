@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class QRCodeMessageResponse
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
 
-        [JsonProperty("prefilled_message")]
+        [JsonPropertyName("prefilled_message")]
         public string PrefilledMessage { get; set; }
 
-        [JsonProperty("deep_link_url")]
+        [JsonPropertyName("deep_link_url")]
         public string DeepLinkUrl { get; set; }
 
-        [JsonProperty("qr_image_url")]
+        [JsonPropertyName("qr_image_url")]
         public string QrImageUrl { get; set; }
     }
 }

@@ -1,50 +1,50 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class TemplateBaseResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public List<TemplateData> Data { get; set; }
 
-        [JsonProperty("paging")]
+        [JsonPropertyName("paging")]
         public TemplatePaging Paging { get; set; }
     }
 
     public class TemplateData
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("components")]
+        [JsonPropertyName("components")]
         public List<WhatsAppBusinessHSMWhatsAppHSMComponentGet> Components { get; set; }
 
-        [JsonProperty("language")]
+        [JsonPropertyName("language")]
         public string Language { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("category")]
+        [JsonPropertyName("category")]
         public string Category { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
     public class TemplatePaging
     {
-        [JsonProperty("cursors")]
+        [JsonPropertyName("cursors")]
         public TemplateCursors Cursors { get; set; }
     }
 
     public class TemplateCursors
     {
-        [JsonProperty("before")]
+        [JsonPropertyName("before")]
         public string Before { get; set; }
 
-        [JsonProperty("after")]
+        [JsonPropertyName("after")]
         public string After { get; set; }
     }
 }

@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class MediaUploadResponse
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string MediaId { get; set; }
     }
 }

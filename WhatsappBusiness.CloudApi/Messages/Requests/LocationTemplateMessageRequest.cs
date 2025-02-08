@@ -1,83 +1,90 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class LocationTemplateMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "template";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "template";
 
-        [JsonProperty("template")]
+        [JsonPropertyName("template")]
         public LocationMessageTemplate Template { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class LocationMessageTemplate
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("language")]
+        [JsonPropertyName("language")]
         public LocationMessageLanguage Language { get; set; }
 
-        [JsonProperty("components")]
+        [JsonPropertyName("components")]
         public List<LocationMessageComponent> Components { get; set; }
     }
 
     public class LocationMessageComponent
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("parameters")]
+        [JsonPropertyName("parameters")]
         public List<LocationMessageParameter> Parameters { get; set; }
     }
 
     public class LocationMessageParameter
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-		[JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("parameter_name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ParameterName { get; set; }
 
-		[JsonProperty("location", NullValueHandling = NullValueHandling.Ignore)]
-        public LocationDetails Location { get; set; }
+		[JsonPropertyName("location")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public LocationDetails Location { get; set; }
 
-        [JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
-        public string Text { get; set; }
+        [JsonPropertyName("text")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Text { get; set; }
     }
 
     public class LocationDetails
     {
-        [JsonProperty("latitude")]
+        [JsonPropertyName("latitude")]
         public string Latitude { get; set; }
 
-        [JsonProperty("longitude")]
+        [JsonPropertyName("longitude")]
         public string Longitude { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("address")]
+        [JsonPropertyName("address")]
         public string Address { get; set; }
     }
 
     public class LocationMessageLanguage
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
     }
 }

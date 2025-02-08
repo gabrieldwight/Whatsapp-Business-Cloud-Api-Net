@@ -1,29 +1,29 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class SubscribedAppsResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public List<SubscribedAppsData> Data { get; set; }
     }
 
     public class SubscribedAppsData
     {
-        [JsonProperty("whatsapp_business_api_data")]
+        [JsonPropertyName("whatsapp_business_api_data")]
         public WhatsappBusinessApiData WhatsappBusinessApiData { get; set; }
     }
 
     public partial class WhatsappBusinessApiData
     {
-        [JsonProperty("link")]
+        [JsonPropertyName("link")]
         public string Link { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 }

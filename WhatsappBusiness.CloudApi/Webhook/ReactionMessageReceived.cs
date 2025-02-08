@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -8,94 +8,94 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class ReactionMessageReceived
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<ReactionMessageEntry> Entry { get; set; }
     }
 
     public class ReactionMessageEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<ReactionMessageChange> Changes { get; set; }
     }
 
     public class ReactionMessageChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public ReactionMessageValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class ReactionMessageValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public ReactionMessageMetadata Metadata { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<ReactionMessageContact> Contacts { get; set; }
 
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         public List<ReactionMessage> Messages { get; set; }
     }
 
     public class ReactionMessageContact
     {
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public ReactionMessageProfile Profile { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
 
     public class ReactionMessageProfile
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public class ReactionMessage
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("reaction")]
+        [JsonPropertyName("reaction")]
         public ReactionMessageText Reaction { get; set; }
     }
 
     public class ReactionMessageText
     {
-        [JsonProperty("message_id")]
+        [JsonPropertyName("message_id")]
         public string MessageId { get; set; }
 
-        [JsonProperty("emoji")]
+        [JsonPropertyName("emoji")]
         public string Emoji { get; set; }
     }
 
     public class ReactionMessageMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 }

@@ -1,28 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Media.Requests
 {
     public class UploadMediaDataRequest
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; private set; } = "whatsapp";
         
         /// <summary>
         /// Name of the file. For example: "file.jpg".
         /// </summary>
-        [JsonProperty("fileName")]
+        [JsonPropertyName("fileName")]
         public string FileName { get; set; }
 
         /// <summary>
         /// Type of media file being uploaded.
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
         /// <summary>
         /// Full file content data.
         /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public byte[] Data { get; set; }
     }
 }

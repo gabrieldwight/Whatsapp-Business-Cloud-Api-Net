@@ -1,47 +1,47 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class SharedWABAResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public List<WABAData> Data { get; set; }
 
-        [JsonProperty("paging")]
+        [JsonPropertyName("paging")]
         public Paging Paging { get; set; }
     }
 
     public class WABAData
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public long Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("currency")]
+        [JsonPropertyName("currency")]
         public string Currency { get; set; }
 
-        [JsonProperty("timezone_id")]
+        [JsonPropertyName("timezone_id")]
         public string TimezoneId { get; set; }
 
-        [JsonProperty("message_template_namespace")]
+        [JsonPropertyName("message_template_namespace")]
         public string MessageTemplateNamespace { get; set; }
     }
 
     public class Paging
     {
-        [JsonProperty("cursors")]
+        [JsonPropertyName("cursors")]
         public Cursors Cursors { get; set; }
     }
 
     public class Cursors
     {
-        [JsonProperty("before")]
+        [JsonPropertyName("before")]
         public string Before { get; set; }
 
-        [JsonProperty("after")]
+        [JsonPropertyName("after")]
         public string After { get; set; }
     }
 }

@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 
 namespace WhatsappBusiness.CloudApi.Messages.ReplyRequests
 {
     public class ImageMessageByUrlReplyRequest : ImageMessageByUrlRequest
     {
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public ImageMessageUrlContext Context { get; set; }
     }
 
     public class ImageMessageUrlContext
     {
-        [JsonProperty("message_id")]
+        [JsonPropertyName("message_id")]
         public string MessageId { get; set; }
     }
 }

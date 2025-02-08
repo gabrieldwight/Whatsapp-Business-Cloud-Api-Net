@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -9,115 +9,115 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class VideoMessageReceived
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<VideoMessageEntry> Entry { get; set; }
     }
 
     public class VideoMessageEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<VideoMessageChange> Changes { get; set; }
     }
 
     public class VideoMessageChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public VideoMessageValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class VideoMessageValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public VideoMessageMetadata Metadata { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<VideoMessageContact> Contacts { get; set; }
 
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         public List<VideoMessage> Messages { get; set; }
     }
 
     public class VideoMessageContact
     {
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public VideoMessageProfile Profile { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
 
     public class VideoMessageProfile
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public class VideoMessage
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("video")]
+        [JsonPropertyName("video")]
         public Video Video { get; set; }
 
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public VideoMessageContext? Context { get; set; }
     }
 
     public class Video
     {
-        [JsonProperty("caption")]
+        [JsonPropertyName("caption")]
         public string Caption { get; set; }
 
-        [JsonProperty("filename")]
+        [JsonPropertyName("filename")]
         public string Filename { get; set; }
 
-        [JsonProperty("mime_type")]
+        [JsonPropertyName("mime_type")]
         public string MimeType { get; set; }
 
-        [JsonProperty("sha256")]
+        [JsonPropertyName("sha256")]
         public string Sha256 { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
     public class VideoMessageMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 
     public class VideoMessageContext
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 }

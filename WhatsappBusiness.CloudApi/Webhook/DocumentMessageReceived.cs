@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -9,115 +9,115 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class DocumentMessageReceived
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<DocumentMessageEntry> Entry { get; set; }
     }
 
     public class DocumentMessageEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<DocumentMessageChange> Changes { get; set; }
     }
 
     public class DocumentMessageChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public DocumentMessageValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class DocumentMessageValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public DocumentMessageMetadata Metadata { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<DocumentMessageContact> Contacts { get; set; }
 
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         public List<DocumentMessage> Messages { get; set; }
     }
 
     public class DocumentMessageContact
     {
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public DocumentMessageProfile Profile { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
 
     public class DocumentMessageProfile
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public class DocumentMessage
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("document")]
+        [JsonPropertyName("document")]
         public Document Document { get; set; }
 
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public DocumentMessageContext? Context { get; set; }
     }
 
     public class Document
     {
-        [JsonProperty("caption")]
+        [JsonPropertyName("caption")]
         public string Caption { get; set; }
 
-        [JsonProperty("filename")]
+        [JsonPropertyName("filename")]
         public string Filename { get; set; }
 
-        [JsonProperty("mime_type")]
+        [JsonPropertyName("mime_type")]
         public string MimeType { get; set; }
 
-        [JsonProperty("sha256")]
+        [JsonPropertyName("sha256")]
         public string Sha256 { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
     public class DocumentMessageMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 
     public class DocumentMessageContext
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 }

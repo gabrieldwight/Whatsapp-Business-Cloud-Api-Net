@@ -1,50 +1,50 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class BusinessProfileResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public List<BusinessProfileData> Data { get; set; }
     }
 
     public class BusinessProfileData
     {
-        [JsonProperty("business_profile")]
+        [JsonPropertyName("business_profile")]
         public BusinessProfile BusinessProfile { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
     public partial class BusinessProfile
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("address")]
+        [JsonPropertyName("address")]
         public string Address { get; set; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("vertical")]
+        [JsonPropertyName("vertical")]
         public string Vertical { get; set; }
 
-        [JsonProperty("about")]
+        [JsonPropertyName("about")]
         public string About { get; set; }
 
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string Email { get; set; }
 
-        [JsonProperty("websites")]
+        [JsonPropertyName("websites")]
         public List<string> Websites { get; set; }
 
-        [JsonProperty("profile_picture_url")]
+        [JsonPropertyName("profile_picture_url")]
         public string ProfilePictureUrl { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 }

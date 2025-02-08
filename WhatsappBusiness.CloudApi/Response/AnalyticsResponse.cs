@@ -1,44 +1,44 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class AnalyticsResponse
     {
-        [JsonProperty("analytics")]
+        [JsonPropertyName("analytics")]
         public Analytics Analytics { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
     public class Analytics
     {
-        [JsonProperty("phone_numbers")]
+        [JsonPropertyName("phone_numbers")]
         public List<string> PhoneNumbers { get; set; }
 
-        [JsonProperty("country_codes")]
+        [JsonPropertyName("country_codes")]
         public List<string> CountryCodes { get; set; }
 
-        [JsonProperty("granularity")]
+        [JsonPropertyName("granularity")]
         public string Granularity { get; set; }
 
-        [JsonProperty("data_points")]
+        [JsonPropertyName("data_points")]
         public List<AnalyticsDataPoint> DataPoints { get; set; }
     }
 
     public class AnalyticsDataPoint
     {
-        [JsonProperty("start")]
+        [JsonPropertyName("start")]
         public long Start { get; set; }
 
-        [JsonProperty("end")]
+        [JsonPropertyName("end")]
         public long End { get; set; }
 
-        [JsonProperty("sent")]
+        [JsonPropertyName("sent")]
         public long Sent { get; set; }
 
-        [JsonProperty("delivered")]
+        [JsonPropertyName("delivered")]
         public long Delivered { get; set; }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -8,208 +8,208 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class ContactMessageReceived
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<ContactMessageEntry> Entry { get; set; }
     }
 
     public class ContactMessageEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<ContactMessageChange> Changes { get; set; }
     }
 
     public class ContactMessageChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public ContactMessageValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class ContactMessageValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public ContactMessageMetadata Metadata { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<ValueContact> Contacts { get; set; }
 
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         public List<ContactMessage> Messages { get; set; }
     }
 
     public class ValueContact
     {
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public ContactMessageProfile Profile { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
 
     public class ContactMessageProfile
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public class ContactMessage
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<MessageContact> Contacts { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public ContactMessageContext? Context { get; set; }
     }
 
     public class MessageContact
     {
-        [JsonProperty("addresses")]
+        [JsonPropertyName("addresses")]
         public List<Address> Addresses { get; set; }
 
-        [JsonProperty("birthday")]
+        [JsonPropertyName("birthday")]
         public string Birthday { get; set; }
 
-        [JsonProperty("emails")]
+        [JsonPropertyName("emails")]
         public List<Email> Emails { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public Name Name { get; set; }
 
-        [JsonProperty("org")]
+        [JsonPropertyName("org")]
         public Org Org { get; set; }
 
-        [JsonProperty("phones")]
+        [JsonPropertyName("phones")]
         public List<Phone> Phones { get; set; }
 
-        [JsonProperty("urls")]
+        [JsonPropertyName("urls")]
         public List<Url> Urls { get; set; }
     }
 
     public class Address
     {
-        [JsonProperty("city")]
+        [JsonPropertyName("city")]
         public string City { get; set; }
 
-        [JsonProperty("country")]
+        [JsonPropertyName("country")]
         public string Country { get; set; }
 
-        [JsonProperty("country_code")]
+        [JsonPropertyName("country_code")]
         public string CountryCode { get; set; }
 
-        [JsonProperty("state")]
+        [JsonPropertyName("state")]
         public string State { get; set; }
 
-        [JsonProperty("street")]
+        [JsonPropertyName("street")]
         public string Street { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("zip")]
+        [JsonPropertyName("zip")]
         public string Zip { get; set; }
     }
 
     public class Email
     {
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string EmailEmail { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class Name
     {
-        [JsonProperty("formatted_name")]
+        [JsonPropertyName("formatted_name")]
         public string FormattedName { get; set; }
 
-        [JsonProperty("first_name")]
+        [JsonPropertyName("first_name")]
         public string FirstName { get; set; }
 
-        [JsonProperty("last_name")]
+        [JsonPropertyName("last_name")]
         public string LastName { get; set; }
 
-        [JsonProperty("middle_name")]
+        [JsonPropertyName("middle_name")]
         public string MiddleName { get; set; }
 
-        [JsonProperty("suffix")]
+        [JsonPropertyName("suffix")]
         public string Suffix { get; set; }
 
-        [JsonProperty("prefix")]
+        [JsonPropertyName("prefix")]
         public string Prefix { get; set; }
     }
 
     public class Org
     {
-        [JsonProperty("company")]
+        [JsonPropertyName("company")]
         public string Company { get; set; }
 
-        [JsonProperty("department")]
+        [JsonPropertyName("department")]
         public string Department { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
     }
 
     public class Phone
     {
-        [JsonProperty("phone")]
+        [JsonPropertyName("phone")]
         public string PhonePhone { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class Url
     {
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string UrlUrl { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class ContactMessageMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 
     public class ContactMessageContext
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 }

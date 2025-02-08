@@ -1,35 +1,35 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class ConversationalComponentResponse
     {
-        [JsonProperty("conversational_automation")]
+        [JsonPropertyName("conversational_automation")]
         public ConversationalAutomation ConversationalAutomation { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
     public class ConversationalAutomation
     {
-        [JsonProperty("enable_welcome_message")]
+        [JsonPropertyName("enable_welcome_message")]
         public bool EnableWelcomeMessage { get; set; }
 
-        [JsonProperty("prompts")]
+        [JsonPropertyName("prompts")]
         public List<string> Prompts { get; set; }
 
-        [JsonProperty("commands")]
+        [JsonPropertyName("commands")]
         public List<ConversationalCommand> Commands { get; set; }
     }
 
     public class ConversationalCommand
     {
-        [JsonProperty("command_name")]
+        [JsonPropertyName("command_name")]
         public string CommandName { get; set; }
 
-        [JsonProperty("command_description")]
+        [JsonPropertyName("command_description")]
         public string CommandDescription { get; set; }
     }
 }

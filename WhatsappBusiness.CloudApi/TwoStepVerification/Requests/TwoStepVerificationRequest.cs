@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.TwoStepVerification.Requests
 {
     public class TwoStepVerificationRequest
     {
-        [JsonProperty("pin")]
+        [JsonPropertyName("pin")]
         public string Pin { get; set; }
     }
 }

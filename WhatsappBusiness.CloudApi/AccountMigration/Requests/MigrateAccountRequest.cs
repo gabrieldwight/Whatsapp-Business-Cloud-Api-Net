@@ -1,25 +1,25 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.AccountMigration.Requests
 {
     public class MigrateAccountRequest
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("pin")]
+        [JsonPropertyName("pin")]
         public string Pin { get; set; }
 
-        [JsonProperty("backup")]
+        [JsonPropertyName("backup")]
         public Backup Backup { get; set; }
     }
 
     public class Backup
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public string Data { get; set; }
 
-        [JsonProperty("password")]
+        [JsonPropertyName("password")]
         public string Password { get; set; }
     }
 }

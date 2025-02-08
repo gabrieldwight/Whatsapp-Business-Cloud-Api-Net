@@ -1,44 +1,44 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class WhatsAppBusinessHSMWhatsAppHSMComponentGet
     {
-        [JsonProperty("add_security_recommendation")]
+        [JsonPropertyName("add_security_recommendation")]
         public bool AddSecurityRecommendation { get; set; }
 
-        [JsonProperty("code_expiration_minutes")]
+        [JsonPropertyName("code_expiration_minutes")]
         public int CodeExpirationMinutes { get; set; }
 
-        [JsonProperty("example")]
+        [JsonPropertyName("example")]
         public object Example { get; set; }
 
-        [JsonProperty("format")]
+        [JsonPropertyName("format")]
         public string Format { get; set; }
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-		[JsonProperty("buttons")]
+		[JsonPropertyName("buttons")]
 		public List<TemplateButton> Buttons { get; set; }
 	}
 
     public class TemplateButton
     {
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 
-		[JsonProperty("url")]
+		[JsonPropertyName("url")]
 		public string Url { get; set; }  // For URL type buttons
 
-		[JsonProperty("phone_number")]
+		[JsonPropertyName("phone_number")]
 		public string PhoneNumber { get; set; }  // For PHONE_NUMBER type buttons
 	}
 }

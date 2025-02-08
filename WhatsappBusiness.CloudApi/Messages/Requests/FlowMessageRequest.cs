@@ -1,79 +1,87 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class FlowMessageRequest
 	{
-		[JsonProperty("recipient_type")]
+		[JsonPropertyName("recipient_type")]
+		[JsonInclude]
 		public string RecipientType { get; private set; } = "individual";
 
-		[JsonProperty("messaging_product")]
+		[JsonPropertyName("messaging_product")]
+		[JsonInclude]
 		public string MessagingProduct { get; private set; } = "whatsapp";
 
-		[JsonProperty("to")]
+		[JsonPropertyName("to")]
 		public string To { get; set; }
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "interactive";
 
-		[JsonProperty("interactive")]
+		[JsonPropertyName("interactive")]
 		public FlowMessageInteractive Interactive { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class FlowMessageInteractive
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "flow";
 
-		[JsonProperty("header")]
+		[JsonPropertyName("header")]
 		public FlowMessageHeader Header { get; set; }
 
-		[JsonProperty("body")]
+		[JsonPropertyName("body")]
 		public FlowMessageBody Body { get; set; }
 
-		[JsonProperty("footer")]
+		[JsonPropertyName("footer")]
 		public FlowMessageFooter Footer { get; set; }
 
-		[JsonProperty("action")]
+		[JsonPropertyName("action")]
 		public FlowMessageAction Action { get; set; }
 	}
 
 	public class FlowMessageAction
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
+		[JsonInclude]
 		public string Name { get; private set; } = "flow";
 
-		[JsonProperty("parameters")]
+		[JsonPropertyName("parameters")]
 		public FlowMessageParameters Parameters { get; set; }
 	}
 
 	public class FlowMessageParameters
 	{
-		[JsonProperty("flow_message_version")]
+		[JsonPropertyName("flow_message_version")]
+		[JsonInclude]
 		public string FlowMessageVersion { get; private set; } = "3";
 
-		[JsonProperty("flow_token")]
+		[JsonPropertyName("flow_token")]
 		public string FlowToken { get; set; }
 
-		[JsonProperty("flow_id")]
+		[JsonPropertyName("flow_id")]
 		public string FlowId { get; set; }
 
-		[JsonProperty("flow_cta")]
+		[JsonPropertyName("flow_cta")]
 		public string FlowCta { get; set; }
 
-		[JsonProperty("flow_action")]
+		[JsonPropertyName("flow_action")]
 		public string FlowAction { get; set; }
 
-		[JsonProperty("flow_action_payload")]
+		[JsonPropertyName("flow_action_payload")]
 		public FlowActionPayload FlowActionPayload { get; set; }
 
 		[JsonIgnore]
 		public bool IsInDraftMode { get; set; }
 
-		[JsonProperty("mode", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("mode")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public string Mode { get; set; }
 
 		public bool ShouldSerializeMode()
@@ -90,31 +98,31 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
 	public class FlowActionPayload
 	{
-		[JsonProperty("screen")]
+		[JsonPropertyName("screen")]
 		public string Screen { get; set; }
 
-		[JsonProperty("data")]
+		[JsonPropertyName("data")]
 		public object Data { get; set; }
 	}
 
 	public class FlowMessageBody
 	{
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 
 	public class FlowMessageFooter
 	{
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 
 	public class FlowMessageHeader
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 }

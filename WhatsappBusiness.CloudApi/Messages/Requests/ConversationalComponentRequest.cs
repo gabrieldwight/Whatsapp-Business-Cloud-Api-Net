@@ -1,26 +1,26 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class ConversationalComponentRequest
     {
-        [JsonProperty("enable_welcome_message")]
+        [JsonPropertyName("enable_welcome_message")]
         public bool EnableWelcomeMessage { get; set; }
 
-        [JsonProperty("commands")]
+        [JsonPropertyName("commands")]
         public List<ConversationalComponentCommand> Commands { get; set; }
 
-        [JsonProperty("prompts")]
+        [JsonPropertyName("prompts")]
         public List<string> Prompts { get; set; }
     }
 
     public class ConversationalComponentCommand
     {
-        [JsonProperty("command_name")]
+        [JsonPropertyName("command_name")]
         public string CommandName { get; set; }
 
-        [JsonProperty("command_description")]
+        [JsonPropertyName("command_description")]
         public string CommandDescription { get; set; }
     }
 }

@@ -1,34 +1,38 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class TextMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "text";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "text";
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public WhatsAppText Text { get; set; }
 
-        [JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
-        public string BizOpaqueCallbackData { get; set; }
+        [JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class WhatsAppText
     {
-        [JsonProperty("preview_url")]
+        [JsonPropertyName("preview_url")]
         public bool PreviewUrl { get; set; }
 
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public string Body { get; set; }
     }
 }

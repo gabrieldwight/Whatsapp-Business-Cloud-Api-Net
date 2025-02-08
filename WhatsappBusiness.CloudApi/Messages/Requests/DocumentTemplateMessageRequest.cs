@@ -1,128 +1,137 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class DocumentTemplateMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "template";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "template";
 
-        [JsonProperty("template")]
+        [JsonPropertyName("template")]
         public DocumentMessageTemplate Template { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class DocumentMessageTemplate
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("language")]
+        [JsonPropertyName("language")]
         public DocumentMessageLanguage Language { get; set; }
 
-        [JsonProperty("components")]
+        [JsonPropertyName("components")]
         public List<DocumentMessageComponent> Components { get; set; }
     }
 
     public class DocumentMessageComponent
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("parameters")]
+        [JsonPropertyName("parameters")]
         public List<DocumentMessageParameter> Parameters { get; set; }
     }
 
     public class DocumentMessageParameter
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-		[JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("parameter_name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ParameterName { get; set; }
 
-		[JsonProperty("document", NullValueHandling = NullValueHandling.Ignore)]
-        public Document Document { get; set; }
+		[JsonPropertyName("document")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public Document Document { get; set; }
 
-        [JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
-        public string Text { get; set; }
+        [JsonPropertyName("text")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Text { get; set; }
 
-        [JsonProperty("currency", NullValueHandling = NullValueHandling.Ignore)]
-        public DocumentTemplateCurrency Currency { get; set; }
+        [JsonPropertyName("currency")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public DocumentTemplateCurrency Currency { get; set; }
 
-        [JsonProperty("date_time", NullValueHandling = NullValueHandling.Ignore)]
-        public DocumentTemplateDateTime DateTime { get; set; }
+        [JsonPropertyName("date_time")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public DocumentTemplateDateTime DateTime { get; set; }
     }
 
     public class DocumentTemplateCurrency
     {
-        [JsonProperty("fallback_value")]
+        [JsonPropertyName("fallback_value")]
         public string FallbackValue { get; set; }
 
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
 
-        [JsonProperty("amount_1000")]
+        [JsonPropertyName("amount_1000")]
         public long Amount1000 { get; set; }
     }
 
     public class DocumentTemplateDateTime
     {
-        [JsonProperty("fallback_value")]
+        [JsonPropertyName("fallback_value")]
         public string FallbackValue { get; set; }
 
-        [JsonProperty("day_of_week")]
+        [JsonPropertyName("day_of_week")]
         public long DayOfWeek { get; set; }
 
-        [JsonProperty("year")]
+        [JsonPropertyName("year")]
         public long Year { get; set; }
 
-        [JsonProperty("month")]
+        [JsonPropertyName("month")]
         public long Month { get; set; }
 
-        [JsonProperty("day_of_month")]
+        [JsonPropertyName("day_of_month")]
         public long DayOfMonth { get; set; }
 
-        [JsonProperty("hour")]
+        [JsonPropertyName("hour")]
         public long Hour { get; set; }
 
-        [JsonProperty("minute")]
+        [JsonPropertyName("minute")]
         public long Minute { get; set; }
 
-        [JsonProperty("calendar")]
+        [JsonPropertyName("calendar")]
         public string Calendar { get; set; }
     }
 
     public class Document
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("link")]
+        [JsonPropertyName("link")]
         public string Link { get; set; }
 
-        [JsonProperty("caption")]
+        [JsonPropertyName("caption")]
         public string Caption { get; set; }
 
-        [JsonProperty("filename")]
+        [JsonPropertyName("filename")]
         public string Filename { get; set; }
     }
 
     public class DocumentMessageLanguage
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
     }
 }

@@ -1,83 +1,88 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class MultiProductMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "interactive";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "interactive";
 
-        [JsonProperty("interactive")]
+        [JsonPropertyName("interactive")]
         public MultiProductInteractive Interactive { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class MultiProductInteractive
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
+        [JsonInclude]
         public string Type { get; private set; } = "product_list";
 
-        [JsonProperty("header")]
+        [JsonPropertyName("header")]
         public MultiProductHeader Header { get; set; }
 
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public MultiProductBody Body { get; set; }
 
-        [JsonProperty("footer")]
+        [JsonPropertyName("footer")]
         public MultiProductBody Footer { get; set; }
 
-        [JsonProperty("action")]
+        [JsonPropertyName("action")]
         public MultiProductAction Action { get; set; }
     }
 
     public class MultiProductAction
     {
-        [JsonProperty("catalog_id")]
+        [JsonPropertyName("catalog_id")]
         public string CatalogId { get; set; }
 
-        [JsonProperty("sections")]
+        [JsonPropertyName("sections")]
         public List<MultiProductSection> Sections { get; set; }
     }
 
     public class MultiProductSection
     {
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("product_items")]
+        [JsonPropertyName("product_items")]
         public List<ProductItem> ProductItems { get; set; }
     }
 
     public class ProductItem
     {
-        [JsonProperty("product_retailer_id")]
+        [JsonPropertyName("product_retailer_id")]
         public string ProductRetailerId { get; set; }
     }
 
     public class MultiProductBody
     {
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 
     public class MultiProductHeader
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 }

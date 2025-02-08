@@ -1,26 +1,26 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
 	public class TemplateByIdResponse
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonProperty("components")]
+		[JsonPropertyName("components")]
 		public List<object> Components { get; set; }
 
-		[JsonProperty("language")]
+		[JsonPropertyName("language")]
 		public string Language { get; set; }
 
-		[JsonProperty("status")]
+		[JsonPropertyName("status")]
 		public string Status { get; set; }
 
-		[JsonProperty("category")]
+		[JsonPropertyName("category")]
 		public string Category { get; set; }
 
-		[JsonProperty("id")]
+		[JsonPropertyName("id")]
 		public string Id { get; set; }
 	}
 }

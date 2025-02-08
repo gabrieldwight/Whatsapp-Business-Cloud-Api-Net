@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class ResumableUploadResponse
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("file_offset")]
+        [JsonPropertyName("file_offset")]
         public long FileOffset { get; set; }
 
-        [JsonProperty("h")]
+        [JsonPropertyName("h")]
         public string H { get; set; }
     }
 }

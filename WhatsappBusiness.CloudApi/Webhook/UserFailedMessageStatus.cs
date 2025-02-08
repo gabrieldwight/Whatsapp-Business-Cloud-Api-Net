@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -8,76 +8,76 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class UserFailedMessageStatus
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<UserFailedMessageEntry> Entry { get; set; }
     }
 
     public class UserFailedMessageEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<UserFailedMessageChange> Changes { get; set; }
     }
 
     public class UserFailedMessageChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public UserFailedMessageValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class UserFailedMessageValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public UserFailedMessageMetadata Metadata { get; set; }
 
-        [JsonProperty("statuses")]
+        [JsonPropertyName("statuses")]
         public List<UserFailedStatus> Statuses { get; set; }
     }
 
     public class UserFailedMessageMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 
     public class UserFailedStatus
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("recipient_id")]
+        [JsonPropertyName("recipient_id")]
         public string RecipientId { get; set; }
 
-        [JsonProperty("errors")]
+        [JsonPropertyName("errors")]
         public List<UserFailedMessageError> Errors { get; set; }
     }
 
     public class UserFailedMessageError
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public long Code { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
     }
 }

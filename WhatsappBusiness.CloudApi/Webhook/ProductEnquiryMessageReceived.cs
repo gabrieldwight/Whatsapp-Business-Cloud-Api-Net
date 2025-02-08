@@ -1,119 +1,119 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
     public class ProductEnquiryMessageReceived
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<ProductEnquiryEntry> Entry { get; set; }
     }
 
     public class ProductEnquiryEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<ProductEnquiryChange> Changes { get; set; }
     }
 
     public class ProductEnquiryChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public ProductEnquiryValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class ProductEnquiryValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public ProductEnquiryMetadata Metadata { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<ProductEnquiryContact> Contacts { get; set; }
 
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         public List<ProductEnquiryMessage> Messages { get; set; }
     }
 
     public class ProductEnquiryContact
     {
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public ProductEnquiryProfile Profile { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
 
     public class ProductEnquiryProfile
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public class ProductEnquiryMessage
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public ProductEnquiryText Text { get; set; }
 
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public ProductEnquiryContext Context { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class ProductEnquiryContext
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("referred_product")]
+        [JsonPropertyName("referred_product")]
         public ReferredProduct ReferredProduct { get; set; }
     }
 
     public partial class ReferredProduct
     {
-        [JsonProperty("catalog_id")]
+        [JsonPropertyName("catalog_id")]
         public string CatalogId { get; set; }
 
-        [JsonProperty("product_retailer_id")]
+        [JsonPropertyName("product_retailer_id")]
         public string ProductRetailerId { get; set; }
     }
 
     public class ProductEnquiryText
     {
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public string Body { get; set; }
     }
 
     public class ProductEnquiryMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 }

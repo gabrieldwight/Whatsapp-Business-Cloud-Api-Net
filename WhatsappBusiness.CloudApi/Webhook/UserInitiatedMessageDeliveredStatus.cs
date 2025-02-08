@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -8,97 +8,97 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class UserInitiatedMessageDeliveredStatus
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<UserInitiatedMessageDeliveryEntry> Entry { get; set; }
     }
 
     public class UserInitiatedMessageDeliveryEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<UserInitiatedMessageDeliveryChange> Changes { get; set; }
     }
 
     public class UserInitiatedMessageDeliveryChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public UserInitiatedMessageDeliveryValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class UserInitiatedMessageDeliveryValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public UserInitiatedMessageDeliveryMetadata Metadata { get; set; }
 
-        [JsonProperty("statuses")]
+        [JsonPropertyName("statuses")]
         public List<UserInitiatedMessageDeliveryStatus> Statuses { get; set; }
     }
 
     public class UserInitiatedMessageDeliveryMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 
     public class UserInitiatedMessageDeliveryStatus
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("recipient_id")]
+        [JsonPropertyName("recipient_id")]
         public string RecipientId { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("conversation")]
+        [JsonPropertyName("conversation")]
         public UserInitiatedMessageDeliveryConversation Conversation { get; set; }
 
-        [JsonProperty("pricing")]
+        [JsonPropertyName("pricing")]
         public UserInitiatedMessageDeliveryPricing Pricing { get; set; }
     }
 
     public class UserInitiatedMessageDeliveryConversation
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("expiration_timestamp")]
+        [JsonPropertyName("expiration_timestamp")]
         public string ExpirationTimestamp { get; set; }
 
-        [JsonProperty("origin")]
+        [JsonPropertyName("origin")]
         public UserInitiatedMessageDeliveryOrigin Origin { get; set; }
     }
 
     public class UserInitiatedMessageDeliveryOrigin
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class UserInitiatedMessageDeliveryPricing
     {
-        [JsonProperty("pricing_model")]
+        [JsonPropertyName("pricing_model")]
         public string PricingModel { get; set; }
 
-        [JsonProperty("billable")]
+        [JsonPropertyName("billable")]
         public bool Billable { get; set; }
     }
 }

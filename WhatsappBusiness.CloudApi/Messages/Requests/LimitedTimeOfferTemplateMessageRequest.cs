@@ -1,92 +1,103 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class LimitedTimeOfferTemplateMessageRequest
 	{
-		[JsonProperty("messaging_product")]
+		[JsonPropertyName("messaging_product")]
+		[JsonInclude]
 		public string MessagingProduct { get; private set; } = "whatsapp";
 
-		[JsonProperty("recipient_type")]
+		[JsonPropertyName("recipient_type")]
+		[JsonInclude]
 		public string RecipientType { get; private set; } = "individual";
 
-		[JsonProperty("to")]
+		[JsonPropertyName("to")]
 		public string To { get; set; }
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "template";
 
-		[JsonProperty("template")]
+		[JsonPropertyName("template")]
 		public LimitedTimeOfferMessageTemplate Template { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class LimitedTimeOfferMessageTemplate
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonProperty("language")]
+		[JsonPropertyName("language")]
 		public LimitedTimeOfferMessageLanguage Language { get; set; }
 
-		[JsonProperty("components")]
+		[JsonPropertyName("components")]
 		public List<LimitedTimeOfferMessageComponent> Components { get; set; }
 	}
 
 	public class LimitedTimeOfferMessageComponent
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("parameters")]
+		[JsonPropertyName("parameters")]
 		public List<LimitedTimeOfferMessageParameter> Parameters { get; set; }
 
-		[JsonProperty("sub_type", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("sub_type")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string SubType { get; set; }
 
-		[JsonProperty("index", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("index")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public long? Index { get; set; }
 	}
 
 	public class LimitedTimeOfferMessageParameter
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("parameter_name")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ParameterName { get; set; }
 
-		[JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("image")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public LimitedTimeOfferMessageImage Image { get; set; }
 
-		[JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("text")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Text { get; set; }
 
-		[JsonProperty("limited_time_offer", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("limited_time_offer")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public LimitedTimeOffer LimitedTimeOffer { get; set; }
 
-		[JsonProperty("coupon_code", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("coupon_code")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string CouponCode { get; set; }
 	}
 
 	public class LimitedTimeOfferMessageImage
 	{
-		[JsonProperty("id")]
+		[JsonPropertyName("id")]
 		public string Id { get; set; }
 	}
 
 	public class LimitedTimeOffer
 	{
-		[JsonProperty("expiration_time_ms")]
+		[JsonPropertyName("expiration_time_ms")]
 		public long ExpirationTimeMs { get; set; }
 	}
 
 	public class LimitedTimeOfferMessageLanguage
 	{
-		[JsonProperty("code")]
+		[JsonPropertyName("code")]
 		public string Code { get; set; }
 	}
 }

@@ -1,71 +1,81 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class AuthenticationTemplateMessageRequest
 	{
-		[JsonProperty("messaging_product")]
+		[JsonPropertyName("messaging_product")]
+		[JsonInclude]
 		public string MessagingProduct { get; private set; } = "whatsapp";
 
-		[JsonProperty("recipient_type")]
+		[JsonPropertyName("recipient_type")]
+		[JsonInclude]
 		public string RecipientType { get; private set; } = "individual";
 
-		[JsonProperty("to")]
+		[JsonPropertyName("to")]
 		public string To { get; set; }
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "template";
 
-		[JsonProperty("template")]
+		[JsonPropertyName("template")]
 		public AuthenticationMessageTemplate Template { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class AuthenticationMessageTemplate
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonProperty("language")]
+		[JsonPropertyName("language")]
 		public AuthenticationMessageLanguage Language { get; set; }
 
-		[JsonProperty("components")]
+		[JsonPropertyName("components")]
 		public List<AuthenticationMessageComponent> Components { get; set; }
 	}
 
 	public class AuthenticationMessageComponent
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
 		/// <summary>
 		/// Only to be used for template creation do not set this property when sending auth template messages
 		/// </summary>
-		[JsonProperty("add_security_recommendation", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("add_security_recommendation")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public bool AddSecurityRecommendation { get; set; }
 
 		/// <summary>
 		/// Only to be used for template creation do not set this property when sending auth template messages
 		/// </summary>
-		[JsonProperty("code_expiration_minutes", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("code_expiration_minutes")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public int CodeExpirationMinutes { get; set; }
 
-		[JsonProperty("parameters", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("parameters")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<AuthenticationMessageParameter> Parameters { get; set; }
 
-		[JsonProperty("sub_type", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("sub_type")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string SubType { get; set; }
 
-		[JsonProperty("index", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("index")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public long? Index { get; set; }
 
 		[JsonIgnore]
 		public bool IsTemplateCreation { get; set; }
 
-		[JsonProperty("buttons", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("buttons")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<AuthenticationMessageButton> Buttons { get; set; }
 
 		public bool ShouldSerializeCodeExpirationMinutes()
@@ -83,49 +93,54 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
 	public class AuthenticationMessageButton
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("otp_type")]
+		[JsonPropertyName("otp_type")]
 		public string OtpType { get; set; }
 
-		[JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("text")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Text { get; set; }
 
-		[JsonProperty("autofill_text", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("autofill_text")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string AutofillText { get; set; }
 
-		[JsonProperty("zero_tap_terms_accepted", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("zero_tap_terms_accepted")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ZeroTapTermsAccepted { get; set; }
 
-		[JsonProperty("supported_apps", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("supported_apps")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<AuthenticationMessageSupportedApps> SupportedApps { get; set; }
 	}
 
 	public class AuthenticationMessageSupportedApps
 	{
-		[JsonProperty("package_name")]
+		[JsonPropertyName("package_name")]
 		public string PackageName { get; set; }
 
-		[JsonProperty("signature_hash")]
+		[JsonPropertyName("signature_hash")]
 		public string SignatureHash { get; set; }
 	}
 
 	public class AuthenticationMessageParameter
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("parameter_name")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ParameterName { get; set; }
 
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 
 	public class AuthenticationMessageLanguage
 	{
-		[JsonProperty("code")]
+		[JsonPropertyName("code")]
 		public string Code { get; set; }
 	}
 }

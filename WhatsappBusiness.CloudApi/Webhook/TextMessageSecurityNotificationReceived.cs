@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -8,106 +8,106 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class TextMessageSecurityNotificationReceived
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<TextMessageSecurityNotificationEntry> Entry { get; set; }
     }
 
     public class TextMessageSecurityNotificationEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<TextMessageSecurityNotificationChange> Changes { get; set; }
     }
 
     public class TextMessageSecurityNotificationChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public TextMessageSecurityNotificationValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class TextMessageSecurityNotificationValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public TextMessageSecurityNotificationMetadata Metadata { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<TextMessageSecurityNotificationContact> Contacts { get; set; }
 
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         public List<TextMessageSecurityNotificationMessage> Messages { get; set; }
     }
 
     public class TextMessageSecurityNotificationContact
     {
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public TextMessageSecurityNotificationProfile Profile { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
 
     public class TextMessageSecurityNotificationProfile
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public class TextMessageSecurityNotificationMessage
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("identity")]
+        [JsonPropertyName("identity")]
         public Identity Identity { get; set; }
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public TextMessageSecurityNotificationText Text { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class Identity
     {
-        [JsonProperty("acknowledged")]
+        [JsonPropertyName("acknowledged")]
         public bool Acknowledged { get; set; }
 
-        [JsonProperty("created_timestamp")]
+        [JsonPropertyName("created_timestamp")]
         public long CreatedTimestamp { get; set; }
 
-        [JsonProperty("hash")]
+        [JsonPropertyName("hash")]
         public string Hash { get; set; }
     }
 
     public class TextMessageSecurityNotificationText
     {
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public string Body { get; set; }
     }
 
     public class TextMessageSecurityNotificationMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 }

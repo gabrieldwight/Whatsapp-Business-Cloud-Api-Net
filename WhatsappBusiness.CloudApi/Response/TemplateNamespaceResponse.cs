@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
 	public class TemplateNamespaceResponse
 	{
-		[JsonProperty("message_template_namespace")]
+		[JsonPropertyName("message_template_namespace")]
 		public string MessageTemplateNamespace { get; set; }
 
-		[JsonProperty("id")]
+		[JsonPropertyName("id")]
 		public string Id { get; set; }
 	}
 }

@@ -1,25 +1,25 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class MediaUrlResponse
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; set; }
 
-        [JsonProperty("mime_type")]
+        [JsonPropertyName("mime_type")]
         public string MimeType { get; set; }
 
-        [JsonProperty("sha256")]
+        [JsonPropertyName("sha256")]
         public string Sha256 { get; set; }
 
-        [JsonProperty("file_size")]
+        [JsonPropertyName("file_size")]
         public string FileSize { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 }

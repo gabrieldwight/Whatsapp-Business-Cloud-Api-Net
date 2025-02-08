@@ -1,53 +1,53 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class ConversationAnalyticsResponse
     {
-        [JsonProperty("conversation_analytics")]
+        [JsonPropertyName("conversation_analytics")]
         public ConversationAnalytics ConversationAnalytics { get; set; }
 
-		[JsonProperty("id")]
+		[JsonPropertyName("id")]
 		public string Id { get; set; }
 	}
 
     public class ConversationAnalytics
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public List<ConversationAnalyticsData> Data { get; set; }
     }
 
     public class ConversationAnalyticsData
     {
-        [JsonProperty("data_points")]
+        [JsonPropertyName("data_points")]
         public List<ConversationAnalyticsDataPoint> DataPoints { get; set; }
     }
 
     public class ConversationAnalyticsDataPoint
     {
-        [JsonProperty("start")]
+        [JsonPropertyName("start")]
         public long Start { get; set; }
 
-        [JsonProperty("end")]
+        [JsonPropertyName("end")]
         public long End { get; set; }
 
-        [JsonProperty("conversation")]
+        [JsonPropertyName("conversation")]
         public long Conversation { get; set; }
 
-        [JsonProperty("phone_number")]
+        [JsonPropertyName("phone_number")]
         public string PhoneNumber { get; set; }
 
-        [JsonProperty("country")]
+        [JsonPropertyName("country")]
         public string Country { get; set; }
 
-        [JsonProperty("conversation_type")]
+        [JsonPropertyName("conversation_type")]
         public string ConversationType { get; set; }
 
-        [JsonProperty("conversation_direction")]
+        [JsonPropertyName("conversation_direction")]
         public string ConversationDirection { get; set; }
 
-        [JsonProperty("cost")]
+        [JsonPropertyName("cost")]
         public double Cost { get; set; }
     }
 }

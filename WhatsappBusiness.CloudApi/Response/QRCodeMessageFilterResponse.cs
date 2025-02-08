@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class QRCodeMessageFilterResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public List<QRCodeMessageResponse> Data { get; set; }
     }
 }

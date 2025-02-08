@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class MarkMessageRequest
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("message_id")]
+        [JsonPropertyName("message_id")]
         public string MessageId { get; set; }
     }
 }

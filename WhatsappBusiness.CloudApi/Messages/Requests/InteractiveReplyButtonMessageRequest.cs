@@ -1,125 +1,140 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class InteractiveReplyButtonMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "interactive";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "interactive";
 
-        [JsonProperty("interactive")]
+        [JsonPropertyName("interactive")]
         public InteractiveReplyButtonMessage Interactive { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class InteractiveReplyButtonMessage
     {
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "button";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "button";
 
-		[JsonProperty("header")]
+		[JsonPropertyName("header")]
 		public ReplyButtonHeader Header { get; set; }
 
-		[JsonProperty("body")]
+		[JsonPropertyName("body")]
         public ReplyButtonBody Body { get; set; }
 
-		[JsonProperty("footer")]
+		[JsonPropertyName("footer")]
 		public ReplyButtonFooter Footer { get; set; }
 
-		[JsonProperty("action")]
+		[JsonPropertyName("action")]
         public ReplyButtonAction Action { get; set; }
     }
 
     public class ReplyButtonAction
     {
-        [JsonProperty("buttons")]
+        [JsonPropertyName("buttons")]
         public List<ReplyButton> Buttons { get; set; }
     }
 
     public class ReplyButton
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("reply")]
+        [JsonPropertyName("reply")]
         public Reply Reply { get; set; }
     }
 
     public class Reply
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
     }
 
     public partial class ReplyButtonBody
     {
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 
 	public class ReplyButtonHeader
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("text")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Text { get; set; }
 
-		[JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("image")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public ReplyButtonImage ReplyButtonImage { get; set; }
 
-		[JsonProperty("document", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("document")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public ReplyButtonDocument ReplyButtonDocument { get; set; }
 
-		[JsonProperty("video", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("video")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public ReplyButtonVideo ReplyButtonVideo { get; set; }
 	}
 
 	public class ReplyButtonFooter
 	{
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 
     public class ReplyButtonImage
     {
-		[JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string MediaId { get; set; }
 
-		[JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("link")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string MediaUrl { get; set; }
     }
 
 	public class ReplyButtonDocument
 	{
-		[JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string MediaId { get; set; }
 
-		[JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("link")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string MediaUrl { get; set; }
 	}
 
 	public class ReplyButtonVideo
 	{
-		[JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string MediaId { get; set; }
 
-		[JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("link")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string MediaUrl { get; set; }
 	}
 }

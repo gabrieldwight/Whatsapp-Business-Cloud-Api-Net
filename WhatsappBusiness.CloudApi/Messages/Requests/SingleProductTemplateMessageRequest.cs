@@ -1,98 +1,108 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class SingleProductTemplateMessageRequest
 	{
-		[JsonProperty("messaging_product")]
+		[JsonPropertyName("messaging_product")]
+		[JsonInclude]
 		public string MessagingProduct { get; private set; } = "whatsapp";
 
-		[JsonProperty("recipient_type")]
+		[JsonPropertyName("recipient_type")]
+		[JsonInclude]
 		public string RecipientType { get; private set; } = "individual";
 
-		[JsonProperty("to")]
+		[JsonPropertyName("to")]
 		public string To { get; set; }
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "template";
 
-		[JsonProperty("template")]
+		[JsonPropertyName("template")]
 		public SPMTemplate Template { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class SPMTemplate
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonProperty("language")]
+		[JsonPropertyName("language")]
 		public SPMLanguage Language { get; set; }
 
-		[JsonProperty("components")]
+		[JsonPropertyName("components")]
 		public List<SPMComponent> Components { get; set; }
 	}
 
 	public class SPMComponent
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("parameters")]
+		[JsonPropertyName("parameters")]
 		public List<SPMParameter> Parameters { get; set; }
 
-		[JsonProperty("format", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("format")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Format { get; set; }
 
-		[JsonProperty("text",  NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("text")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Text { get; set; }
 
-		[JsonProperty("buttons", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("buttons")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<SPMButtons> Buttons { get; set; }
 	}
 
 	public class SPMParameter
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("parameter_name")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ParameterName { get; set; }
 
-		[JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("text")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Text { get; set; }
 
-		[JsonProperty("product", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("product")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public SPMProduct Product { get; set; }
 	}
 
 	public class SPMProduct
 	{
-		[JsonProperty("product_retailer_id")]
+		[JsonPropertyName("product_retailer_id")]
 		public string ProductId { get; set; }
 
-		[JsonProperty("catalog_id")]
+		[JsonPropertyName("catalog_id")]
 		public string CatalogId { get; set; }
 	}
 
 	public class SPMButtons
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 
 	public class SPMLanguage
 	{
-		[JsonProperty("policy")]
+		[JsonPropertyName("policy")]
 		public string Policy { get; set; }
 
-		[JsonProperty("code")]
+		[JsonPropertyName("code")]
 		public string Code { get; set; }
 	}
 }

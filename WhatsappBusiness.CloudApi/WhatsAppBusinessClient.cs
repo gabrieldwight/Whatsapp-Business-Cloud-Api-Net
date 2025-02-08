@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using Polly;
 using Polly.Extensions.Http;
 using System;
@@ -9,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
@@ -33,7 +33,6 @@ namespace WhatsappBusiness.CloudApi
     {
         private readonly HttpClient _httpClient;
         readonly Random jitterer = new Random();
-        private readonly JsonSerializer _serializer = new JsonSerializer();
         private WhatsAppBusinessCloudApiConfig _whatsAppConfig;
 
         /// <summary>
@@ -97,7 +96,7 @@ namespace WhatsappBusiness.CloudApi
 
             builder.Append(WhatsAppBusinessRequestEndpoint.SetConversationAutomation);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            builder.Append($"?commands={JsonConvert.SerializeObject(conversationalComponentCommand)}");
+            builder.Append($"?commands={JsonSerializer.Serialize(conversationalComponentCommand)}");
 
             var formattedWhatsAppEndpoint = builder.ToString();
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
@@ -114,7 +113,7 @@ namespace WhatsappBusiness.CloudApi
 
             builder.Append(WhatsAppBusinessRequestEndpoint.SetConversationAutomation);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            builder.Append($"?commands={JsonConvert.SerializeObject(conversationalComponentCommand)}");
+            builder.Append($"?commands={JsonSerializer.Serialize(conversationalComponentCommand)}");
 
             var formattedWhatsAppEndpoint = builder.ToString();
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken);
@@ -131,7 +130,7 @@ namespace WhatsappBusiness.CloudApi
 
             builder.Append(WhatsAppBusinessRequestEndpoint.SetConversationAutomation);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            builder.Append($"?prompts={JsonConvert.SerializeObject(prompts)}");
+            builder.Append($"?prompts={JsonSerializer.Serialize(prompts)}");
 
             var formattedWhatsAppEndpoint = builder.ToString();
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
@@ -148,7 +147,7 @@ namespace WhatsappBusiness.CloudApi
 
             builder.Append(WhatsAppBusinessRequestEndpoint.SetConversationAutomation);
             builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
-            builder.Append($"?prompts={JsonConvert.SerializeObject(prompts)}");
+            builder.Append($"?prompts={JsonSerializer.Serialize(prompts)}");
 
             var formattedWhatsAppEndpoint = builder.ToString();
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken);
@@ -791,9 +790,9 @@ namespace WhatsappBusiness.CloudApi
             analyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
             analyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
             analyticUrlBuilder.Replace("{{granularity}}", granularity);
-            analyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
-            analyticUrlBuilder.Append($".product_types({JsonConvert.SerializeObject(productTypes)})");
-            analyticUrlBuilder.Append($".country_codes({JsonConvert.SerializeObject(countryCodes)})");
+            analyticUrlBuilder.Append($".phone_numbers({JsonSerializer.Serialize(phoneNumbers)})");
+            analyticUrlBuilder.Append($".product_types({JsonSerializer.Serialize(productTypes)})");
+            analyticUrlBuilder.Append($".country_codes({JsonSerializer.Serialize(countryCodes)})");
 			analyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
 
 			formattedWhatsAppEndpoint = analyticUrlBuilder.ToString();
@@ -844,9 +843,9 @@ namespace WhatsappBusiness.CloudApi
             analyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
             analyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
             analyticUrlBuilder.Replace("{{granularity}}", granularity);
-			analyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
-			analyticUrlBuilder.Append($".product_types({JsonConvert.SerializeObject(productTypes)})");
-			analyticUrlBuilder.Append($".country_codes({JsonConvert.SerializeObject(countryCodes)})");
+			analyticUrlBuilder.Append($".phone_numbers({JsonSerializer.Serialize(phoneNumbers)})");
+			analyticUrlBuilder.Append($".product_types({JsonSerializer.Serialize(productTypes)})");
+			analyticUrlBuilder.Append($".country_codes({JsonSerializer.Serialize(countryCodes)})");
 			analyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
 
             formattedWhatsAppEndpoint = analyticUrlBuilder.ToString();
@@ -909,11 +908,11 @@ namespace WhatsappBusiness.CloudApi
             conversationAnalyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
             conversationAnalyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
             conversationAnalyticUrlBuilder.Replace("{{granularity}}", granularity);
-            conversationAnalyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
-            conversationAnalyticUrlBuilder.Append($".metric_types({JsonConvert.SerializeObject(metricTypes)})");
-            conversationAnalyticUrlBuilder.Append($".conversation_types({JsonConvert.SerializeObject(conversationTypes)})");
-            conversationAnalyticUrlBuilder.Append($".conversation_directions({JsonConvert.SerializeObject(conversationDirections)})");
-            conversationAnalyticUrlBuilder.Append($".dimensions({JsonConvert.SerializeObject(dimensions)})");
+            conversationAnalyticUrlBuilder.Append($".phone_numbers({JsonSerializer.Serialize(phoneNumbers)})");
+            conversationAnalyticUrlBuilder.Append($".metric_types({JsonSerializer.Serialize(metricTypes)})");
+            conversationAnalyticUrlBuilder.Append($".conversation_types({JsonSerializer.Serialize(conversationTypes)})");
+            conversationAnalyticUrlBuilder.Append($".conversation_directions({JsonSerializer.Serialize(conversationDirections)})");
+            conversationAnalyticUrlBuilder.Append($".dimensions({JsonSerializer.Serialize(dimensions)})");
 			conversationAnalyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
 
 			formattedWhatsAppEndpoint = conversationAnalyticUrlBuilder.ToString();
@@ -976,11 +975,11 @@ namespace WhatsappBusiness.CloudApi
             conversationAnalyticUrlBuilder.Replace("{{start-date}}", new DateTimeOffset(startDate).ToUnixTimeSeconds().ToString());
             conversationAnalyticUrlBuilder.Replace("{{end-date}}", new DateTimeOffset(endDate).ToUnixTimeSeconds().ToString());
             conversationAnalyticUrlBuilder.Replace("{{granularity}}", granularity);
-            conversationAnalyticUrlBuilder.Append($".phone_numbers({JsonConvert.SerializeObject(phoneNumbers)})");
-            conversationAnalyticUrlBuilder.Append($".metric_types({JsonConvert.SerializeObject(metricTypes)})");
-            conversationAnalyticUrlBuilder.Append($".conversation_types({JsonConvert.SerializeObject(conversationTypes)})");
-            conversationAnalyticUrlBuilder.Append($".conversation_directions({JsonConvert.SerializeObject(conversationDirections)})");
-            conversationAnalyticUrlBuilder.Append($".dimensions({JsonConvert.SerializeObject(dimensions)})");
+            conversationAnalyticUrlBuilder.Append($".phone_numbers({JsonSerializer.Serialize(phoneNumbers)})");
+            conversationAnalyticUrlBuilder.Append($".metric_types({JsonSerializer.Serialize(metricTypes)})");
+            conversationAnalyticUrlBuilder.Append($".conversation_types({JsonSerializer.Serialize(conversationTypes)})");
+            conversationAnalyticUrlBuilder.Append($".conversation_directions({JsonSerializer.Serialize(conversationDirections)})");
+            conversationAnalyticUrlBuilder.Append($".dimensions({JsonSerializer.Serialize(dimensions)})");
 			conversationAnalyticUrlBuilder.Append($"&access_token={_whatsAppConfig.AccessToken}");
 
 			formattedWhatsAppEndpoint = conversationAnalyticUrlBuilder.ToString();
@@ -3307,7 +3306,7 @@ namespace WhatsappBusiness.CloudApi
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
             T result = new();
-            string json = JsonConvert.SerializeObject(whatsAppDto);
+            string json = JsonSerializer.Serialize(whatsAppDto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             cancellationToken.ThrowIfCancellationRequested();
             var response = await _httpClient.PostAsync(whatsAppBusinessEndpoint, content, cancellationToken).ConfigureAwait(false);
@@ -3315,45 +3314,37 @@ namespace WhatsappBusiness.CloudApi
             if (response.IsSuccessStatusCode)
             {
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
-            }
-            else
+			}
+			else
             {
                 WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
-                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
                 throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-            }
-            return result;
+			}
+			return result;
         }
 
         /// <summary>
@@ -3379,45 +3370,37 @@ namespace WhatsappBusiness.CloudApi
             if (response.IsSuccessStatusCode)
             {
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
-            }
-            else
+			}
+			else
             {
                 WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
-                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
                 throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-            }
-            return result;
+			}
+			return result;
         }
 
         /// <summary>
@@ -3509,45 +3492,37 @@ namespace WhatsappBusiness.CloudApi
 			if (response.IsSuccessStatusCode)
             {
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
-            }
-            else
+			}
+			else
             {
                 WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
-                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
                 throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-            }
-            return result;
+			}
+			return result;
         }
 
         private async Task<byte[]> WhatsAppBusinessGetAsync(string whatsAppBusinessEndpoint, string AppName = null, string version = null, CancellationToken cancellationToken = default)
@@ -3626,45 +3601,37 @@ namespace WhatsappBusiness.CloudApi
             if (response.IsSuccessStatusCode)
             {
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
-            }
-            else
+			}
+			else
             {
                 WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
-                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
                 throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-            }
-            return result;
+			}
+			return result;
         }
 
         /// <summary>
@@ -3680,7 +3647,7 @@ namespace WhatsappBusiness.CloudApi
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
             T result = new();
-            string json = JsonConvert.SerializeObject(whatsAppDto);
+            string json = JsonSerializer.Serialize(whatsAppDto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             cancellationToken.ThrowIfCancellationRequested();
             var response = await _httpClient.PutAsync(whatsAppBusinessEndpoint, content, cancellationToken).ConfigureAwait(false);
@@ -3688,45 +3655,37 @@ namespace WhatsappBusiness.CloudApi
             if (response.IsSuccessStatusCode)
             {
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
-            }
-            else
+			}
+			else
             {
                 WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
-                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
                 throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-            }
-            return result;
+			}
+			return result;
         }
 
         /// <summary>
@@ -3750,45 +3709,37 @@ namespace WhatsappBusiness.CloudApi
             if (response.IsSuccessStatusCode)
             {
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    result = _serializer.Deserialize<T>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
 #endif
-            }
-            else
+			}
+			else
             {
                 WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
 #if NET5_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync(cancellationToken).ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
-                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
 #if NETSTANDARD2_0_OR_GREATER
-                await response.Content.ReadAsStreamAsync().ContinueWith((Task<Stream> stream) =>
-                {
-                    using var reader = new StreamReader(stream.Result);
-                    using var json = new JsonTextReader(reader);
-                    whatsAppErrorResponse = _serializer.Deserialize<WhatsAppErrorResponse>(json);
-                }, cancellationToken);
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
                 throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-            }
-            return result;
+			}
+			return result;
         }
 	}
 }

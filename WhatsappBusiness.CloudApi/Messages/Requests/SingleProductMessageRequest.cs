@@ -1,55 +1,60 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class SingleProductMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "interactive";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "interactive";
 
-        [JsonProperty("interactive")]
+        [JsonPropertyName("interactive")]
         public SingleProductInteractive Interactive { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class SingleProductInteractive
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
+        [JsonInclude]
         public string Type { get; private set; } = "product";
 
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public SingleProductBody Body { get; set; }
 
-        [JsonProperty("footer")]
+        [JsonPropertyName("footer")]
         public SingleProductBody Footer { get; set; }
 
-        [JsonProperty("action")]
+        [JsonPropertyName("action")]
         public SingleProductAction Action { get; set; }
     }
 
     public class SingleProductAction
     {
-        [JsonProperty("catalog_id")]
+        [JsonPropertyName("catalog_id")]
         public string CatalogId { get; set; }
 
-        [JsonProperty("product_retailer_id")]
+        [JsonPropertyName("product_retailer_id")]
         public string ProductRetailerId { get; set; }
     }
 
     public class SingleProductBody
     {
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 }

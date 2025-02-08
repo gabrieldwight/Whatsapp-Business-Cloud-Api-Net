@@ -1,82 +1,87 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class InteractiveCTAButtonMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "interactive";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "interactive";
 
-        [JsonProperty("interactive")]
+        [JsonPropertyName("interactive")]
         public InteractiveCTAButtonMessage Interactive { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class InteractiveCTAButtonMessage
     {
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "cta_url";
+        [JsonPropertyName("type")]
+        [JsonInclude]
+		public string Type { get; private set; } = "cta_url";
 
-        [JsonProperty("header")]
+        [JsonPropertyName("header")]
         public CTAButtonHeader Header { get; set; }
 
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public CTAButtonBody Body { get; set; }
 
-        [JsonProperty("footer")]
+        [JsonPropertyName("footer")]
         public CTAButtonFooter Footer { get; set; }
 
-        [JsonProperty("action")]
+        [JsonPropertyName("action")]
         public CTAButtonAction Action { get; set; }
     }
 
     public class CTAButtonAction
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("parameters")]
+        [JsonPropertyName("parameters")]
         public CTAButtonParameters Parameters { get; set; }
     }
 
     public class CTAButtonParameters
     {
-        [JsonProperty("display_text")]
+        [JsonPropertyName("display_text")]
         public string DisplayText { get; set; }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; set; }
     }
 
     public class CTAButtonHeader
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 
     public class CTAButtonBody
     {
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 
     public class CTAButtonFooter
     {
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 }

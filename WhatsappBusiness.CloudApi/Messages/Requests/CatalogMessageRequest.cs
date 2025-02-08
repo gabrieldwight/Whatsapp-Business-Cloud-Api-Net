@@ -1,61 +1,64 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class CatalogMessageRequest
 	{
-		[JsonProperty("messaging_product")]
+		[JsonPropertyName("messaging_product")]
+		[JsonInclude]
 		public string MessagingProduct { get; private set; } = "whatsapp";
 
-		[JsonProperty("recipient_type")]
+		[JsonPropertyName("recipient_type")]
+		[JsonInclude]
 		public string RecipientType { get; private set; } = "individual";
 
-		[JsonProperty("to")]
+		[JsonPropertyName("to")]
 		public string To { get; set; }
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("interactive")]
+		[JsonPropertyName("interactive")]
 		public CatalogMessageInteractive Interactive { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class CatalogMessageInteractive
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("body")]
+		[JsonPropertyName("body")]
 		public CatalogMessageBody Body { get; set; }
 
-		[JsonProperty("action")]
+		[JsonPropertyName("action")]
 		public CatalogMessageAction Action { get; set; }
 
-		[JsonProperty("footer")]
+		[JsonPropertyName("footer")]
 		public CatalogMessageFooter Footer { get; set; }
 	}
 
 	public class CatalogMessageAction
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonProperty("parameters")]
+		[JsonPropertyName("parameters")]
 		public CatalogMessageParameters Parameters { get; set; }
 	}
 
 	public class CatalogMessageParameters
 	{
-		[JsonProperty("thumbnail_product_retailer_id")]
+		[JsonPropertyName("thumbnail_product_retailer_id")]
 		public string ThumbnailProductRetailerId { get; set; }
 	}
 
 	public class CatalogMessageBody
 	{
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 

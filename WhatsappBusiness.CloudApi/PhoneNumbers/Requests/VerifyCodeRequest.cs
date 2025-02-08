@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.PhoneNumbers.Requests
 {
     public class VerifyCodeRequest
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
     }
 }

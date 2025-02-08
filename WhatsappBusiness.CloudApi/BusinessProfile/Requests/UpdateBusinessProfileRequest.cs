@@ -1,29 +1,31 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.BusinessProfile.Requests
 {
     public class UpdateBusinessProfileRequest
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
         public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("address")]
+        [JsonPropertyName("address")]
         public string Address { get; set; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("vertical")]
+        [JsonPropertyName("vertical")]
         public string Vertical { get; set; }
 
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string Email { get; set; }
 
-        [JsonProperty("websites")]
+        [JsonPropertyName("websites")]
         public List<string> Websites { get; set; }
 
-		[JsonProperty("profile_picture_handle", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("profile_picture_handle")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ProfilePictureHandle { get; set; }
 	}
 }

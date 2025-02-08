@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.PhoneNumbers.Requests
 {
     public class RequestVerificationCode
     {
-        [JsonProperty("code_method")]
+        [JsonPropertyName("code_method")]
         public string CodeMethod { get; set; }
 
-        [JsonProperty("locale")]
+        [JsonPropertyName("locale")]
         public string Locale { get; set; }
     }
 }

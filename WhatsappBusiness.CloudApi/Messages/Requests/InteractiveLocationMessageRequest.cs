@@ -1,49 +1,55 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class InteractiveLocationMessageRequest
 	{
-		[JsonProperty("messaging_product")]
+		[JsonPropertyName("messaging_product")]
+		[JsonInclude]
 		public string MessagingProduct { get; private set; } = "whatsapp";
 
-		[JsonProperty("recipient_type")]
+		[JsonPropertyName("recipient_type")]
+		[JsonInclude]
 		public string RecipientType { get; private set; } = "individual";
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "interactive";
 
-		[JsonProperty("to")]
+		[JsonPropertyName("to")]
 		public string To { get; set; }
 
-		[JsonProperty("interactive")]
+		[JsonPropertyName("interactive")]
 		public InteractiveLocationRequestMessage Interactive { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class InteractiveLocationRequestMessage
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "location_request_message";
 
-		[JsonProperty("body")]
+		[JsonPropertyName("body")]
 		public InteractiveLocationBody Body { get; set; }
 
-		[JsonProperty("action")]
+		[JsonPropertyName("action")]
 		public InteractiveLocationAction Action { get; set; }
 	}
 
 	public class InteractiveLocationAction
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
+		[JsonInclude]
 		public string Name { get; private set; } = "send_location";
 	}
 
 	public class InteractiveLocationBody
 	{
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 }

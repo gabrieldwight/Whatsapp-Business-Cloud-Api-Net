@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -8,94 +8,94 @@ namespace WhatsappBusiness.CloudApi.Webhook
     /// </summary>
     public class BusinessFromUserInitiatedMessageDeliveredStatus
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<BusinessFromUserInitiatedEntry> Entry { get; set; }
     }
 
     public class BusinessFromUserInitiatedEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<BusinessFromUserInitiatedChange> Changes { get; set; }
     }
 
     public class BusinessFromUserInitiatedChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public BusinessFromUserInitiatedValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class BusinessFromUserInitiatedValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public BusinessFromUserInitiatedMetadata Metadata { get; set; }
 
-        [JsonProperty("statuses")]
+        [JsonPropertyName("statuses")]
         public List<BusinessFromUserInitiatedStatus> Statuses { get; set; }
     }
 
     public class BusinessFromUserInitiatedMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 
     public class BusinessFromUserInitiatedStatus
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; set; }
 
-        [JsonProperty("recipient_id")]
+        [JsonPropertyName("recipient_id")]
         public string RecipientId { get; set; }
 
-        [JsonProperty("conversation")]
+        [JsonPropertyName("conversation")]
         public BusinessFromUserInitiatedConversation Conversation { get; set; }
 
-        [JsonProperty("pricing")]
+        [JsonPropertyName("pricing")]
         public BusinessFromUserInitiatedPricing Pricing { get; set; }
     }
 
     public class BusinessFromUserInitiatedConversation
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("expiration_timestamp")]
+        [JsonPropertyName("expiration_timestamp")]
         public string ExpirationTimestamp { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class BusinessFromUserInitiatedPricing
     {
-        [JsonProperty("billable")]
+        [JsonPropertyName("billable")]
         public bool Billable { get; set; }
 
-        [JsonProperty("pricing_model")]
+        [JsonPropertyName("pricing_model")]
         public string PricingModel { get; set; }
 
-        [JsonProperty("category")]
+        [JsonPropertyName("category")]
         public string Category { get; set; }
     }
 }

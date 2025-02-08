@@ -1,13 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Registration.Requests
 {
     public class RegisterPhoneRequest
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
         public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("pin")]
+        [JsonPropertyName("pin")]
         public string Pin { get; set; }
     }
 }

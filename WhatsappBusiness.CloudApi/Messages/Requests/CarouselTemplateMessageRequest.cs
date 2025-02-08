@@ -1,125 +1,138 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class CarouselTemplateMessageRequest
 	{
-		[JsonProperty("messaging_product")]
+		[JsonPropertyName("messaging_product")]
+		[JsonInclude]
 		public string MessagingProduct { get; private set; } = "whatsapp";
 
-		[JsonProperty("recipient_type")]
+		[JsonPropertyName("recipient_type")]
+		[JsonInclude]
 		public string RecipientType { get; private set; } = "individual";
 
-		[JsonProperty("to")]
+		[JsonPropertyName("to")]
 		public string To { get; set; }
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "template";
 
-		[JsonProperty("template")]
+		[JsonPropertyName("template")]
 		public CarouselMessageTemplate Template { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class CarouselMessageTemplate
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonProperty("language")]
+		[JsonPropertyName("language")]
 		public CarouselMessageLanguage Language { get; set; }
 
-		[JsonProperty("components")]
+		[JsonPropertyName("components")]
 		public List<CarouselMessageTemplateComponent> Components { get; set; }
 	}
 
 	public class CarouselMessageTemplateComponent
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("parameters", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("parameters")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<CarouselMessageParameter> Parameters { get; set; }
 
-		[JsonProperty("cards", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("cards")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<CarouselMessageCard> Cards { get; set; }
 	}
 
 	public class CarouselMessageCard
 	{
-		[JsonProperty("card_index")]
+		[JsonPropertyName("card_index")]
 		public int CardIndex { get; set; }
 
-		[JsonProperty("components")]
+		[JsonPropertyName("components")]
 		public List<CarouselCardComponent> Components { get; set; }
 	}
 
 	public class CarouselCardComponent
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("format", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("format")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Format { get; set; }
 
-		[JsonProperty("parameters")]
+		[JsonPropertyName("parameters")]
 		public List<CardMessageParameter> Parameters { get; set; }
 
-		[JsonProperty("sub_type", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("sub_type")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string SubType { get; set; }
 
-		[JsonProperty("index", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("index")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public long? Index { get; set; }
 
-		[JsonProperty("buttons", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("buttons")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<CardMessageButton> Buttons { get; set; }
 	}
 
 	public class CardMessageButton
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 
 	public class CardMessageParameter
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("image")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public CardImage Image { get; set; }
 
-		[JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("text")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Text { get; set; }
 
-		[JsonProperty("payload", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("payload")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Payload { get; set; }
 	}
 
 	public class CardImage
 	{
-		[JsonProperty("id")]
+		[JsonPropertyName("id")]
 		public string Id { get; set; }
 	}
 
 	public partial class CarouselMessageParameter
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("text")]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 	}
 
 	public class CarouselMessageLanguage
 	{
-		[JsonProperty("code")]
+		[JsonPropertyName("code")]
 		public string Code { get; set; }
 	}
 }

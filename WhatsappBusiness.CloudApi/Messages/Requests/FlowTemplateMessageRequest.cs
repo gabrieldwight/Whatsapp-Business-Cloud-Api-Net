@@ -1,80 +1,88 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class FlowTemplateMessageRequest
 	{
-		[JsonProperty("messaging_product")]
+		[JsonPropertyName("messaging_product")]
+		[JsonInclude]
 		public string MessagingProduct { get; private set; } = "whatsapp";
 
-		[JsonProperty("recipient_type")]
+		[JsonPropertyName("recipient_type")]
+		[JsonInclude]
 		public string RecipientType { get; private set; } = "individual";
 
-		[JsonProperty("to")]
+		[JsonPropertyName("to")]
 		public string To { get; set; }
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
+		[JsonInclude]
 		public string Type { get; private set; } = "template";
 
-		[JsonProperty("template")]
+		[JsonPropertyName("template")]
 		public FlowMessageTemplate Template { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
 	public class FlowMessageTemplate
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonProperty("language")]
+		[JsonPropertyName("language")]
 		public FlowMessageLanguage Language { get; set; }
 
-		[JsonProperty("components")]
+		[JsonPropertyName("components")]
 		public List<FlowMessageComponent> Components { get; set; }
 	}
 
 	public class FlowMessageComponent
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("parameters")]
+		[JsonPropertyName("parameters")]
 		public List<FlowTemplateMessageParameter> Parameters { get; set; }
 
-		[JsonProperty("sub_type", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("sub_type")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string SubType { get; set; }
 
-		[JsonProperty("index", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("index")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public long? Index { get; set; }
 	}
 
 	public class FlowTemplateMessageParameter
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("parameter_name", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("parameter_name")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ParameterName { get; set; }
 
-		[JsonProperty("action", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("action")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public FlowTemplateMessageAction Action { get; set; }
 	}
 
 	public class FlowTemplateMessageAction
 	{
-		[JsonProperty("flow_token")]
+		[JsonPropertyName("flow_token")]
 		public string FlowToken { get; set; }
 
-		[JsonProperty("flow_action_data")]
+		[JsonPropertyName("flow_action_data")]
 		public object FlowActionData { get; set; }
 	}
 
 	public class FlowMessageLanguage
 	{
-		[JsonProperty("code")]
+		[JsonPropertyName("code")]
 		public string Code { get; set; }
 	}
 }

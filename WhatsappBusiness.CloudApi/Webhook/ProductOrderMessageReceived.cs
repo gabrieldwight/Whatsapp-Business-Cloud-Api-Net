@@ -1,132 +1,128 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
-    public class ProductOrderMessageReceived
+	public class ProductOrderMessageReceived
     {
-        [JsonProperty("object")]
+        [JsonPropertyName("object")]
         public string Object { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public List<ProductOrderMessageEntry> Entry { get; set; }
     }
 
     public class ProductOrderMessageEntry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("changes")]
+        [JsonPropertyName("changes")]
         public List<ProductOrderMessageChange> Changes { get; set; }
     }
 
     public class ProductOrderMessageChange
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public ProductOrderMessageValue Value { get; set; }
 
-        [JsonProperty("field")]
+        [JsonPropertyName("field")]
         public string Field { get; set; }
     }
 
     public class ProductOrderMessageValue
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public ProductOrderMessageMetadata Metadata { get; set; }
 
-        [JsonProperty("contacts")]
+        [JsonPropertyName("contacts")]
         public List<ProductOrderMessageContact> Contacts { get; set; }
 
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         public List<ProductOrderMessageMessage> Messages { get; set; }
     }
 
     public class ProductOrderMessageContact
     {
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public ProductOrderMessageProfile Profile { get; set; }
 
-        [JsonProperty("wa_id")]
+        [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
 
     public class ProductOrderMessageProfile
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public class ProductOrderMessageMessage
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("order")]
+        [JsonPropertyName("order")]
         public Order Order { get; set; }
 
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public ProductOrderMessageContext Context { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public long Timestamp { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
     public class ProductOrderMessageContext
     {
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public string From { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
     public class Order
     {
-        [JsonProperty("catalog_id")]
+        [JsonPropertyName("catalog_id")]
         public string CatalogId { get; set; }
 
-        [JsonProperty("product_items")]
+        [JsonPropertyName("product_items")]
         public List<ProductItem> ProductItems { get; set; }
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 
     public class ProductItem
     {
-        [JsonProperty("product_retailer_id")]
+        [JsonPropertyName("product_retailer_id")]
         public string ProductRetailerId { get; set; }
 
-        [JsonProperty("quantity")]
+        [JsonPropertyName("quantity")]
         public string Quantity { get; set; }
 
-        [JsonProperty("item_price")]
+        [JsonPropertyName("item_price")]
         public string ItemPrice { get; set; }
 
-        [JsonProperty("currency")]
+        [JsonPropertyName("currency")]
         public string Currency { get; set; }
     }
 
     public class ProductOrderMessageMetadata
     {
-        [JsonProperty("display_phone_number")]
+        [JsonPropertyName("display_phone_number")]
         public string DisplayPhoneNumber { get; set; }
 
-        [JsonProperty("phone_number_id")]
+        [JsonPropertyName("phone_number_id")]
         public string PhoneNumberId { get; set; }
     }
 }

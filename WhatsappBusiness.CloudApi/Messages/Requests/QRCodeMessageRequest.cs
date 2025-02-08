@@ -1,16 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
 	public class QRCodeMessageRequest
 	{
-		[JsonProperty("prefilled_message")]
+		[JsonPropertyName("prefilled_message")]
 		public string PrefilledMessage { get; set; }
 
-		[JsonProperty("generate_qr_image", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("generate_qr_image")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string GenerateQRImage { get; set; }
 
-		[JsonProperty("code", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("code")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Code { get; set; }
 	}
 }

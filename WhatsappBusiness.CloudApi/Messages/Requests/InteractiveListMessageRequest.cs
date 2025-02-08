@@ -1,95 +1,100 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class InteractiveListMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+		[JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "interactive";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "interactive";
 
-        [JsonProperty("interactive")]
+        [JsonPropertyName("interactive")]
         public InteractiveListMessage Interactive { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class InteractiveListMessage
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
+        [JsonInclude]
         public string Type { get; private set; } = "list";
 
-        [JsonProperty("header")]
+        [JsonPropertyName("header")]
         public Header Header { get; set; }
 
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public ListBody Body { get; set; }
 
-        [JsonProperty("footer")]
+        [JsonPropertyName("footer")]
         public Footer Footer { get; set; }
 
-        [JsonProperty("action")]
+        [JsonPropertyName("action")]
         public ListAction Action { get; set; }
     }
 
     public class ListAction
     {
-        [JsonProperty("button")]
+        [JsonPropertyName("button")]
         public string Button { get; set; }
 
-        [JsonProperty("sections")]
+        [JsonPropertyName("sections")]
         public List<Section> Sections { get; set; }
     }
 
     public class Section
     {
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("rows")]
+        [JsonPropertyName("rows")]
         public List<Row> Rows { get; set; }
     }
 
     public class Row
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
     }
 
     public class ListBody
     {
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 
     public class Header
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 
     public class Footer
     {
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
     }
 }

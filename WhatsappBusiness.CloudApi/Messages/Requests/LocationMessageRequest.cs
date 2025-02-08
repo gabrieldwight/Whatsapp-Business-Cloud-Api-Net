@@ -1,40 +1,44 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Messages.Requests
 {
     public class LocationMessageRequest
     {
-        [JsonProperty("messaging_product")]
-        public string MessagingProduct { get; private set; } = "whatsapp";
+        [JsonPropertyName("messaging_product")]
+        [JsonInclude]
+		public string MessagingProduct { get; private set; } = "whatsapp";
 
-        [JsonProperty("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        [JsonPropertyName("recipient_type")]
+		[JsonInclude]
+		public string RecipientType { get; private set; } = "individual";
 
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; private set; } = "location";
+        [JsonPropertyName("type")]
+		[JsonInclude]
+		public string Type { get; private set; } = "location";
 
-        [JsonProperty("location")]
+        [JsonPropertyName("location")]
         public Location Location { get; set; }
 
-		[JsonProperty("biz_opaque_callback_data", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("biz_opaque_callback_data")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
 	}
 
     public class Location
     {
-        [JsonProperty("longitude")]
+        [JsonPropertyName("longitude")]
         public double Longitude { get; set; }
 
-        [JsonProperty("latitude")]
+        [JsonPropertyName("latitude")]
         public double Latitude { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("address")]
+        [JsonPropertyName("address")]
         public string Address { get; set; }
     }
 }

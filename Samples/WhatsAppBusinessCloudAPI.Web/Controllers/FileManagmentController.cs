@@ -1,16 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using System.Data;
-using System.Globalization;
-using CsvHelper;
 using WhatsappBusiness.CloudApi.Interfaces;
-using WhatsappBusiness.CloudApi.Configurations;
-using WhatsAppBusinessCloudAPI.Web.Extensions.Alerts;
-using System.IO;
 using WhatsappBusiness.CloudApi.Media.Requests;
-using WhatsAppBusinessCloudAPI.Web.ViewModel;
-using WhatsappBusiness.CloudApi.Exceptions;
-using Newtonsoft.Json;
 
 namespace WhatsAppBusinessCloudAPI.Web.Controllers
 {

@@ -1,50 +1,50 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class SharedWABAIDResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public SharedWABAIDData Data { get; set; }
     }
 
     public class SharedWABAIDData
     {
-        [JsonProperty("app_id")]
+        [JsonPropertyName("app_id")]
         public string AppId { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("application")]
+        [JsonPropertyName("application")]
         public string Application { get; set; }
 
-        [JsonProperty("data_access_expires_at")]
+        [JsonPropertyName("data_access_expires_at")]
         public long DataAccessExpiresAt { get; set; }
 
-        [JsonProperty("expires_at")]
+        [JsonPropertyName("expires_at")]
         public long ExpiresAt { get; set; }
 
-        [JsonProperty("is_valid")]
+        [JsonPropertyName("is_valid")]
         public bool IsValid { get; set; }
 
-        [JsonProperty("scopes")]
+        [JsonPropertyName("scopes")]
         public List<string> Scopes { get; set; }
 
-        [JsonProperty("granular_scopes")]
+        [JsonPropertyName("granular_scopes")]
         public List<GranularScope> GranularScopes { get; set; }
 
-        [JsonProperty("user_id")]
+        [JsonPropertyName("user_id")]
         public string UserId { get; set; }
     }
 
     public partial class GranularScope
     {
-        [JsonProperty("scope")]
+        [JsonPropertyName("scope")]
         public string Scope { get; set; }
 
-        [JsonProperty("target_ids")]
+        [JsonPropertyName("target_ids")]
         public List<string> TargetIds { get; set; }
     }
 }

@@ -1,46 +1,46 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
     public class WhatsAppErrorResponse
     {
-        [JsonProperty("error")]
+        [JsonPropertyName("error")]
         public Error Error { get; set; }
     }
 
     public class Error
     {
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public long Code { get; set; }
 
-        [JsonProperty("error_user_title")]
+        [JsonPropertyName("error_user_title")]
         public string? ErrorUserTitle { get; set; }
 
-        [JsonProperty("error_user_msg")]
+        [JsonPropertyName("error_user_msg")]
         public string? ErrorUserMsg { get; set; }
 
-        [JsonProperty("error_data")]
+        [JsonPropertyName("error_data")]
         public ErrorData? ErrorData { get; set; }
 
-        [JsonProperty("error_subcode")]
+        [JsonPropertyName("error_subcode")]
         public long? ErrorSubcode { get; set; }
 
-        [JsonProperty("fbtrace_id")]
+        [JsonPropertyName("fbtrace_id")]
         public string FbtraceId { get; set; }
     }
 
     public class ErrorData
     {
-        [JsonProperty("messaging_product")]
+        [JsonPropertyName("messaging_product")]
         public string MessagingProduct { get; set; }
 
-        [JsonProperty("details")]
+        [JsonPropertyName("details")]
         public string Details { get; set; }
     }
 }

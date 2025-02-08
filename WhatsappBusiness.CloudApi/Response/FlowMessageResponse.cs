@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
 {
 	public class FlowMessageResponse : WhatsAppResponse
 	{
-		[JsonProperty("meta")]
+		[JsonPropertyName("meta")]
 		public Meta Meta { get; set; }
 	}
 
 	public class Meta
 	{
-		[JsonProperty("api_status")]
+		[JsonPropertyName("api_status")]
 		public string ApiStatus { get; set; }
 
-		[JsonProperty("version")]
+		[JsonPropertyName("version")]
 		public string Version { get; set; }
 	}
 }

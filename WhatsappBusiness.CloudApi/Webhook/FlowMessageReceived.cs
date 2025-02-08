@@ -1,62 +1,62 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
 	public class FlowMessageReceived
 	{
-		[JsonProperty("messages")]
+		[JsonPropertyName("messages")]
 		public List<FlowMessage> Messages { get; set; }
 	}
 
 	public class FlowMessage
 	{
-		[JsonProperty("context")]
+		[JsonPropertyName("context")]
 		public FlowContext Context { get; set; }
 
-		[JsonProperty("from")]
+		[JsonPropertyName("from")]
 		public string From { get; set; }
 
-		[JsonProperty("id")]
+		[JsonPropertyName("id")]
 		public string Id { get; set; }
 
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("interactive")]
+		[JsonPropertyName("interactive")]
 		public FlowInteractive Interactive { get; set; }
 
-		[JsonProperty("timestamp")]
+		[JsonPropertyName("timestamp")]
 		public string Timestamp { get; set; }
 	}
 
 	public class FlowContext
 	{
-		[JsonProperty("from")]
+		[JsonPropertyName("from")]
 		public string From { get; set; }
 
-		[JsonProperty("id")]
+		[JsonPropertyName("id")]
 		public string Id { get; set; }
 	}
 
 	public class FlowInteractive
 	{
-		[JsonProperty("type")]
+		[JsonPropertyName("type")]
 		public string Type { get; set; }
 
-		[JsonProperty("nfm_reply")]
+		[JsonPropertyName("nfm_reply")]
 		public NfmReply NfmReply { get; set; }
 	}
 
 	public partial class NfmReply
 	{
-		[JsonProperty("name")]
+		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonProperty("body")]
+		[JsonPropertyName("body")]
 		public string Body { get; set; }
 
-		[JsonProperty("response_json")]
+		[JsonPropertyName("response_json")]
 		public string ResponseJson { get; set; }
 	}
 }
