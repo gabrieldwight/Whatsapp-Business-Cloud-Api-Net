@@ -17,7 +17,7 @@ namespace WhatsappBusiness.CloudApi.Response
         public string Sha256 { get; set; }
 
         [JsonPropertyName("file_size")]
-        public string FileSize { get; set; }
+        public long FileSize { get; set; }
 
         [JsonPropertyName("id")]
         public string Id { get; set; }
