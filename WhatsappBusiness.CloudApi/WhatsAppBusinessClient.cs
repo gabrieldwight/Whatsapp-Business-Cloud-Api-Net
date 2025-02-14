@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
+using WhatsappBusiness.CloudApi.BlockUser.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
@@ -85,7 +86,59 @@ namespace WhatsappBusiness.CloudApi
             _whatsAppConfig = whatsAppConfig;
         }
 
-        public BaseSuccessResponse ConfigureConversationalCommands(ConversationalComponentCommand conversationalComponentCommand, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public void SetWhatsAppBusinessConfig(WhatsAppBusinessCloudApiConfig cloudApiConfig)
+        {
+            _whatsAppConfig = cloudApiConfig;
+		}
+
+		/// <summary>
+		/// Use this endpoint to block a list of WhatsApp user numbers.
+		/// </summary>
+		/// <param name="blockUserRequest">Block User Request</param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BlockUserResponse</returns>
+		public BlockUserResponse BlockUser(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
+
+			builder.Append(WhatsAppBusinessRequestEndpoint.BlockUser);
+			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+			var formattedWhatsAppEndpoint = builder.ToString();
+			return WhatsAppBusinessPostAsync<BlockUserResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Use this endpoint to block a list of WhatsApp user numbers.
+		/// </summary>
+		/// <param name="blockUserRequest">Block User Request</param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BlockUserResponse</returns>
+		public async Task<BlockUserResponse> BlockUserAsync(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		{
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
+
+			builder.Append(WhatsAppBusinessRequestEndpoint.BlockUser);
+			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+			var formattedWhatsAppEndpoint = builder.ToString();
+			return await WhatsAppBusinessPostAsync<BlockUserResponse>(formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+
+		public BaseSuccessResponse ConfigureConversationalCommands(ConversationalComponentCommand conversationalComponentCommand, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -853,21 +906,101 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessGetAsync<AnalyticsResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
         }
 
-        /// <summary>
-        /// The conversation_analytics field provides cost and conversation information for a specific WABA.
-        /// </summary>
-        /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
-        /// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
-        /// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
-        /// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
-        /// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
-        /// <param name="metricTypes">List of metrics you would like to receive. If you send an empty list, we return results for all metric types.</param>
-        /// <param name="conversationTypes">List of conversation types. If you send an empty list, we return results for all conversation types.</param>
-        /// <param name="conversationDirections">List of conversation directions. If you send an empty list, we return results for all conversation directions</param>
-        /// <param name="dimensions">List of breakdowns you would like to apply to your metrics. If you send an empty list, we return results without any breakdowns.</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>ConversationAnalyticsResponse</returns>
-        public ConversationAnalyticsResponse GetConversationAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		/// <summary>
+		/// Get a list of blocked users.
+		/// </summary>
+		/// <param name="limit"></param>
+		/// <param name="after"></param>
+		/// <param name="before"></param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>GetBlockedUserResponse</returns>
+		public GetBlockedUserResponse GetBlockedUsers(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
+
+			builder.Append(WhatsAppBusinessRequestEndpoint.BlockUser);
+			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+			if (limit.HasValue)
+			{
+				builder.Append($"?limit={limit}");
+			}
+
+			if (!string.IsNullOrWhiteSpace(after))
+			{
+				builder.Append($"?after={after}");
+			}
+
+			if (!string.IsNullOrWhiteSpace(before))
+			{
+				builder.Append($"?before={before}");
+			}
+
+			var formattedWhatsAppEndpoint = builder.ToString();
+			return WhatsAppBusinessGetAsync<GetBlockedUserResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Get a list of blocked users.
+		/// </summary>
+		/// <param name="limit"></param>
+		/// <param name="after"></param>
+		/// <param name="before"></param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>GetBlockedUserResponse</returns>
+		public async Task<GetBlockedUserResponse> GetBlockedUsersAsync(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		{
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
+
+			builder.Append(WhatsAppBusinessRequestEndpoint.BlockUser);
+			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+			if (limit.HasValue)
+			{
+				builder.Append($"?limit={limit}");
+			}
+
+			if (!string.IsNullOrWhiteSpace(after))
+			{
+				builder.Append($"?after={after}");
+			}
+
+			if (!string.IsNullOrWhiteSpace(before))
+			{
+				builder.Append($"?before={before}");
+			}
+
+			var formattedWhatsAppEndpoint = builder.ToString();
+			return await WhatsAppBusinessGetAsync<GetBlockedUserResponse>(formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+		/// <summary>
+		/// The conversation_analytics field provides cost and conversation information for a specific WABA.
+		/// </summary>
+		/// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
+		/// <param name="startDate">The start date for the date range you are retrieving analytics for</param>
+		/// <param name="endDate">The end date for the date range you are retrieving analytics for</param>
+		/// <param name="granularity">The granularity by which you would like to retrieve the analytics</param>
+		/// <param name="phoneNumbers">An array of phone numbers for which you would like to retrieve analytics. If not provided, all phone numbers added to your WABA are included.</param>
+		/// <param name="metricTypes">List of metrics you would like to receive. If you send an empty list, we return results for all metric types.</param>
+		/// <param name="conversationTypes">List of conversation types. If you send an empty list, we return results for all conversation types.</param>
+		/// <param name="conversationDirections">List of conversation directions. If you send an empty list, we return results for all conversation directions</param>
+		/// <param name="dimensions">List of breakdowns you would like to apply to your metrics. If you send an empty list, we return results without any breakdowns.</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>ConversationAnalyticsResponse</returns>
+		public ConversationAnalyticsResponse GetConversationAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3037,14 +3170,60 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(twoStepVerificationRequest, formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// Update the business profile information such as the business description, email or address. To update your profile, make a POST call to /{{Phone-Number-ID}}/whatsapp_business_profile. In your request, you can include the parameters listed below.
-        /// It is recommended that you use Resumable Upload - Create an Upload Session to obtain an upload ID.Then use this upload ID in a call to Resumable Upload - Upload File Data to obtain the picture handle.This handle can be used for the profile_picture_handle
-        /// </summary>
-        /// <param name="updateBusinessProfileRequest">UpdateBusinessProfileRequest object</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>BaseSuccessResponse</returns>
-        public BaseSuccessResponse UpdateBusinessProfile(UpdateBusinessProfileRequest updateBusinessProfileRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		/// <summary>
+		/// Use this endpoint to unblock a list of WhatsApp user numbers.
+		/// </summary>
+		/// <param name="blockUserRequest">Block User Request</param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BlockUserResponse</returns>
+		public BlockUserResponse UnblockUser(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		{
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
+
+			builder.Append(WhatsAppBusinessRequestEndpoint.BlockUser);
+			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+			var formattedWhatsAppEndpoint = builder.ToString();
+			return WhatsAppBusinessDeleteAsync<BlockUserResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Use this endpoint to unblock a list of WhatsApp user numbers.
+		/// </summary>
+		/// <param name="blockUserRequest">Block User Request</param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BlockUserResponse</returns>
+		public async Task<BlockUserResponse> UnblockUserAsync(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		{
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
+
+			builder.Append(WhatsAppBusinessRequestEndpoint.BlockUser);
+			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+			var formattedWhatsAppEndpoint = builder.ToString();
+			return await WhatsAppBusinessDeleteAsync<BlockUserResponse>(formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+		/// <summary>
+		/// Update the business profile information such as the business description, email or address. To update your profile, make a POST call to /{{Phone-Number-ID}}/whatsapp_business_profile. In your request, you can include the parameters listed below.
+		/// It is recommended that you use Resumable Upload - Create an Upload Session to obtain an upload ID.Then use this upload ID in a call to Resumable Upload - Upload File Data to obtain the picture handle.This handle can be used for the profile_picture_handle
+		/// </summary>
+		/// <param name="updateBusinessProfileRequest">UpdateBusinessProfileRequest object</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		public BaseSuccessResponse UpdateBusinessProfile(UpdateBusinessProfileRequest updateBusinessProfileRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {

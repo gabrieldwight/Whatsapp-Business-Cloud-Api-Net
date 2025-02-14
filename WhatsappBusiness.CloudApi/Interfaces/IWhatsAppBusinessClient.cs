@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
+using WhatsappBusiness.CloudApi.BlockUser.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Media.Requests;
@@ -17,6 +18,8 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 {
     public interface IWhatsAppBusinessClient
     {
+        void SetWhatsAppBusinessConfig(WhatsAppBusinessCloudApiConfig cloudApiConfig);
+
         #region Account Migration function
         /// <summary>
         /// To migrate your account, make a POST call to the /{{Phone-Number-ID}}/register endpoint and include the parameters listed below.
@@ -1468,6 +1471,66 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 
         Task<ConversationalComponentResponse> GetConversationalMessageAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
-        #endregion
-    }
+		#endregion
+
+		#region BlockUser
+		/// <summary>
+		/// Use this endpoint to block a list of WhatsApp user numbers.
+		/// </summary>
+		/// <param name="blockUserRequest">Block User Request</param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BlockUserResponse</returns>
+		BlockUserResponse BlockUser(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Use this endpoint to block a list of WhatsApp user numbers.
+		/// </summary>
+		/// <param name="blockUserRequest">Block User Request</param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BlockUserResponse</returns>
+		Task<BlockUserResponse> BlockUserAsync(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Use this endpoint to unblock a list of WhatsApp user numbers.
+		/// </summary>
+		/// <param name="blockUserRequest">Block User Request</param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BlockUserResponse</returns>
+		BlockUserResponse UnblockUser(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Use this endpoint to unblock a list of WhatsApp user numbers.
+		/// </summary>
+		/// <param name="blockUserRequest">Block User Request</param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BlockUserResponse</returns>
+		Task<BlockUserResponse> UnblockUserAsync(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Get a list of blocked users.
+		/// </summary>
+		/// <param name="limit"></param>
+		/// <param name="after"></param>
+		/// <param name="before"></param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>GetBlockedUserResponse</returns>
+		GetBlockedUserResponse GetBlockedUsers(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Get a list of blocked users.
+		/// </summary>
+		/// <param name="limit"></param>
+		/// <param name="after"></param>
+		/// <param name="before"></param>
+		/// <param name="cloudApiConfig">Custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>GetBlockedUserResponse</returns>
+		Task<GetBlockedUserResponse> GetBlockedUsersAsync(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		#endregion
+	}
 }
