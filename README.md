@@ -17,6 +17,8 @@ WhatsApp Flows: [Setting up WhatsApp Flows](https://developers.facebook.com/docs
 
 WhatsApp Welcome Message: [Setting up Conversational Components](https://developers.facebook.com/docs/whatsapp/cloud-api/phone-numbers/conversational-components)
 
+WhatsApp Block User API: [How to block a user](https://developers.facebook.com/docs/whatsapp/cloud-api/block-users?locale=en_US)
+
 Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
 
 Authentication Message Documentation: [Create and Send Authentication Message](https://developers.facebook.com/docs/whatsapp/business-management-api/authentication-templates)
@@ -47,6 +49,7 @@ Take note: Downloading media from the generated Whatsapp media URL will require 
   - [x] Authentication Message
   - [x] Flow Message
   - [x] Conversational Components
+  - [x] Block User
 - [x] Receiving Message (via Webhook)
   - [x] Text
   - [x] Media (image, video, audio, document, sticker)
