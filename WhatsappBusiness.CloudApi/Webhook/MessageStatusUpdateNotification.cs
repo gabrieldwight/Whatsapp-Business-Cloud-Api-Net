@@ -103,7 +103,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
 		public string PricingModel { get; set; }
 
 		[JsonPropertyName("billable")]
-		public string Billable { get; set; }
+		public bool Billable { get; set; }
 
 		[JsonPropertyName("category")]
 		public string Category { get; set; }
