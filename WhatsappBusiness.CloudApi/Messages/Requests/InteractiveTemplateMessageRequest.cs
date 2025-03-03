@@ -114,27 +114,27 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
         [JsonPropertyName("day_of_week")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public long DayOfWeek { get; set; }
+		public long? DayOfWeek { get; set; }
 
         [JsonPropertyName("year")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public long Year { get; set; }
+		public long? Year { get; set; }
 
         [JsonPropertyName("month")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public long Month { get; set; }
+		public long? Month { get; set; }
 
         [JsonPropertyName("day_of_month")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public long DayOfMonth { get; set; }
+		public long? DayOfMonth { get; set; }
 
         [JsonPropertyName("hour")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public long Hour { get; set; }
+		public long? Hour { get; set; }
 
         [JsonPropertyName("minute")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public long Minute { get; set; }
+		public long? Minute { get; set; }
 
         [JsonPropertyName("calendar")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
