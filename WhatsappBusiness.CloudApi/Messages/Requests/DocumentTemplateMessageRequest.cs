@@ -84,7 +84,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Code { get; set; }
 
         [JsonPropertyName("amount_1000")]
-        public long Amount1000 { get; set; }
+        public long? Amount1000 { get; set; }
     }
 
     public class DocumentTemplateDateTime
@@ -93,22 +93,22 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string FallbackValue { get; set; }
 
         [JsonPropertyName("day_of_week")]
-        public long DayOfWeek { get; set; }
+        public long? DayOfWeek { get; set; }
 
         [JsonPropertyName("year")]
-        public long Year { get; set; }
+        public long? Year { get; set; }
 
         [JsonPropertyName("month")]
-        public long Month { get; set; }
+        public long? Month { get; set; }
 
         [JsonPropertyName("day_of_month")]
-        public long DayOfMonth { get; set; }
+        public long? DayOfMonth { get; set; }
 
         [JsonPropertyName("hour")]
-        public long Hour { get; set; }
+        public long? Hour { get; set; }
 
         [JsonPropertyName("minute")]
-        public long Minute { get; set; }
+        public long? Minute { get; set; }
 
         [JsonPropertyName("calendar")]
         public string Calendar { get; set; }

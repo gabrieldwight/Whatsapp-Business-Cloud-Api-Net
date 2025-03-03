@@ -104,7 +104,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Code { get; set; }
 
         [JsonPropertyName("amount_1000")]
-        public long Amount1000 { get; set; }
+        public long? Amount1000 { get; set; }
     }
 
     public class InteractiveMessageDateTime
