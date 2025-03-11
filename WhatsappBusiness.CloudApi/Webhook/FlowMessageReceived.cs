@@ -9,7 +9,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
 		public List<FlowMessage> Messages { get; set; }
 	}
 
-	public class FlowMessage
+	public class FlowMessage : IMessage
 	{
 		[JsonPropertyName("context")]
 		public FlowContext Context { get; set; }

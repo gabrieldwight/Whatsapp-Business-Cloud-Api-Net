@@ -43,40 +43,18 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public VideoMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<VideoMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<VideoMessage> Messages { get; set; }
     }
 
-    public class VideoMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public VideoMessageProfile Profile { get; set; }
+    
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
+    
 
-    public class VideoMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class VideoMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+    public class VideoMessage : GenericMessage
+    {        
 
         [JsonPropertyName("video")]
         public Video Video { get; set; }

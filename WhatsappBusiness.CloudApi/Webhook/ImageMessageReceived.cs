@@ -64,7 +64,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string Name { get; set; }
     }
 
-    public class ImageMessage
+    public class ImageMessage: IMessage
     {
         [JsonPropertyName("from")]
         public string From { get; set; }

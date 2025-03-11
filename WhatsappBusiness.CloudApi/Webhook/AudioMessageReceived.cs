@@ -43,40 +43,15 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public AudioMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<AudioMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<AudioMessage> Messages { get; set; }
     }
+    
 
-    public class AudioMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public AudioMessageProfile Profile { get; set; }
-
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class AudioMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class AudioMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+    public class AudioMessage : GenericMessage
+    {        
 
         [JsonPropertyName("audio")]
         public Audio Audio { get; set; }

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
-	public class ListReplyButtonMessageReceived
+    public class ListReplyButtonMessageReceived
     {
         [JsonPropertyName("object")]
         public string Object { get; set; }
@@ -60,7 +60,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string Name { get; set; }
     }
 
-    public class ListReplyButtonMessage
+    public class ListReplyButtonMessage : IMessage
     {
         [JsonPropertyName("context")]
         public ListReplyButtonMessageContext Context { get; set; }

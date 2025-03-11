@@ -43,40 +43,14 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public DocumentMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<DocumentMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<DocumentMessage> Messages { get; set; }
     }
 
-    public class DocumentMessageContact
+    public class DocumentMessage : GenericMessage
     {
-        [JsonPropertyName("profile")]
-        public DocumentMessageProfile Profile { get; set; }
-
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class DocumentMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class DocumentMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
 
         [JsonPropertyName("document")]
         public Document Document { get; set; }

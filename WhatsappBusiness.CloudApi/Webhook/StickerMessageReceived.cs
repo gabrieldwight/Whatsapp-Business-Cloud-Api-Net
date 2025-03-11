@@ -64,7 +64,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string Name { get; set; }
     }
 
-    public class StickerMessage
+    public class StickerMessage : IMessage
     {
         [JsonPropertyName("from")]
         public string From { get; set; }

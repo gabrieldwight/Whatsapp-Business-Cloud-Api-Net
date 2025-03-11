@@ -63,7 +63,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string Name { get; set; }
     }
 
-    public class QuickReplyButtonMessage
+    public class QuickReplyButtonMessage : IMessage
     {
         [JsonPropertyName("context")]
         public QuickReplyButtonMessageContext Context { get; set; }
