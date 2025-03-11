@@ -39,38 +39,15 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public ProductEnquiryMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<ProductEnquiryContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<ProductEnquiryMessage> Messages { get; set; }
-    }
+    }    
 
-    public class ProductEnquiryContact
-    {
-        [JsonPropertyName("profile")]
-        public ProductEnquiryProfile Profile { get; set; }
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class ProductEnquiryProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class ProductEnquiryMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("text")]
-        public ProductEnquiryText Text { get; set; }
-
+    public class ProductEnquiryMessage:GenericMessage
+    {    
         [JsonPropertyName("context")]
         public ProductEnquiryContext Context { get; set; }
 

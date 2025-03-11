@@ -39,43 +39,16 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public WhatsAppAdsClickMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<WhatsAppAdsClickContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<WhatsAppAdsClickMessage> Messages { get; set; }
     }
 
-    public class WhatsAppAdsClickContact
-    {
-        [JsonPropertyName("profile")]
-        public WhatsAppAdsClickProfile Profile { get; set; }
-
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class WhatsAppAdsClickProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class WhatsAppAdsClickMessage
+    public class WhatsAppAdsClickMessage:GenericMessage
     {
         [JsonPropertyName("referral")]
         public Referral Referral { get; set; }
-
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
 
         [JsonPropertyName("text")]
         public WhatsAppAdsClickText Text { get; set; }

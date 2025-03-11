@@ -42,40 +42,16 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public ReactionMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<ReactionMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<ReactionMessage> Messages { get; set; }
     }
 
-    public class ReactionMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public ReactionMessageProfile Profile { get; set; }
+    
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class ReactionMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class ReactionMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+    public class ReactionMessage:GenericMessage
+    {        
 
         [JsonPropertyName("reaction")]
         public ReactionMessageText Reaction { get; set; }

@@ -39,43 +39,17 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public ListReplyButtonMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<ListReplyButtonMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<ListReplyButtonMessage> Messages { get; set; }
     }
 
-    public class ListReplyButtonMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public ListReplyButtonMessageProfile Profile { get; set; }
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class ListReplyButtonMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class ListReplyButtonMessage : IMessage
+    public class ListReplyButtonMessage : GenericMessage
     {
         [JsonPropertyName("context")]
         public ListReplyButtonMessageContext Context { get; set; }
-
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
 
         [JsonPropertyName("interactive")]
         public Interactive Interactive { get; set; }

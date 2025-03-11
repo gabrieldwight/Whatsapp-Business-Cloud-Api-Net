@@ -42,43 +42,19 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public LocationMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<LocationMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<LocationMessage> Messages { get; set; }
     }
 
-    public class LocationMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public LocationMessageProfile Profile { get; set; }
+    
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class LocationMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class LocationMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
+    public class LocationMessage:GenericMessage
+    {        
 
         [JsonPropertyName("location")]
         public Location Location { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
 
         [JsonPropertyName("context")]
         public LocationMessageContext? Context { get; set; }

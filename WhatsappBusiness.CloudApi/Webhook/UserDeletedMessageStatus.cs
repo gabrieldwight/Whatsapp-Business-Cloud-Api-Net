@@ -42,43 +42,19 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public UserDeletedMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<UserDeletedMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<UserDeletedMessage> Messages { get; set; }
     }
 
-    public class UserDeletedMessageContact
+
+    public class UserDeletedMessage : GenericMessage
     {
-        [JsonPropertyName("profile")]
-        public UserDeletedMessageProfile Profile { get; set; }
-
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class UserDeletedMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class UserDeletedMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
 
         [JsonPropertyName("errors")]
         public List<UserDeletedMessageError> Errors { get; set; }
 
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
     }
 
     public class UserDeletedMessageError

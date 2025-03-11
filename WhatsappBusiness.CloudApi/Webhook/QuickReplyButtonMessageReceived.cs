@@ -42,43 +42,19 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public QuickReplyButtonMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<QuickReplyButtonMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<QuickReplyButtonMessage> Messages { get; set; }
     }
 
-    public class QuickReplyButtonMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public QuickReplyButtonMessageProfile Profile { get; set; }
+    
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class QuickReplyButtonMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class QuickReplyButtonMessage : IMessage
+    public class QuickReplyButtonMessage : GenericMessage
     {
         [JsonPropertyName("context")]
         public QuickReplyButtonMessageContext Context { get; set; }
-
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+    
 
         [JsonPropertyName("button")]
         public QuickReplyButtonMessageButton Button { get; set; }

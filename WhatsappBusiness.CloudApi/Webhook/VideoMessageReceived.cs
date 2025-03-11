@@ -49,10 +49,6 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public List<VideoMessage> Messages { get; set; }
     }
 
-    
-
-    
-
     public class VideoMessage : GenericMessage
     {        
 

@@ -39,46 +39,22 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public ProductOrderMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<ProductOrderMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<ProductOrderMessageMessage> Messages { get; set; }
     }
 
-    public class ProductOrderMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public ProductOrderMessageProfile Profile { get; set; }
+    
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class ProductOrderMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class ProductOrderMessageMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+    public class ProductOrderMessageMessage:GenericMessage
+    {    
 
         [JsonPropertyName("order")]
         public Order Order { get; set; }
 
         [JsonPropertyName("context")]
         public ProductOrderMessageContext Context { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public long Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
     }
 
     public class ProductOrderMessageContext

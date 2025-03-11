@@ -42,43 +42,19 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public ReplyButtonMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<ReplyButtonMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<ReplyButtonMessage> Messages { get; set; }
     }
 
-    public class ReplyButtonMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public ReplyButtonMessageProfile Profile { get; set; }
+    
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class ReplyButtonMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class ReplyButtonMessage
+    public class ReplyButtonMessage:GenericMessage
     {
         [JsonPropertyName("context")]
         public ReplyButtonMessageContext Context { get; set; }
-
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+        
 
         [JsonPropertyName("interactive")]
         public ReplyButtonMessageInteractive Interactive { get; set; }

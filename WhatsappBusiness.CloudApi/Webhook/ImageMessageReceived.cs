@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
+
 namespace WhatsappBusiness.CloudApi.Webhook
 {
     /// <summary>
@@ -43,40 +44,15 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public ImageMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<ImageMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<ImageMessage> Messages { get; set; }
     }
+    
 
-    public class ImageMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public ImageMessageProfile Profile { get; set; }
-
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class ImageMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class ImageMessage: IMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+    public class ImageMessage: GenericMessage
+    {    
 
         [JsonPropertyName("image")]
         public Image Image { get; set; }

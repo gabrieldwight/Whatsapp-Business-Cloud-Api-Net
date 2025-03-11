@@ -1,3 +1,4 @@
+namespace WhatsappBusiness.CloudApi.Interfaces;
 public interface IMessage
 {
     string From { get; set; }

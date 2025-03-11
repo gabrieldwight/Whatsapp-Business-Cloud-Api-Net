@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using WhatsappBusiness.CloudApi.Interfaces;
 
 public abstract class GenericMessage : IMessage
 {

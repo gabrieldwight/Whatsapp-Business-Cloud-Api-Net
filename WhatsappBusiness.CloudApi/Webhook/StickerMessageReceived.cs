@@ -43,40 +43,15 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public StickerMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<StickerMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<StickerMessage> Messages { get; set; }
     }
 
-    public class StickerMessageContact
-    {
-        [JsonPropertyName("profile")]
-        public StickerMessageProfile Profile { get; set; }
-
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class StickerMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class StickerMessage : IMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+    
+    public class StickerMessage : GenericMessage
+    {        
 
         [JsonPropertyName("sticker")]
         public Sticker Sticker { get; set; }

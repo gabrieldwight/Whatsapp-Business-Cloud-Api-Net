@@ -42,43 +42,21 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public UnknownMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<UnknownMessageContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<UnknownMessage> Messages { get; set; }
     }
 
-    public class UnknownMessageContact
+
+
+    public class UnknownMessage : GenericMessage
     {
-        [JsonPropertyName("profile")]
-        public UnknownMessageProfile Profile { get; set; }
 
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class UnknownMessageProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class UnknownMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
 
         [JsonPropertyName("errors")]
         public List<Error> Errors { get; set; }
 
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
     }
 
     public class Error
