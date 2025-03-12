@@ -380,6 +380,8 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }
+
+        [NonAction]
         public async Task<MarkMessageRequest> GetMarkMessageRequestAsync<TType>(MessageReceived<TType> message) where TType : IGenericMessage
         {
             var messages = new List<TType>(message.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
