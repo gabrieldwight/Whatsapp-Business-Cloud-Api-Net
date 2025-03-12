@@ -42,7 +42,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public ContactMessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<ValueContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<ContactMessage> Messages { get; set; }
@@ -51,34 +51,17 @@ namespace WhatsappBusiness.CloudApi.Webhook
     public class ValueContact
     {
         [JsonPropertyName("profile")]
-        public ContactMessageProfile Profile { get; set; }
+        public Profile Profile { get; set; }
 
         [JsonPropertyName("wa_id")]
         public string WaId { get; set; }
     }
+    
 
-    public class ContactMessageProfile
+    public class ContactMessage: GenericMessage
     {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class ContactMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
         [JsonPropertyName("contacts")]
         public List<MessageContact> Contacts { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
 
         [JsonPropertyName("context")]
         public ContactMessageContext? Context { get; set; }
