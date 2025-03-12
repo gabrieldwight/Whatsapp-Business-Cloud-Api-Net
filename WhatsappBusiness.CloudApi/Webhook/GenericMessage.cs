@@ -1,7 +1,8 @@
 using System.Text.Json.Serialization;
 using WhatsappBusiness.CloudApi.Interfaces;
+using WhatsappBusiness.CloudApi.Webhook;
 
-public abstract class GenericMessage : IMessage
+public abstract class GenericMessage : IGenericMessage
 {
     [JsonPropertyName("from")]
     public virtual string From { get; set; }
@@ -14,5 +15,8 @@ public abstract class GenericMessage : IMessage
 
     [JsonPropertyName("type")]
     public virtual string Type { get; set; }
+
+    [JsonPropertyName("context")]
+    public MessageContext? Context { get; set; }
 
 }

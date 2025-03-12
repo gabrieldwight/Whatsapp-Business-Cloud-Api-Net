@@ -2,48 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
-{
-    public class WhatsAppAdsClickReceived
-    {
-        [JsonPropertyName("object")]
-        public string Object { get; set; }
-
-        [JsonPropertyName("entry")]
-        public List<WhatsAppAdsClickEntry> Entry { get; set; }
-    }
-
-    public class WhatsAppAdsClickEntry
-    {
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("changes")]
-        public List<WhatsAppAdsClickChange> Changes { get; set; }
-    }
-
-    public class WhatsAppAdsClickChange
-    {
-        [JsonPropertyName("value")]
-        public WhatsAppAdsClickValue Value { get; set; }
-
-        [JsonPropertyName("field")]
-        public string Field { get; set; }
-    }
-
-    public class WhatsAppAdsClickValue
-    {
-        [JsonPropertyName("messaging_product")]
-        public string MessagingProduct { get; set; }
-
-        [JsonPropertyName("metadata")]
-        public WhatsAppAdsClickMetadata Metadata { get; set; }
-
-        [JsonPropertyName("contacts")]
-        public List<Contact> Contacts { get; set; }
-
-        [JsonPropertyName("messages")]
-        public List<WhatsAppAdsClickMessage> Messages { get; set; }
-    }
+{ 
 
     public class WhatsAppAdsClickMessage:GenericMessage
     {
@@ -89,13 +48,5 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonPropertyName("body")]
         public string Body { get; set; }
     }
-
-    public class WhatsAppAdsClickMetadata
-    {
-        [JsonPropertyName("display_phone_number")]
-        public string DisplayPhoneNumber { get; set; }
-
-        [JsonPropertyName("phone_number_id")]
-        public string PhoneNumberId { get; set; }
-    }
+    
 }

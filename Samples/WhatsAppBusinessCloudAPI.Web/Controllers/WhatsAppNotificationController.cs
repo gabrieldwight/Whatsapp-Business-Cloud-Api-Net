@@ -126,7 +126,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("text"))
                     {
-                        var textMessageReceived = JsonSerializer.Deserialize<TextMessageReceived>(messageReceived.GetRawText());
+                        var textMessageReceived = JsonSerializer.Deserialize<MessageReceived<TextMessage>>(messageReceived.GetRawText());
                         textMessage = new List<TextMessage>(textMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(textMessage, JsonSerializerOptions));
 
@@ -154,7 +154,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("image"))
                     {
-                        var imageMessageReceived = JsonSerializer.Deserialize<ImageMessageReceived>(messageReceived.GetRawText());
+                        var imageMessageReceived = JsonSerializer.Deserialize<MessageReceived<ImageMessage>>(messageReceived.GetRawText());
                         imageMessage = new List<ImageMessage>(imageMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(imageMessage, JsonSerializerOptions));
 
@@ -172,7 +172,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("audio"))
                     {
-                        var audioMessageReceived = JsonSerializer.Deserialize<AudioMessageReceived>(messageReceived.GetRawText());
+                        var audioMessageReceived = JsonSerializer.Deserialize<MessageReceived<AudioMessage>>(messageReceived.GetRawText());
                         audioMessage = new List<AudioMessage>(audioMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(audioMessage, JsonSerializerOptions));
 
@@ -221,7 +221,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("document"))
                     {
-                        var documentMessageReceived = JsonSerializer.Deserialize<DocumentMessageReceived>(messageReceived.GetRawText());
+                        var documentMessageReceived = JsonSerializer.Deserialize<MessageReceived<DocumentMessage>>(messageReceived.GetRawText());
                         documentMessage = new List<DocumentMessage>(documentMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(documentMessage, JsonSerializerOptions));
 
@@ -270,7 +270,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("sticker"))
                     {
-                        var stickerMessageReceived = JsonSerializer.Deserialize<StickerMessageReceived>(messageReceived.GetRawText());
+                        var stickerMessageReceived = JsonSerializer.Deserialize<MessageReceived<StickerMessage>>(messageReceived.GetRawText());
                         stickerMessage = new List<StickerMessage>(stickerMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(stickerMessage, JsonSerializerOptions));
 
@@ -288,7 +288,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("contacts"))
                     {
-                        var contactMessageReceived = JsonSerializer.Deserialize<ContactMessageReceived>(messageReceived.GetRawText());
+                        var contactMessageReceived = JsonSerializer.Deserialize<MessageReceived<ContactMessage>>(messageReceived.GetRawText());
                         contactMessage = new List<ContactMessage>(contactMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(contactMessage, JsonSerializerOptions));
 
@@ -306,7 +306,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("location"))
                     {
-                        var locationMessageReceived = JsonSerializer.Deserialize<StaticLocationMessageReceived>(messageReceived.GetRawText());
+                        var locationMessageReceived = JsonSerializer.Deserialize<MessageReceived<LocationMessage>>(messageReceived.GetRawText());
                         locationMessage = new List<LocationMessage>(locationMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(locationMessage, JsonSerializerOptions));
 
@@ -336,7 +336,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("button"))
                     {
-                        var quickReplyMessageReceived = JsonSerializer.Deserialize<QuickReplyButtonMessageReceived>(messageReceived.GetRawText());
+                        var quickReplyMessageReceived = JsonSerializer.Deserialize<MessageReceived<QuickReplyButtonMessage>>(messageReceived.GetRawText());
                         quickReplyButtonMessage = new List<QuickReplyButtonMessage>(quickReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(quickReplyButtonMessage, JsonSerializerOptions));
 
@@ -358,7 +358,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                         if (getInteractiveType.Equals("button_reply"))
                         {
-                            var replyMessageReceived = JsonSerializer.Deserialize<ReplyButtonMessageReceived>(messageReceived.GetRawText());
+                            var replyMessageReceived = JsonSerializer.Deserialize<MessageReceived<ReplyButtonMessage>>(messageReceived.GetRawText());
                             replyButtonMessage = new List<ReplyButtonMessage>(replyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                             _logger.LogInformation(JsonSerializer.Serialize(replyButtonMessage, JsonSerializerOptions));
 
@@ -376,7 +376,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                         if (getInteractiveType.Equals("list_reply"))
                         {
-                            var listReplyMessageReceived = JsonSerializer.Deserialize<ListReplyButtonMessageReceived>(messageReceived.GetRawText());
+                            var listReplyMessageReceived = JsonSerializer.Deserialize<MessageReceived<ListReplyButtonMessage>>(messageReceived.GetRawText());
                             listReplyButtonMessage = new List<ListReplyButtonMessage>(listReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                             _logger.LogInformation(JsonSerializer.Serialize(listReplyButtonMessage, JsonSerializerOptions));
 

@@ -3,49 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
-	public class ProductOrderMessageReceived
-    {
-        [JsonPropertyName("object")]
-        public string Object { get; set; }
-
-        [JsonPropertyName("entry")]
-        public List<ProductOrderMessageEntry> Entry { get; set; }
-    }
-
-    public class ProductOrderMessageEntry
-    {
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("changes")]
-        public List<ProductOrderMessageChange> Changes { get; set; }
-    }
-
-    public class ProductOrderMessageChange
-    {
-        [JsonPropertyName("value")]
-        public ProductOrderMessageValue Value { get; set; }
-
-        [JsonPropertyName("field")]
-        public string Field { get; set; }
-    }
-
-    public class ProductOrderMessageValue
-    {
-        [JsonPropertyName("messaging_product")]
-        public string MessagingProduct { get; set; }
-
-        [JsonPropertyName("metadata")]
-        public ProductOrderMessageMetadata Metadata { get; set; }
-
-        [JsonPropertyName("contacts")]
-        public List<Contact> Contacts { get; set; }
-
-        [JsonPropertyName("messages")]
-        public List<ProductOrderMessageMessage> Messages { get; set; }
-    }
-
-    
 
     public class ProductOrderMessageMessage:GenericMessage
     {    
@@ -54,16 +11,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public Order Order { get; set; }
 
         [JsonPropertyName("context")]
-        public ProductOrderMessageContext Context { get; set; }
-    }
-
-    public class ProductOrderMessageContext
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public MessageContext Context { get; set; }
     }
 
     public class Order
@@ -92,13 +40,5 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonPropertyName("currency")]
         public string Currency { get; set; }
     }
-
-    public class ProductOrderMessageMetadata
-    {
-        [JsonPropertyName("display_phone_number")]
-        public string DisplayPhoneNumber { get; set; }
-
-        [JsonPropertyName("phone_number_id")]
-        public string PhoneNumberId { get; set; }
-    }
+    
 }
