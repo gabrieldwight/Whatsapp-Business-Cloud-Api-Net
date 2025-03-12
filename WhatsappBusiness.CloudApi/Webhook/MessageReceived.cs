@@ -3,6 +3,26 @@ using System.Text.Json.Serialization;
 using WhatsappBusiness.CloudApi.Interfaces;
 namespace WhatsappBusiness.CloudApi.Webhook;
 
+
+public abstract class GenericMessage : IGenericMessage
+{
+    [JsonPropertyName("from")]
+    public virtual string From { get; set; }
+
+    [JsonPropertyName("id")]
+    public virtual string Id { get; set; }
+
+    [JsonPropertyName("timestamp")]
+    public virtual string Timestamp { get; set; }
+
+    [JsonPropertyName("type")]
+    public virtual string Type { get; set; }
+
+    [JsonPropertyName("context")]
+    public virtual MessageContext? Context { get; set; }
+
+}
+
 public class MessageReceived<TMessageType> where TMessageType : IGenericMessage
 {
     [JsonPropertyName("object")]
