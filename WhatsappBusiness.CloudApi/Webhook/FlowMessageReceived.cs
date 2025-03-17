@@ -9,34 +9,13 @@ namespace WhatsappBusiness.CloudApi.Webhook
 		public List<FlowMessage> Messages { get; set; }
 	}
 
-	public class FlowMessage
+	public class FlowMessage : GenericMessage
 	{
 		[JsonPropertyName("context")]
-		public FlowContext Context { get; set; }
-
-		[JsonPropertyName("from")]
-		public string From { get; set; }
-
-		[JsonPropertyName("id")]
-		public string Id { get; set; }
-
-		[JsonPropertyName("type")]
-		public string Type { get; set; }
+		public MessageContext Context { get; set; }		
 
 		[JsonPropertyName("interactive")]
 		public FlowInteractive Interactive { get; set; }
-
-		[JsonPropertyName("timestamp")]
-		public string Timestamp { get; set; }
-	}
-
-	public class FlowContext
-	{
-		[JsonPropertyName("from")]
-		public string From { get; set; }
-
-		[JsonPropertyName("id")]
-		public string Id { get; set; }
 	}
 
 	public class FlowInteractive

@@ -32,11 +32,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private List<ListReplyButtonMessage> listReplyButtonMessage;
         private List<FlowMessage> flowMessage;
         private JsonSerializerOptions JsonSerializerOptions => new JsonSerializerOptions
-		{
-			WriteIndented = true
-		};
+        {
+            WriteIndented = true
+        };
 
-		public WhatsAppNotificationController(ILogger<WhatsAppNotificationController> logger, IWhatsAppBusinessClient whatsAppBusinessClient,
+        public WhatsAppNotificationController(ILogger<WhatsAppNotificationController> logger, IWhatsAppBusinessClient whatsAppBusinessClient,
             IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
@@ -126,15 +126,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("text"))
                     {
-                        var textMessageReceived = JsonSerializer.Deserialize<TextMessageReceived>(messageReceived.GetRawText());
+                        var textMessageReceived = JsonSerializer.Deserialize<MessageReceived<TextMessage>>(messageReceived.GetRawText());
                         textMessage = new List<TextMessage>(textMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(textMessage, JsonSerializerOptions));
 
-                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                        markMessageRequest.MessageId = textMessage.SingleOrDefault().Id;
-                        markMessageRequest.Status = "read";
-
-                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(textMessageReceived));
 
                         TextMessageReplyRequest textMessageReplyRequest = new TextMessageReplyRequest();
                         textMessageReplyRequest.Context = new WhatsappBusiness.CloudApi.Messages.ReplyRequests.TextMessageContext();
@@ -154,15 +150,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("image"))
                     {
-                        var imageMessageReceived = JsonSerializer.Deserialize<ImageMessageReceived>(messageReceived.GetRawText());
+                        var imageMessageReceived = JsonSerializer.Deserialize<MessageReceived<ImageMessage>>(messageReceived.GetRawText());
                         imageMessage = new List<ImageMessage>(imageMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(imageMessage, JsonSerializerOptions));
 
-                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                        markMessageRequest.MessageId = imageMessage.SingleOrDefault().Id;
-                        markMessageRequest.Status = "read";
-
-                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(imageMessageReceived));
 
                         return Ok(new
                         {
@@ -172,15 +164,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("audio"))
                     {
-                        var audioMessageReceived = JsonSerializer.Deserialize<AudioMessageReceived>(messageReceived.GetRawText());
+                        var audioMessageReceived = JsonSerializer.Deserialize<MessageReceived<AudioMessage>>(messageReceived.GetRawText());
                         audioMessage = new List<AudioMessage>(audioMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(audioMessage, JsonSerializerOptions));
 
-                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                        markMessageRequest.MessageId = audioMessage.SingleOrDefault().Id;
-                        markMessageRequest.Status = "read";
-
-                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(audioMessageReceived));
 
                         var mediaUrlResponse = await _whatsAppBusinessClient.GetMediaUrlAsync(audioMessage.SingleOrDefault().Audio.Id);
 
@@ -221,15 +209,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("document"))
                     {
-                        var documentMessageReceived = JsonSerializer.Deserialize<DocumentMessageReceived>(messageReceived.GetRawText());
+                        var documentMessageReceived = JsonSerializer.Deserialize<MessageReceived<DocumentMessage>>(messageReceived.GetRawText());
                         documentMessage = new List<DocumentMessage>(documentMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(documentMessage, JsonSerializerOptions));
 
-                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                        markMessageRequest.MessageId = documentMessage.SingleOrDefault().Id;
-                        markMessageRequest.Status = "read";
-
-                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(documentMessageReceived));
 
                         var mediaUrlResponse = await _whatsAppBusinessClient.GetMediaUrlAsync(documentMessage.SingleOrDefault().Document.Id);
 
@@ -270,15 +254,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("sticker"))
                     {
-                        var stickerMessageReceived = JsonSerializer.Deserialize<StickerMessageReceived>(messageReceived.GetRawText());
+                        var stickerMessageReceived = JsonSerializer.Deserialize<MessageReceived<StickerMessage>>(messageReceived.GetRawText());
                         stickerMessage = new List<StickerMessage>(stickerMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(stickerMessage, JsonSerializerOptions));
 
-                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                        markMessageRequest.MessageId = stickerMessage.SingleOrDefault().Id;
-                        markMessageRequest.Status = "read";
-
-                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(stickerMessageReceived));
 
                         return Ok(new
                         {
@@ -288,15 +268,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("contacts"))
                     {
-                        var contactMessageReceived = JsonSerializer.Deserialize<ContactMessageReceived>(messageReceived.GetRawText());
+                        var contactMessageReceived = JsonSerializer.Deserialize<MessageReceived<ContactMessage>>(messageReceived.GetRawText());
                         contactMessage = new List<ContactMessage>(contactMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(contactMessage, JsonSerializerOptions));
 
-                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                        markMessageRequest.MessageId = contactMessage.SingleOrDefault().Id;
-                        markMessageRequest.Status = "read";
-
-                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(contactMessageReceived));
 
                         return Ok(new
                         {
@@ -306,15 +282,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("location"))
                     {
-                        var locationMessageReceived = JsonSerializer.Deserialize<StaticLocationMessageReceived>(messageReceived.GetRawText());
+                        var locationMessageReceived = JsonSerializer.Deserialize<MessageReceived<LocationMessage>>(messageReceived.GetRawText());
                         locationMessage = new List<LocationMessage>(locationMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(locationMessage, JsonSerializerOptions));
 
-                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                        markMessageRequest.MessageId = locationMessage.SingleOrDefault().Id;
-                        markMessageRequest.Status = "read";
-
-                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(locationMessageReceived));
 
                         LocationMessageReplyRequest locationMessageReplyRequest = new LocationMessageReplyRequest();
                         locationMessageReplyRequest.Context = new WhatsappBusiness.CloudApi.Messages.ReplyRequests.LocationMessageContext();
@@ -336,15 +308,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                     if (messageType.Equals("button"))
                     {
-                        var quickReplyMessageReceived = JsonSerializer.Deserialize<QuickReplyButtonMessageReceived>(messageReceived.GetRawText());
+                        var quickReplyMessageReceived = JsonSerializer.Deserialize<MessageReceived<QuickReplyButtonMessage>>(messageReceived.GetRawText());
                         quickReplyButtonMessage = new List<QuickReplyButtonMessage>(quickReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                         _logger.LogInformation(JsonSerializer.Serialize(quickReplyButtonMessage, JsonSerializerOptions));
 
-                        MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                        markMessageRequest.MessageId = quickReplyButtonMessage.SingleOrDefault().Id;
-                        markMessageRequest.Status = "read";
-
-                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                        await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(quickReplyMessageReceived));
 
                         return Ok(new
                         {
@@ -358,15 +326,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                         if (getInteractiveType.Equals("button_reply"))
                         {
-                            var replyMessageReceived = JsonSerializer.Deserialize<ReplyButtonMessageReceived>(messageReceived.GetRawText());
+                            var replyMessageReceived = JsonSerializer.Deserialize<MessageReceived<ReplyButtonMessage>>(messageReceived.GetRawText());
                             replyButtonMessage = new List<ReplyButtonMessage>(replyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                             _logger.LogInformation(JsonSerializer.Serialize(replyButtonMessage, JsonSerializerOptions));
 
-                            MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                            markMessageRequest.MessageId = replyButtonMessage.SingleOrDefault().Id;
-                            markMessageRequest.Status = "read";
-
-                            await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                            await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(replyMessageReceived));
 
                             return Ok(new
                             {
@@ -376,15 +340,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
                         if (getInteractiveType.Equals("list_reply"))
                         {
-                            var listReplyMessageReceived = JsonSerializer.Deserialize<ListReplyButtonMessageReceived>(messageReceived.GetRawText());
+                            var listReplyMessageReceived = JsonSerializer.Deserialize<MessageReceived<ListReplyButtonMessage>>(messageReceived.GetRawText());
                             listReplyButtonMessage = new List<ListReplyButtonMessage>(listReplyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
                             _logger.LogInformation(JsonSerializer.Serialize(listReplyButtonMessage, JsonSerializerOptions));
 
-                            MarkMessageRequest markMessageRequest = new MarkMessageRequest();
-                            markMessageRequest.MessageId = listReplyButtonMessage.SingleOrDefault().Id;
-                            markMessageRequest.Status = "read";
-
-                            await _whatsAppBusinessClient.MarkMessageAsReadAsync(markMessageRequest);
+                            await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(listReplyMessageReceived));
 
                             return Ok(new
                             {
@@ -419,6 +379,18 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 _logger.LogError(ex, ex.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
+        }
+
+        [NonAction]
+        public async Task<MarkMessageRequest> GetMarkMessageRequestAsync<TType>(MessageReceived<TType> message) where TType : IGenericMessage
+        {
+            var messages = new List<TType>(message.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+            MarkMessageRequest markMessageRequest = new MarkMessageRequest();
+            markMessageRequest.MessageId = messages.SingleOrDefault().Id;
+            markMessageRequest.Status = "read";
+
+            return markMessageRequest;
+
         }
     }
 }

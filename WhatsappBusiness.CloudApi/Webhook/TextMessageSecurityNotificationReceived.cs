@@ -42,34 +42,17 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public TextMessageSecurityNotificationMetadata Metadata { get; set; }
 
         [JsonPropertyName("contacts")]
-        public List<TextMessageSecurityNotificationContact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         [JsonPropertyName("messages")]
         public List<TextMessageSecurityNotificationMessage> Messages { get; set; }
     }
 
-    public class TextMessageSecurityNotificationContact
+    
+
+    public class TextMessageSecurityNotificationMessage : GenericMessage
     {
-        [JsonPropertyName("profile")]
-        public TextMessageSecurityNotificationProfile Profile { get; set; }
-
-        [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
-    }
-
-    public class TextMessageSecurityNotificationProfile
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class TextMessageSecurityNotificationMessage
-    {
-        [JsonPropertyName("from")]
-        public string From { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+    
 
         [JsonPropertyName("identity")]
         public Identity Identity { get; set; }
@@ -77,11 +60,6 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonPropertyName("text")]
         public TextMessageSecurityNotificationText Text { get; set; }
 
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
     }
 
     public class Identity

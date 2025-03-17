@@ -39,21 +39,12 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string MessagingProduct { get; set; }
 
         [JsonPropertyName("metadata")]
-        public MessageStatusUpdateMetadata Metadata { get; set; }
+        public MessageMetadata Metadata { get; set; }
 
         [JsonPropertyName("statuses")]
         public List<MessageStatus> Statuses { get; set; }
     }
-
-    public class MessageStatusUpdateMetadata
-    {
-        [JsonPropertyName("display_phone_number")]
-        public string DisplayPhoneNumber { get; set; }
-
-        [JsonPropertyName("phone_number_id")]
-        public string PhoneNumberId { get; set; }
-    }
-
+    
     public class MessageStatus
     {
         [JsonPropertyName("id")]
