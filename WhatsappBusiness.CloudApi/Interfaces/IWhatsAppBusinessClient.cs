@@ -12,6 +12,7 @@ using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
 using WhatsappBusiness.CloudApi.Registration.Requests;
 using WhatsappBusiness.CloudApi.Response;
+using WhatsappBusiness.CloudApi.Templates;
 using WhatsappBusiness.CloudApi.TwoStepVerification.Requests;
 
 namespace WhatsappBusiness.CloudApi.Interfaces
@@ -1040,6 +1041,30 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
         WhatsAppResponse SendLocationRequestMessage(InteractiveLocationMessageRequest interactiveLocationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Template Message based on parameters
+		/// </summary>
+		/// <param name="recipientPhoneNumber">Recipient Phone Number</param>
+		/// <param name="templateName">Name of the template</param>
+		/// <param name="languageCode">Language Code of the template</param>
+		/// <param name="components">Components for the template</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		Task<WhatsAppResponse> SendTemplateMessageAsync(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Template Message based on parameters
+		/// </summary>
+		/// <param name="recipientPhoneNumber">Recipient Phone Number</param>
+		/// <param name="templateName">Name of the template</param>
+		/// <param name="languageCode">Language Code of the template</param>
+		/// <param name="components">Components for the template</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		WhatsAppResponse SendTemplateMessage(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
         #endregion
 
         #region Two step verification code function

@@ -23,6 +23,7 @@ using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
 using WhatsappBusiness.CloudApi.Registration.Requests;
 using WhatsappBusiness.CloudApi.Response;
+using WhatsappBusiness.CloudApi.Templates;
 using WhatsappBusiness.CloudApi.TwoStepVerification.Requests;
 
 namespace WhatsappBusiness.CloudApi
@@ -3132,6 +3133,130 @@ namespace WhatsappBusiness.CloudApi
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
 			return WhatsAppBusinessPostAsync<WhatsAppResponse>(interactiveLocationMessageRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Send Template Message based on parameters
+		/// </summary>
+		/// <param name="recipientPhoneNumber">Recipient Phone Number</param>
+		/// <param name="templateName">Name of the template</param>
+		/// <param name="languageCode">Language Code of the template</param>
+		/// <param name="components">Components for the template</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public async Task<WhatsAppResponse> SendTemplateMessageAsync(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			var processedComponents = new List<object>();
+
+			if (components != null)
+			{
+				foreach (var component in components)
+				{
+					var componentObject = new Dictionary<string, object>
+			        {
+				        { "type", component.Type }
+			        };
+
+					// Add "text" if present (for text-based headers and footers)
+					if (!string.IsNullOrEmpty(component.Text))
+					{
+						componentObject["text"] = component.Text;
+					}
+
+					// Add "parameters" if present
+					if (component.Parameters != null && component.Parameters.Length > 0)
+					{
+						componentObject["parameters"] = component.Parameters;
+					}
+
+					processedComponents.Add(componentObject);
+				}
+			}
+
+			var payload = new
+			{
+				messaging_product = "whatsapp",
+				recipient_type = "individual",
+				to = recipientPhoneNumber,
+				type = "template",
+				template = new
+				{
+					name = templateName,
+					language = new { code = languageCode },
+					components = processedComponents.Count > 0 ? processedComponents.ToArray() : null
+				}
+			};
+
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			return await WhatsAppBusinessPostAsync<WhatsAppResponse>(payload, formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+		/// <summary>
+		/// Send Template Message based on parameters
+		/// </summary>
+		/// <param name="recipientPhoneNumber">Recipient Phone Number</param>
+		/// <param name="templateName">Name of the template</param>
+		/// <param name="languageCode">Language Code of the template</param>
+		/// <param name="components">Components for the template</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public WhatsAppResponse SendTemplateMessage(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			var processedComponents = new List<object>();
+
+			if (components != null)
+			{
+				foreach (var component in components)
+				{
+					var componentObject = new Dictionary<string, object>
+					{
+						{ "type", component.Type }
+					};
+
+					// Add "text" if present (for text-based headers and footers)
+					if (!string.IsNullOrEmpty(component.Text))
+					{
+						componentObject["text"] = component.Text;
+					}
+
+					// Add "parameters" if present
+					if (component.Parameters != null && component.Parameters.Length > 0)
+					{
+						componentObject["parameters"] = component.Parameters;
+					}
+
+					processedComponents.Add(componentObject);
+				}
+			}
+
+			var payload = new
+			{
+				messaging_product = "whatsapp",
+				recipient_type = "individual",
+				to = recipientPhoneNumber,
+				type = "template",
+				template = new
+				{
+					name = templateName,
+					language = new { code = languageCode },
+					components = processedComponents.Count > 0 ? processedComponents.ToArray() : null
+				}
+			};
+
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			return WhatsAppBusinessPostAsync<WhatsAppResponse>(payload, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
 		/// <summary>
