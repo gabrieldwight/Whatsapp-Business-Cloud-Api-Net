@@ -601,6 +601,53 @@ flowTemplateMessageRequest.Template.Components = new List<FlowMessageComponent>(
 var results = await _whatsAppBusinessClient.SendFlowMessageTemplateAsync(flowTemplateMessageRequest);
 ```
 
+## Sending template messages with different parameters
+```C#
+// Text Header, Body with Parameters, Footer, and Quick Reply Button
+var components = new[]
+{
+    new TemplateComponent { Type = "header", Text = "Order Update" },
+    new TemplateComponent 
+    { 
+        Type = "body", 
+        Parameters = new object[] { new { type = "text", text = "Your order is ready!" } }
+    },
+    new TemplateComponent { Type = "footer", Text = "Need help? Reply below" },
+    new TemplateComponent 
+    { 
+        Type = "button", 
+        Parameters = new object[] { new { type = "text", text = "Track Order" } }
+    }
+};
+
+await _whatsAppBusinessClient.SendTemplateMessageAsync("+1234567890", "template_name", "en_US", components);
+
+//  Image Header, Body, and Call-to-Action Button (URL)
+var components = new[]
+{
+    new TemplateComponent 
+    { 
+        Type = "header", 
+        Parameters = new object[] { new { type = "image", image = new { link = "https://example.com/image.jpg" } } }
+    },
+    new TemplateComponent 
+    { 
+        Type = "body", 
+        Parameters = new object[] { new { type = "text", text = "Check out our latest offers!" } }
+    },
+    new TemplateComponent 
+    { 
+        Type = "button", 
+        Parameters = new object[] 
+        { 
+            new { type = "text", text = "Visit Website", sub_type = "url", url = "https://example.com" } 
+        }
+    }
+};
+
+await _whatsAppBusinessClient.SendTemplateMessageAsync("+1234567890", "template_name", "en_US", components);
+```
+
 ## Webhook Subscription
 First, you need to setup the callback url and verify the token string for WhatsApp Cloud API to verify your callback url.
 Verification part
