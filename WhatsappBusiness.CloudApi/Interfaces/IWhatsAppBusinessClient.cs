@@ -1406,17 +1406,21 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// Get All templates for the whatsapp business account
         /// </summary>
         /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="pagingUrl">Cursor paging url</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>TemplateResponse</returns>
-        Task<TemplateResponse> GetAllTemplatesAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+        Task<TemplateResponse> GetAllTemplatesAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Get All templates for the whatsapp business account
-        /// </summary>
-        /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>TemplateResponse</returns>
-        TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		/// <summary>
+		/// Get All templates for the whatsapp business account
+		/// </summary>
+		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+		/// <param name="cloudApiConfig">Custom cloudapi config</param>
+		/// <param name="pagingUrl">Cursor paging url</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>TemplateResponse</returns>
+		TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Edit Message Template for update

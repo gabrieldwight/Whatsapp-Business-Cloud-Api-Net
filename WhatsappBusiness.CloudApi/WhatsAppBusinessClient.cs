@@ -1481,9 +1481,11 @@ namespace WhatsappBusiness.CloudApi
         /// Get All templates for the whatsapp business account
         /// </summary>
         /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="pagingUrl">Cursor paging url</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>TemplateResponse</returns>
-        public async Task<TemplateResponse> GetAllTemplatesAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public async Task<TemplateResponse> GetAllTemplatesAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1496,16 +1498,26 @@ namespace WhatsappBusiness.CloudApi
             builder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
 
             var formattedWhatsAppEndpoint = builder.ToString();
-            return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+            }
+            else
+            {
+				return await WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken);
+			}
         }
 
         /// <summary>
         /// Get All templates for the whatsapp business account
         /// </summary>
         /// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="pagingUrl">Cursor paging url</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>TemplateResponse</returns>
-        public TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1518,7 +1530,15 @@ namespace WhatsappBusiness.CloudApi
             builder.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
 
             var formattedWhatsAppEndpoint = builder.ToString();
-            return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+            }
+            else
+            {
+				return WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken).GetAwaiter().GetResult();
+			}
         }
 
         /// <summary>
