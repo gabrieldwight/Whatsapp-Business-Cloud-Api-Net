@@ -124,11 +124,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 {
                     var messageType = changesResult.GetProperty("messages")[0].GetProperty("type").GetString();
 
-                    if (messageType.Equals("text"))
+					if (messageType.Equals("text"))
                     {
                         var textMessageReceived = JsonSerializer.Deserialize<MessageReceived<TextMessage>>(messageReceived.GetRawText());
                         textMessage = new List<TextMessage>(textMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
-                        _logger.LogInformation(JsonSerializer.Serialize(textMessage, JsonSerializerOptions));
+						_logger.LogInformation(JsonSerializer.Serialize(textMessage, JsonSerializerOptions));
 
                         await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(textMessageReceived));
 
@@ -388,8 +388,9 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             MarkMessageRequest markMessageRequest = new MarkMessageRequest();
             markMessageRequest.MessageId = messages.SingleOrDefault().Id;
             markMessageRequest.Status = "read";
+            markMessageRequest.TypingIndicator = new TypingIndicator();
 
-            return markMessageRequest;
+			return markMessageRequest;
 
         }
     }
