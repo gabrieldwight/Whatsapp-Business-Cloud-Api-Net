@@ -49,14 +49,14 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		/// Only to be used for template creation do not set this property when sending auth template messages
 		/// </summary>
 		[JsonPropertyName("add_security_recommendation")]
-		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public bool AddSecurityRecommendation { get; set; }
 
 		/// <summary>
 		/// Only to be used for template creation do not set this property when sending auth template messages
 		/// </summary>
 		[JsonPropertyName("code_expiration_minutes")]
-		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public int CodeExpirationMinutes { get; set; }
 
 		[JsonPropertyName("parameters")]
