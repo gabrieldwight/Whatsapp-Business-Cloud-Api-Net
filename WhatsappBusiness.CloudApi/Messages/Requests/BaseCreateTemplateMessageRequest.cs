@@ -12,7 +12,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Category { get; set; }
 
         [JsonPropertyName("allow_category_change")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public bool? AllowCategoryChange { get; set; }
 
         [JsonPropertyName("language")]

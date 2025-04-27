@@ -113,27 +113,27 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string FallbackValue { get; set; }
 
         [JsonPropertyName("day_of_week")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public long? DayOfWeek { get; set; }
 
         [JsonPropertyName("year")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public long? Year { get; set; }
 
         [JsonPropertyName("month")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public long? Month { get; set; }
 
         [JsonPropertyName("day_of_month")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public long? DayOfMonth { get; set; }
 
         [JsonPropertyName("hour")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public long? Hour { get; set; }
 
         [JsonPropertyName("minute")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public long? Minute { get; set; }
 
         [JsonPropertyName("calendar")]

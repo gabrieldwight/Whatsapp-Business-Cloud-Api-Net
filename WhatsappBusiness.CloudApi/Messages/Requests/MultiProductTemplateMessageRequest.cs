@@ -53,7 +53,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		public string SubType { get; set; }
 
 		[JsonPropertyName("index")]
-		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public long? Index { get; set; }
 	}
 

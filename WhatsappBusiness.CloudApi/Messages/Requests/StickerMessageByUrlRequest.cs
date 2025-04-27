@@ -33,7 +33,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string Link { get; set; }
 
 		[JsonPropertyName("animated")]
-		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public bool Animated { get; set; }
 	}
 }
