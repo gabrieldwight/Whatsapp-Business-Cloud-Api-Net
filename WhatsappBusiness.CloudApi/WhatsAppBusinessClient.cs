@@ -18,6 +18,7 @@ using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
 using WhatsappBusiness.CloudApi.Interfaces;
 using WhatsappBusiness.CloudApi.Media.Requests;
+using WhatsappBusiness.CloudApi.MessageHistory.Requests;
 using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
@@ -1229,12 +1230,58 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessGetAsync<MediaUrlResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// To get a list of all the QR codes messages for a business
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns>QRCodeMessageFilterResponse</returns>
-        public QRCodeMessageFilterResponse GetQRCodeMessageList(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		/// <summary>
+		/// Synchronizing messaging history
+		/// </summary>
+		/// <param name="messageHistoryRequest">messageHistoryRequest object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">cancellation token</param>
+		/// <returns>MessageHistoryResponse</returns>
+		public MessageHistoryResponse GetMessageHistorySynchronization(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
+
+			builder.Append(WhatsAppBusinessRequestEndpoint.MessageHistorySync);
+			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+			var formattedWhatsAppEndpoint = builder.ToString();
+			return WhatsAppBusinessPostAsync<MessageHistoryResponse>(messageHistoryRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Synchronizing messaging history
+		/// </summary>
+		/// <param name="messageHistoryRequest">messageHistoryRequest object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">cancellation token</param>
+		/// <returns>MessageHistoryResponse</returns>
+		public async Task<MessageHistoryResponse> GetMessageHistorySynchronizationAsync(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
+
+			builder.Append(WhatsAppBusinessRequestEndpoint.MessageHistorySync);
+			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+
+			var formattedWhatsAppEndpoint = builder.ToString();
+            return await WhatsAppBusinessPostAsync<MessageHistoryResponse>(messageHistoryRequest, formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+		/// <summary>
+		/// To get a list of all the QR codes messages for a business
+		/// </summary>
+		/// <param name="cancellationToken"></param>
+		/// <returns>QRCodeMessageFilterResponse</returns>
+		public QRCodeMessageFilterResponse GetQRCodeMessageList(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {

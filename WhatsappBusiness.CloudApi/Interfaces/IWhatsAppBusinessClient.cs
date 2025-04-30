@@ -7,6 +7,7 @@ using WhatsappBusiness.CloudApi.BlockUser.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Media.Requests;
+using WhatsappBusiness.CloudApi.MessageHistory.Requests;
 using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
@@ -1560,6 +1561,26 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>GetBlockedUserResponse</returns>
 		Task<GetBlockedUserResponse> GetBlockedUsersAsync(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		#endregion
+
+		#region Message History
+		/// <summary>
+		/// Synchronizing messaging history
+		/// </summary>
+		/// <param name="messageHistoryRequest">messageHistoryRequest object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">cancellation token</param>
+		/// <returns>MessageHistoryResponse</returns>
+		MessageHistoryResponse GetMessageHistorySynchronization(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Synchronizing messaging history
+		/// </summary>
+		/// <param name="messageHistoryRequest">messageHistoryRequest object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">cancellation token</param>
+		/// <returns>MessageHistoryResponse</returns>
+		Task<MessageHistoryResponse> GetMessageHistorySynchronizationAsync(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 		#endregion
 	}
 }

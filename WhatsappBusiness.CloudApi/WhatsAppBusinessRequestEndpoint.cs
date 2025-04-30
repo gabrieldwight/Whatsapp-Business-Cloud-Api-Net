@@ -176,5 +176,7 @@ namespace WhatsappBusiness.CloudApi
         public static string GetConversationAutomation { get; private set; } = "{{Phone-Number-ID}}?fields=conversational_automation";
 
         public static string BlockUser { get; private set; } = "{{Phone-Number-ID}}/block_users";
+
+        public static string MessageHistorySync { get; private set; } = "{{Phone-Number-ID}}/smb_app_data";
 	}
 }
