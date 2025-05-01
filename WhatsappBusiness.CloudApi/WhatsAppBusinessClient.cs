@@ -739,7 +739,7 @@ namespace WhatsappBusiness.CloudApi
 
 			string formattedWhatsAppEndpoint;
             formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.DownloadMedia.Replace("{{Media-URL}}", mediaUrl);
-            return await WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, _whatsAppConfig.AppName.Replace(" ","_"), _whatsAppConfig.Version, cancellationToken);
+            return await WhatsAppBusinessGetAsync(formattedWhatsAppEndpoint, _whatsAppConfig.AppName?.Replace(" ","_"), _whatsAppConfig.Version, cancellationToken);
         }
 
 		/// <summary>
