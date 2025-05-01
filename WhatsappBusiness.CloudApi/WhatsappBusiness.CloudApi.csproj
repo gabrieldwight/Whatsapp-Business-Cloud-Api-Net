@@ -12,7 +12,7 @@
     <RepositoryUrl>https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net</RepositoryUrl>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Version>1.0.62</Version>
+    <Version>1.0.63</Version>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0'">
