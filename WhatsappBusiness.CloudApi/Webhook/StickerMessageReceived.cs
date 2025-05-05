@@ -29,6 +29,10 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
         [JsonPropertyName("sha256")]
         public string Sha256 { get; set; }
-    }
+
+		[JsonPropertyName("animated")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+		public bool Animated { get; set; }
+	}
     
 }
