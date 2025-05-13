@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
@@ -19,10 +18,10 @@ namespace WhatsappBusiness.CloudApi.Webhook
     public class Location
     {
         [JsonPropertyName("latitude")]
-        public string Latitude { get; set; }
+        public double Latitude { get; set; }
 
         [JsonPropertyName("longitude")]
-        public string Longitude { get; set; }
+        public double Longitude { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }

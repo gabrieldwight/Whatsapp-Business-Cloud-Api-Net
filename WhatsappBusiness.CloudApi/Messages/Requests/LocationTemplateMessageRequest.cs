@@ -70,10 +70,10 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
     public class LocationDetails
     {
         [JsonPropertyName("latitude")]
-        public string Latitude { get; set; }
+        public double Latitude { get; set; }
 
         [JsonPropertyName("longitude")]
-        public string Longitude { get; set; }
+        public double Longitude { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
