@@ -113,7 +113,7 @@ namespace WhatsappBusiness.CloudApi
 			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
 
 			var formattedWhatsAppEndpoint = builder.ToString();
-			return WhatsAppBusinessPostAsync<BlockUserResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessPostAsync<BlockUserResponse>(blockUserRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
 		/// <summary>
@@ -136,7 +136,7 @@ namespace WhatsappBusiness.CloudApi
 			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
 
 			var formattedWhatsAppEndpoint = builder.ToString();
-			return await WhatsAppBusinessPostAsync<BlockUserResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessPostAsync<BlockUserResponse>(blockUserRequest, formattedWhatsAppEndpoint, cancellationToken);
 		}
 
 
@@ -3382,7 +3382,7 @@ namespace WhatsappBusiness.CloudApi
 			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
 
 			var formattedWhatsAppEndpoint = builder.ToString();
-			return WhatsAppBusinessDeleteAsync<BlockUserResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessDeleteAsync<BlockUserResponse>(blockUserRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
 		/// <summary>
@@ -3405,7 +3405,7 @@ namespace WhatsappBusiness.CloudApi
 			builder.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
 
 			var formattedWhatsAppEndpoint = builder.ToString();
-			return await WhatsAppBusinessDeleteAsync<BlockUserResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessDeleteAsync<BlockUserResponse>(blockUserRequest, formattedWhatsAppEndpoint, cancellationToken);
 		}
 
 		/// <summary>
@@ -4112,5 +4112,61 @@ namespace WhatsappBusiness.CloudApi
 			}
 			return result;
         }
+
+		private async Task<T> WhatsAppBusinessDeleteAsync<T>(object whatsAppDto, string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default, bool isHeaderAccessTokenProvided = true) where T : new()
+		{
+			if (isHeaderAccessTokenProvided)
+			{
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+			}
+			
+            T result = new();
+			
+            string json = JsonSerializer.Serialize(whatsAppDto);
+			var content = new StringContent(json, Encoding.UTF8, "application/json");
+			
+            cancellationToken.ThrowIfCancellationRequested();
+
+			var request = new HttpRequestMessage(HttpMethod.Delete, whatsAppBusinessEndpoint);
+
+            request.Content = content;
+
+			var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+			if (response.IsSuccessStatusCode)
+			{
+#if NET5_0_OR_GREATER
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
+#endif
+#if NETSTANDARD2_0_OR_GREATER
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
+#endif
+			}
+			else
+			{
+				WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
+#if NET5_0_OR_GREATER
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+#endif
+#if NETSTANDARD2_0_OR_GREATER
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+#endif
+			}
+			return result;
+		}
 	}
 }
