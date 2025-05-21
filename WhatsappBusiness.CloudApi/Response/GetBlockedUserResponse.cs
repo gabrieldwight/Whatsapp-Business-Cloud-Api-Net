@@ -15,7 +15,16 @@ namespace WhatsappBusiness.CloudApi.Response
 	public class BlockedUserData
 	{
 		[JsonPropertyName("block_users")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<BlockUser> BlockUsers { get; set; }
+
+		[JsonPropertyName("messaging_product")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string MessagingProduct { get; set; }
+
+		[JsonPropertyName("wa_id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string WaId { get; set; }
 	}
 
 	public class BlockUser : BaseUser
@@ -29,9 +38,11 @@ namespace WhatsappBusiness.CloudApi.Response
 		public BlockedUserCursors Cursors { get; set; }
 
 		[JsonPropertyName("previous")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Previous { get; set; }
 
 		[JsonPropertyName("next")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Next { get; set; }
 	}
 
