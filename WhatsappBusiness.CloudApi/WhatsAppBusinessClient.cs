@@ -351,6 +351,11 @@ namespace WhatsappBusiness.CloudApi
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
+        public WhatsappBusinessEncryptionResponse GetWhatsappBusinessEncryption(CancellationToken cancellationToken = default)
+        {
+	        throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Subscribe an app to a WhatsApp Business Account.
         /// </summary>
@@ -1399,6 +1404,42 @@ namespace WhatsappBusiness.CloudApi
 
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetListSharedWABA.Replace("{{Business-ID}}", businessId);
             return WhatsAppBusinessGetAsync<SharedWABAResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Get Business Public Key
+        /// </summary>
+        /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsappBusinessEncryptionResponse</returns>
+        public async Task<WhatsappBusinessEncryptionResponse> GetWhatsappBusinessEncryptionAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+	        if (cloudApiConfig is not null)
+	        {
+		        _whatsAppConfig = cloudApiConfig;
+	        }
+	        
+	        var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.WhatsAppBusinessEncryption.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+	        return await WhatsAppBusinessGetAsync<WhatsappBusinessEncryptionResponse>(formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// Get Business Public Key
+        /// </summary>
+        /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsappBusinessEncryptionResponse</returns>
+        public WhatsappBusinessEncryptionResponse GetWhatsappBusinessEncryption(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+	        if (cloudApiConfig is not null)
+	        {
+		        _whatsAppConfig = cloudApiConfig;
+	        }
+	        
+	        var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.WhatsAppBusinessEncryption.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+	        return WhatsAppBusinessGetAsync<WhatsappBusinessEncryptionResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
         /// <summary>
