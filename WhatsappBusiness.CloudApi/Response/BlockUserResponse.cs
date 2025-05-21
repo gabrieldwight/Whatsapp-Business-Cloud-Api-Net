@@ -16,6 +16,12 @@ namespace WhatsappBusiness.CloudApi.Response
 		public Error Error { get; set; }
 	}
 
+	public class Data
+	{
+		[JsonPropertyName("messaging_product")]
+		public string MessagingProduct { get; set; }
+	}
+
 	public class BlockUsers
 	{
 		[JsonPropertyName("added_users")]
@@ -53,7 +59,7 @@ namespace WhatsappBusiness.CloudApi.Response
 		public string Message { get; set; }
 
 		[JsonPropertyName("code")]
-		public string Code { get; set; }
+		public long Code { get; set; }
 
 		[JsonPropertyName("error_data")]
 		public BlockUserErrorData ErrorData { get; set; }
