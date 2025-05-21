@@ -351,11 +351,6 @@ namespace WhatsappBusiness.CloudApi
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
-        public WhatsappBusinessEncryptionResponse GetWhatsappBusinessEncryption(CancellationToken cancellationToken = default)
-        {
-	        throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Subscribe an app to a WhatsApp Business Account.
         /// </summary>
@@ -1443,6 +1438,52 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
+        /// Set Business Public Key
+        /// </summary>
+        /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
+        /// <param name="publicKey">The 2048-bit RSA business public key generated</param>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsappBusinessEncryptionResponse</returns>
+        public async Task<BaseSuccessResponse> SetWhatsappBusinessEncryptionAsync(string publicKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+	        if (cloudApiConfig is not null)
+	        {
+		        _whatsAppConfig = cloudApiConfig;
+	        }
+	        
+	        var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.WhatsAppBusinessEncryption.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+	        
+	        var formBody = new List<KeyValuePair<string, string>>();
+	        formBody.Add(new KeyValuePair<string, string>("business_public_key", publicKey));
+	        
+	        return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(formBody, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        /// <summary>
+        /// Set Business Public Key
+        /// </summary>
+        /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
+        /// <param name="publicKey">The 2048-bit RSA business public key generated</param>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsappBusinessEncryptionResponse</returns>
+        public BaseSuccessResponse SetWhatsappBusinessEncryption(string publicKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+	        if (cloudApiConfig is not null)
+	        {
+		        _whatsAppConfig = cloudApiConfig;
+	        }
+	        
+	        var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.WhatsAppBusinessEncryption.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+	        
+	        var formBody = new List<KeyValuePair<string, string>>();
+	        formBody.Add(new KeyValuePair<string, string>("business_public_key", publicKey));
+	        
+	        return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formBody, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
         /// Get Shared WhatsApp Business Account List
         /// </summary>
         /// <param name="businessId">Your Business' ID. Once you have your Phone-Number-ID, make a Get Business Profile request to get your Business' ID.</param>
@@ -1458,6 +1499,8 @@ namespace WhatsappBusiness.CloudApi
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetListSharedWABA.Replace("{{Business-ID}}", businessId);
             return await WhatsAppBusinessGetAsync<SharedWABAResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
+        
+        
 
 		/// <summary>
 		/// Get Whatsapp template message by namespace
@@ -3720,6 +3763,60 @@ namespace WhatsappBusiness.CloudApi
             T result = new();
             string json = JsonSerializer.Serialize(whatsAppDto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+            cancellationToken.ThrowIfCancellationRequested();
+            var response = await _httpClient.PostAsync(whatsAppBusinessEndpoint, content, cancellationToken).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+#if NET5_0_OR_GREATER
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
+#endif
+#if NETSTANDARD2_0_OR_GREATER
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+				}
+#endif
+			}
+			else
+            {
+                WhatsAppErrorResponse whatsAppErrorResponse = new WhatsAppErrorResponse();
+#if NET5_0_OR_GREATER
+				using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+#endif
+#if NETSTANDARD2_0_OR_GREATER
+                using (var stream = await response.Content.ReadAsStreamAsync())
+				{
+					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
+				}
+                throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
+#endif
+			}
+			return result;
+        }
+        
+        /// <summary>
+        /// To perform WhatsApp Business Cloud API functions
+        /// </summary>
+        /// <typeparam name="T">Response Class</typeparam>
+        /// <param name="formValues">Key/Value pairs of items to form URL encode in the request body</param>
+        /// <param name="whatsAppBusinessEndpoint">WhatsApp Business CLoud API endpoint</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Response Object</returns>
+        /// <exception cref="WhatsappBusinessCloudAPIException"></exception>
+        private async Task<T> WhatsAppBusinessPostAsync<T>(IEnumerable<KeyValuePair<string,string>> formValues, string whatsAppBusinessEndpoint, CancellationToken cancellationToken = default) where T : new()
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _whatsAppConfig.AccessToken);
+            T result = new();
+            
+            var content = new FormUrlEncodedContent(formValues);
             cancellationToken.ThrowIfCancellationRequested();
             var response = await _httpClient.PostAsync(whatsAppBusinessEndpoint, content, cancellationToken).ConfigureAwait(false);
 

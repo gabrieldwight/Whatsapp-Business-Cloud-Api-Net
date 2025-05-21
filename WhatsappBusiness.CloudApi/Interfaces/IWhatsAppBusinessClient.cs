@@ -1139,6 +1139,26 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsappBusinessEncryptionResponse</returns>
         WhatsappBusinessEncryptionResponse GetWhatsappBusinessEncryption(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Set Business Public Key
+        /// </summary>
+        /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
+        /// <param name="publicKey">The 2048-bit RSA business public key generated</param>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsappBusinessEncryptionResponse</returns>
+        Task<BaseSuccessResponse> SetWhatsappBusinessEncryptionAsync(string publicKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// Set Business Public Key
+        /// </summary>
+        /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
+        /// <param name="publicKey">The 2048-bit RSA business public key generated</param>
+        /// <param name="cloudApiConfig">Custom cloudapi config</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WhatsappBusinessEncryptionResponse</returns>
+        BaseSuccessResponse SetWhatsappBusinessEncryption(string publicKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
         
         
         #endregion
