@@ -328,6 +328,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         {
                             var replyMessageReceived = JsonSerializer.Deserialize<MessageReceived<ReplyButtonMessage>>(messageReceived.GetRawText());
                             replyButtonMessage = new List<ReplyButtonMessage>(replyMessageReceived.Entry.SelectMany(x => x.Changes).SelectMany(x => x.Value.Messages));
+                            var buttonReply = replyButtonMessage.FirstOrDefault().Interactive.ButtonReply;
                             _logger.LogInformation(JsonSerializer.Serialize(replyButtonMessage, JsonSerializerOptions));
 
                             await _whatsAppBusinessClient.MarkMessageAsReadAsync(await GetMarkMessageRequestAsync(replyMessageReceived));

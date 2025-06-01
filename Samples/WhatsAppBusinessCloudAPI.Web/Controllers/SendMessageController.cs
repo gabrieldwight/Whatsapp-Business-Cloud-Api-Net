@@ -1,19 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.StaticFiles;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using WhatsappBusiness.CloudApi;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
 using WhatsappBusiness.CloudApi.Interfaces;
-using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.Response;
-using WhatsappBusiness.CloudApi.Webhook;
-using WhatsAppBusinessCloudAPI.Web.Extensions.Alerts;
-using WhatsAppBusinessCloudAPI.Web.ViewModel;
-using static System.Net.Mime.MediaTypeNames;
+using Message = WhatsappBusiness.CloudApi.Response.Message;
 
 namespace WhatsAppBusinessCloudAPI.Web.Controllers
 {
