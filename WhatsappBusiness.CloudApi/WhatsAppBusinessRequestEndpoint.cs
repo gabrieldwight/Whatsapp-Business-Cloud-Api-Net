@@ -7,7 +7,7 @@ namespace WhatsappBusiness.CloudApi
         /// <summary>
         /// WhatsApp Business Cloud API V21 BaseAddress
         /// </summary>
-        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v21.0/");
+        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v23.0/");
 
         /// <summary>
         /// Specified WhatsApp Business Cloud API Version BaseAddress

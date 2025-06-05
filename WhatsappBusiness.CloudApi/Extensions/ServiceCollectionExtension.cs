@@ -29,7 +29,9 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
             var noOpPolicy = Policy.NoOpAsync().AsAsyncPolicy<HttpResponseMessage>();
 
-            services.AddSingleton(new WhatsAppBusinessCloudApiConfig
+            services.AddTransient<IWhatsAppBusinessClientFactory, WhatsAppBusinessClientFactory>();
+
+			services.AddSingleton(new WhatsAppBusinessCloudApiConfig
             {
                 WhatsAppBusinessPhoneNumberId = whatsAppConfig.WhatsAppBusinessPhoneNumberId,
                 WhatsAppBusinessAccountId = whatsAppConfig.WhatsAppBusinessAccountId,
@@ -68,7 +70,9 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
             var noOpPolicy = Policy.NoOpAsync().AsAsyncPolicy<HttpResponseMessage>();
 
-            services.AddSingleton(new WhatsAppBusinessCloudApiConfig
+			services.AddTransient<IWhatsAppBusinessClientFactory, WhatsAppBusinessClientFactory>();
+
+			services.AddSingleton(new WhatsAppBusinessCloudApiConfig
             {
                 WhatsAppBusinessPhoneNumberId = whatsAppConfig.WhatsAppBusinessPhoneNumberId,
                 WhatsAppBusinessAccountId = whatsAppConfig.WhatsAppBusinessAccountId,
