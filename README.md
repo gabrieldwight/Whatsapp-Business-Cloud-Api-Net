@@ -19,6 +19,8 @@ WhatsApp Welcome Message: [Setting up Conversational Components](https://develop
 
 WhatsApp Block User API: [How to block a user](https://developers.facebook.com/docs/whatsapp/cloud-api/block-users?locale=en_US)
 
+WhatsApp Cloud API Calling: [How to setup cloud API VoIP calls](https://developers.facebook.com/docs/whatsapp/cloud-api/calling)
+
 Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
 
 Authentication Message Documentation: [Create and Send Authentication Message](https://developers.facebook.com/docs/whatsapp/business-management-api/authentication-templates)
