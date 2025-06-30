@@ -52,7 +52,11 @@ public class GenericStatus : IGenericStatus
     [JsonPropertyName("id")]
     public virtual string Id { get; set; }
 
-    [JsonPropertyName("status")]
+    [JsonPropertyName("type")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual string Type { get; set; }
+
+	[JsonPropertyName("status")]
     public virtual string Status { get; set; }
 
     [JsonPropertyName("timestamp")]
@@ -61,11 +65,17 @@ public class GenericStatus : IGenericStatus
     [JsonPropertyName("recipient_id")]
     public virtual string RecipientId { get; set; }
 
-    [JsonPropertyName("conversation")]
-    public virtual Conversation Conversation { get; set; }
+	[JsonPropertyName("biz_opaque_callback_data")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual string BizOpaqueCallbackData { get; set; }
+
+	[JsonPropertyName("conversation")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual Conversation Conversation { get; set; }
 
     [JsonPropertyName("pricing")]
-    public virtual Pricing Pricing { get; set; }
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual Pricing Pricing { get; set; }
 }
 
 

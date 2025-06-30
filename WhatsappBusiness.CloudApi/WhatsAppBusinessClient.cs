@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
 using WhatsappBusiness.CloudApi.BlockUser.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
+using WhatsappBusiness.CloudApi.Calls.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
 using WhatsappBusiness.CloudApi.Interfaces;
@@ -1178,14 +1179,46 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessGetAsync<BusinessProfileResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// To retrieve your media’s URL, make a GET call to /{{Media-ID}}. Later, you can use this URL to download the media file.
-        /// </summary>
-        /// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
-        /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>MediaUrlResponse</returns>
-        public MediaUrlResponse GetMediaUrl(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
+		/// <summary>
+		/// Get the call permission state for a specific phone number and consumer WhatsApp ID.
+		/// </summary>
+		/// <param name="phoneNumber">WhatsApp Phone Number Id</param>
+		/// <param name="consumerWhatsAppID">Consumer WhatsApp Id</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>Call permission state response</returns>
+		public async Task<CallPermissionStateResponse> GetCallPermissionStateAsync(string phoneNumber, string consumerWhatsAppID, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.CallPermissionState
+				.Replace("{{Phone-Number-ID}}", phoneNumber)
+                .Replace("{{Consumer-WhatsApp-ID}}", consumerWhatsAppID);
+
+            return await WhatsAppBusinessGetAsync<CallPermissionStateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+		/// <summary>
+		/// Get the call permission state for a specific phone number and consumer WhatsApp ID.
+		/// </summary>
+		/// <param name="phoneNumber">WhatsApp Phone Number Id</param>
+		/// <param name="consumerWhatsAppID">Consumer WhatsApp Id</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>Call permission state response</returns>
+		public CallPermissionStateResponse GetCallPermissionState(string phoneNumber, string consumerWhatsAppID, CancellationToken cancellationToken = default)
+        {
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.CallPermissionState
+				.Replace("{{Phone-Number-ID}}", phoneNumber)
+                .Replace("{{Consumer-WhatsApp-ID}}", consumerWhatsAppID);
+
+            return WhatsAppBusinessGetAsync<CallPermissionStateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+		/// <summary>
+		/// To retrieve your media’s URL, make a GET call to /{{Media-ID}}. Later, you can use this URL to download the media file.
+		/// </summary>
+		/// <param name="mediaId">ID for the media to send a media message or media template message to your customers.</param>
+		/// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>MediaUrlResponse</returns>
+		public MediaUrlResponse GetMediaUrl(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1773,6 +1806,77 @@ namespace WhatsappBusiness.CloudApi
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetPhoneNumbers.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
             return await WhatsAppBusinessGetAsync<PhoneNumberResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
+
+		/// <summary>
+		/// Initiate a Business Initiated Call to WhatsApp user.
+		/// </summary>
+		/// <param name="callRequest">Call request object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppCallResponse</returns>
+		public async Task<WhatsAppCallResponse> InitiateWhatsAppCallAsync(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Calls.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<WhatsAppCallResponse>(callRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+		/// <summary>
+		/// Initiate a Business Initiated Call to WhatsApp user.
+		/// </summary>
+		/// <param name="callRequest">Call request object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppCallResponse</returns>
+		public WhatsAppCallResponse InitiateWhatsAppCall(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Calls.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<WhatsAppCallResponse>(callRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Pre accept, accept, reject or Terminate a Business Initiated Call to WhatsApp user.
+		/// </summary>
+		/// <param name="callRequest">Call request object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		public async Task<BaseSuccessResponse> ManageWhatsAppCallActionAsync(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Calls.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(callRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+		/// <summary>
+		/// Pre accept, accept, reject or Terminate a Business Initiated Call to WhatsApp user.
+		/// </summary>
+		/// <param name="callRequest">Call request object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		public BaseSuccessResponse ManageWhatsAppCallAction(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Calls.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<BaseSuccessResponse>(callRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
 
 		/// <summary>
 		/// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.
@@ -3409,6 +3513,112 @@ namespace WhatsappBusiness.CloudApi
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
 			return WhatsAppBusinessPostAsync<WhatsAppResponse>(payload, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
+
+		/// <summary>
+		/// Send Free Form Call Permission Message
+		/// </summary>
+		/// <param name="freeFormCallPermissionMessageRequest">FreeFormCallPermissionMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public async Task<WhatsAppResponse> SendFreeFormCallPermissionMessageAsync(FreeFormCallPermissionMessageRequest freeFormCallPermissionMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			return await WhatsAppBusinessPostAsync<WhatsAppResponse>(freeFormCallPermissionMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+		/// <summary>
+		/// Send Free Form Call Permission Message
+		/// </summary>
+		/// <param name="freeFormCallPermissionMessageRequest">FreeFormCallPermissionMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public WhatsAppResponse SendFreeFormCallPermissionMessage(FreeFormCallPermissionMessageRequest freeFormCallPermissionMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			return WhatsAppBusinessPostAsync<WhatsAppResponse>(freeFormCallPermissionMessageRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+		/// <summary>
+		/// Send Call Permission Template Message
+		/// </summary>
+		/// <param name="callPermissionTemplateMessageRequest">CallPermissionTemplateMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public async Task<WhatsAppResponse> SendCallPermissionTemplateMessageAsync(CallPermissionTemplateMessageRequest callPermissionTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<WhatsAppResponse>(callPermissionTemplateMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+		/// <summary>
+		/// Send Call Permission Template Message
+		/// </summary>
+		/// <param name="callPermissionTemplateMessageRequest">CallPermissionTemplateMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public WhatsAppResponse SendCallPermissionTemplateMessage(CallPermissionTemplateMessageRequest callPermissionTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<WhatsAppResponse>(callPermissionTemplateMessageRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Send Voice Call Message
+		/// </summary>
+		/// <param name="voiceCallMessageRequest">voice call message request object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public async Task<WhatsAppResponse> SendVoiceCallMessageAsync(VoiceCallMessageRequest voiceCallMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<WhatsAppResponse>(voiceCallMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+		/// <summary>
+		/// Send Voice Call Message
+		/// </summary>
+		/// <param name="voiceCallMessageRequest">voice call message request object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public WhatsAppResponse SendVoiceCallMessage(VoiceCallMessageRequest voiceCallMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<WhatsAppResponse>(voiceCallMessageRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
 
 		/// <summary>
 		/// You can use this endpoint to change two-step verification code associated with your account. After you change the verification code, future requests like changing the name, must use the new code.

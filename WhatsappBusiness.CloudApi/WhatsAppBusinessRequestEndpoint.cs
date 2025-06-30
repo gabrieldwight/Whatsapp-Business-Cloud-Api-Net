@@ -180,5 +180,9 @@ namespace WhatsappBusiness.CloudApi
         public static string MessageHistorySync { get; private set; } = "{{Phone-Number-ID}}/smb_app_data";
 
         public static string WhatsAppBusinessEncryption { get; private set; } = "{{Phone-Number-ID}}/whatsapp_business_encryption";
+
+        public static string CallPermissionState { get; private set; } = "{{Phone-Number-ID}}/call_permissions?user_wa_id={{Consumer-WhatsApp-ID}}";
+
+        public static string Calls { get; private set; } = "{{Phone-Number-ID}}/calls";
 	}
 }

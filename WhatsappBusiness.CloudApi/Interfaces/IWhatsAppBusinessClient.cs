@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WhatsappBusiness.CloudApi.AccountMigration.Requests;
 using WhatsappBusiness.CloudApi.BlockUser.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
+using WhatsappBusiness.CloudApi.Calls.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.MessageHistory.Requests;
@@ -1066,17 +1067,71 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
 		WhatsAppResponse SendTemplateMessage(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
-        #endregion
 
-        #region Two step verification code function
         /// <summary>
-        /// You can use this endpoint to change two-step verification code associated with your account. After you change the verification code, future requests like changing the name, must use the new code.
-        /// You set up two-factor verification and register a phone number in the same API call.
+        /// Send Free Form Call Permission Message
         /// </summary>
-        /// <param name="twoStepVerificationRequest">TwoStepVerificationRequest object</param>
+        /// <param name="freeFormCallPermissionMessageRequest">FreeFormCallPermissionMessageRequest object</param>
+        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>BaseSuccessResponse</returns>
-        Task<BaseSuccessResponse> SetTwoStepVerificationAsync(TwoStepVerificationRequest twoStepVerificationRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+        /// <returns>WhatsAppResponse</returns>
+        Task<WhatsAppResponse> SendFreeFormCallPermissionMessageAsync(FreeFormCallPermissionMessageRequest freeFormCallPermissionMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Free Form Call Permission Message
+		/// </summary>
+		/// <param name="freeFormCallPermissionMessageRequest">FreeFormCallPermissionMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		WhatsAppResponse SendFreeFormCallPermissionMessage(FreeFormCallPermissionMessageRequest freeFormCallPermissionMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Call Permission Template Message
+		/// </summary>
+		/// <param name="callPermissionTemplateMessageRequest">CallPermissionTemplateMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		Task<WhatsAppResponse> SendCallPermissionTemplateMessageAsync(CallPermissionTemplateMessageRequest callPermissionTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Call Permission Template Message
+		/// </summary>
+		/// <param name="callPermissionTemplateMessageRequest">CallPermissionTemplateMessageRequest object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		WhatsAppResponse SendCallPermissionTemplateMessage(CallPermissionTemplateMessageRequest callPermissionTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Voice Call Message
+		/// </summary>
+		/// <param name="voiceCallMessageRequest">voice call message request object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		Task<WhatsAppResponse> SendVoiceCallMessageAsync(VoiceCallMessageRequest voiceCallMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Send Voice Call Message
+		/// </summary>
+		/// <param name="voiceCallMessageRequest">voice call message request object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		WhatsAppResponse SendVoiceCallMessage(VoiceCallMessageRequest voiceCallMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		#endregion
+
+		#region Two step verification code function
+		/// <summary>
+		/// You can use this endpoint to change two-step verification code associated with your account. After you change the verification code, future requests like changing the name, must use the new code.
+		/// You set up two-factor verification and register a phone number in the same API call.
+		/// </summary>
+		/// <param name="twoStepVerificationRequest">TwoStepVerificationRequest object</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		Task<BaseSuccessResponse> SetTwoStepVerificationAsync(TwoStepVerificationRequest twoStepVerificationRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// You can use this endpoint to change two-step verification code associated with your account. After you change the verification code, future requests like changing the name, must use the new code.
@@ -1624,6 +1679,62 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 		/// <param name="cancellationToken">cancellation token</param>
 		/// <returns>MessageHistoryResponse</returns>
 		Task<MessageHistoryResponse> GetMessageHistorySynchronizationAsync(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		#endregion
+
+		#region Calls
+		/// <summary>
+		/// Get the call permission state for a specific phone number and consumer WhatsApp ID.
+		/// </summary>
+		/// <param name="phoneNumber">WhatsApp Phone Number Id</param>
+		/// <param name="consumerWhatsAppID">Consumer WhatsApp Id</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>Call permission state response</returns>
+		Task<CallPermissionStateResponse> GetCallPermissionStateAsync(string phoneNumber, string consumerWhatsAppID, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Get the call permission state for a specific phone number and consumer WhatsApp ID.
+		/// </summary>
+		/// <param name="phoneNumber">WhatsApp Phone Number Id</param>
+		/// <param name="consumerWhatsAppID">Consumer WhatsApp Id</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>Call permission state response</returns>
+		CallPermissionStateResponse GetCallPermissionState(string phoneNumber, string consumerWhatsAppID, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Initiate a Business Initiated Call to WhatsApp user.
+		/// </summary>
+		/// <param name="callRequest">Call request object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppCallResponse</returns>
+		Task<WhatsAppCallResponse> InitiateWhatsAppCallAsync(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Initiate a Business Initiated Call to WhatsApp user.
+		/// </summary>
+		/// <param name="callRequest">Call request object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppCallResponse</returns>
+		WhatsAppCallResponse InitiateWhatsAppCall(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+        
+		/// <summary>
+		/// Pre accept, accept, reject or Terminate a Business Initiated Call to WhatsApp user.
+		/// </summary>
+		/// <param name="callRequest">Call request object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		Task<BaseSuccessResponse> ManageWhatsAppCallActionAsync(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Pre accept, accept, reject or Terminate a Business Initiated Call to WhatsApp user.
+		/// </summary>
+		/// <param name="callRequest">Call request object</param>
+		/// <param name="cloudApiConfig">custom cloud api config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		BaseSuccessResponse ManageWhatsAppCallAction(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 		#endregion
 	}
 }
