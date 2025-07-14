@@ -471,7 +471,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendWhatsAppTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
+        public async Task<IActionResult> SendWhatsAppTextTemplateMessage(SendTemplateMessageViewModel sendTemplateMessageViewModel)
         {
             try
             {
