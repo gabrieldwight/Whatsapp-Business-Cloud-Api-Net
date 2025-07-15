@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Webhook
 {
     public class AudioMessage : GenericMessage
     {        
-
         [JsonPropertyName("audio")]
         public Audio Audio { get; set; }
 
         [JsonPropertyName("context")]
-        public MessageContext? Context { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public MessageContext? Context { get; set; }
     }
 
     public class Audio
@@ -18,8 +17,16 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonPropertyName("mime_type")]
         public string MimeType { get; set; }
 
-        [JsonPropertyName("id")]
+		[JsonPropertyName("sha256")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Sha256 { get; set; }
+
+		[JsonPropertyName("id")]
         public string Id { get; set; }
-    }
+
+        [JsonPropertyName("voice")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool Voice { get; set; }
+	}
     
 }
