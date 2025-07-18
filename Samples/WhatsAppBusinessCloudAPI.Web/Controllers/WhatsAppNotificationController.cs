@@ -8,6 +8,9 @@ using WhatsappBusiness.CloudApi.Interfaces;
 using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.Webhook;
+using Microsoft.AspNetCore.SignalR;
+using WhatsAppBusinessCloudAPI.Web.Hubs;
+using WhatsAppBusinessCloudAPI.Web.Models;
 
 namespace WhatsAppBusinessCloudAPI.Web.Controllers
 {
@@ -19,6 +22,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private readonly IWhatsAppBusinessClient _whatsAppBusinessClient;
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHubContext<WhatsAppMessagesHub> _hubContext;
         private List<TextMessage> textMessage;
         private List<AudioMessage> audioMessage;
         private List<ImageMessage> imageMessage;
@@ -36,17 +40,19 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         };
 
         public WhatsAppNotificationController(ILogger<WhatsAppNotificationController> logger, IWhatsAppBusinessClient whatsAppBusinessClient,
-            IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IWebHostEnvironment webHostEnvironment)
+            IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IWebHostEnvironment webHostEnvironment, IHubContext<WhatsAppMessagesHub> hubContext)
         {
             _logger = logger;
             _whatsAppBusinessClient = whatsAppBusinessClient;
             _whatsAppConfig = whatsAppConfig.Value;
             _webHostEnvironment = webHostEnvironment;
+            _hubContext = hubContext;
         }
 
         // Required step for configuring webhook to WhatsApp Cloud API
         // Make sure the verifytoken matches with the hubverifytoken returned from whatsapp.
-        [HttpGet("receive/TextMessage")]
+        // Leave verifytoken empty if you wish to skip the check (not recommended for production apps).
+        [HttpGet]
         public ActionResult<string> ConfigureWhatsAppMessageWebhook([FromQuery(Name = "hub.mode")] string hubMode,
                                                                     [FromQuery(Name = "hub.challenge")] int hubChallenge,
                                                                     [FromQuery(Name = "hub.verify_token")] string hubVerifyToken)
@@ -56,14 +62,21 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             _logger.LogInformation($"hub_challenge={hubChallenge}\n");
             _logger.LogInformation($"hub_verify_token={hubVerifyToken}\n");
 
-            if (!string.IsNullOrEmpty(_whatsAppConfig.WebhookVerifyToken) && !hubVerifyToken.Equals(_whatsAppConfig.WebhookVerifyToken))
+            // Check both hub.mode and verify token as per WhatsApp requirements
+            if (hubMode == "subscribe" && 
+                (string.IsNullOrEmpty(_whatsAppConfig.WebhookVerifyToken) || hubVerifyToken.Equals(_whatsAppConfig.WebhookVerifyToken)))
             {
-                return Forbid("VerifyToken doesn't match");
+                _logger.LogInformation("WEBHOOK VERIFIED");
+                return Ok(hubChallenge);
             }
-            return Ok(hubChallenge);
+            else
+            {
+                _logger.LogWarning($"Webhook verification failed. Mode: {hubMode}, Token match: {hubVerifyToken?.Equals(_whatsAppConfig.WebhookVerifyToken)}");
+                return Forbid("Webhook verification failed");
+            }
         }
 
-        [HttpPost("receive/TextMessage")]
+        [HttpPost]
         public async Task<IActionResult> ReceiveWhatsAppTextMessage([FromBody] JsonElement messageReceived)
         {
             try
@@ -75,6 +88,9 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         Message = "Message not received"
                     });
                 }
+
+                // Send raw JSON to UI for display
+                await SendMessageToUI("Raw JSON", "System", JsonSerializer.Serialize(messageReceived, JsonSerializerOptions), messageReceived.GetRawText());
 
                 // Message status updates will be triggered in different scenarios
                 var changesResult = messageReceived.GetProperty("entry")[0].GetProperty("changes")[0].GetProperty("value");
@@ -391,7 +407,22 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             markMessageRequest.TypingIndicator = new TypingIndicator();
 
 			return markMessageRequest;
+        }
 
+        [NonAction]
+        private async Task SendMessageToUI(string messageType, string from, string content, string rawJson, string status = "Received")
+        {
+            var displayMessage = new WhatsAppMessageDisplay
+            {
+                MessageType = messageType,
+                From = from,
+                MessageContent = content,
+                RawJson = rawJson,
+                Status = status,
+                Timestamp = DateTime.Now
+            };
+
+            await _hubContext.Clients.All.SendAsync("ReceiveMessage", displayMessage);
         }
     }
 }

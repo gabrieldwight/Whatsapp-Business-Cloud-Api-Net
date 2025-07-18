@@ -37,6 +37,11 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             return View();
         }
 
+        public IActionResult Messages()
+        {
+            return View();
+        }
+
         public IActionResult SendWhatsAppTextMessage()
         {
             return View();
