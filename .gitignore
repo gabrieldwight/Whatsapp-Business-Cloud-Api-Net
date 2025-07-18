@@ -365,3 +365,6 @@ FodyWeavers.xsd
 /Samples/WhatsAppBusinessCloudAPI.Web/appsettings.Development.json
 /Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/Application_Files/MediaUploads
 /Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/Application_Files/MediaDownloads
+
+# LibMan (Library Manager) - client-side libraries
+**/wwwroot/lib/

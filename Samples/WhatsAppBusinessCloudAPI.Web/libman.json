@@ -37,6 +37,15 @@
       "files": [
         "select2-bootstrap.min.css"
       ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "@microsoft/signalr@8.0.0",
+      "destination": "wwwroot/lib/signalr/",
+      "files": [
+        "dist/browser/signalr.min.js",
+        "dist/browser/signalr.js"
+      ]
     }
   ]
 }

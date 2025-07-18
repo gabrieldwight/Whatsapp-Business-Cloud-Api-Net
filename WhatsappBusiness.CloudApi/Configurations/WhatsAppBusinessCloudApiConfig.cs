@@ -8,5 +8,6 @@
         public string AccessToken { get; set; }
         public string AppName { get; set; }
         public string Version { get; set; }
+        public string WebhookVerifyToken { get; set; }
     }
 }

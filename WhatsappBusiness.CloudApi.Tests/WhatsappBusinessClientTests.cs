@@ -23,6 +23,7 @@ namespace WhatsappBusiness.CloudApi.Tests
             _whatsAppConfig.AccessToken = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AccessToken"];
             _whatsAppConfig.AppName = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AppName"];
             _whatsAppConfig.Version = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["Version"];
+            _whatsAppConfig.WebhookVerifyToken = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WebhookVerifyToken"];
             
             var factory = new WhatsAppBusinessClientFactory();
             _client = factory.Create(_whatsAppConfig);
