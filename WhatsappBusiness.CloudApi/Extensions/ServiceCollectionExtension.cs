@@ -38,7 +38,8 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 WhatsAppBusinessId = whatsAppConfig.WhatsAppBusinessId,
                 AccessToken = whatsAppConfig.AccessToken,
                 AppName = whatsAppConfig.AppName,
-                Version = whatsAppConfig.Version
+                Version = whatsAppConfig.Version,
+                WebhookVerifyToken = whatsAppConfig.WebhookVerifyToken
             });
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>
@@ -79,7 +80,8 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 WhatsAppBusinessId = whatsAppConfig.WhatsAppBusinessId,
                 AccessToken = whatsAppConfig.AccessToken,
                 AppName = whatsAppConfig.AppName,
-                Version = whatsAppConfig.Version
+                Version = whatsAppConfig.Version,
+                WebhookVerifyToken = whatsAppConfig.WebhookVerifyToken
             });
 
             services.AddHttpClient<IWhatsAppBusinessClient, WhatsAppBusinessClient>(options =>

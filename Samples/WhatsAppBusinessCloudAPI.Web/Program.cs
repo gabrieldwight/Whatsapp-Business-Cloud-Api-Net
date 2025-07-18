@@ -23,6 +23,7 @@ whatsAppConfig.WhatsAppBusinessId = builder.Configuration.GetSection("WhatsAppBu
 whatsAppConfig.AccessToken = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AccessToken"];
 whatsAppConfig.AppName = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AppName"];
 whatsAppConfig.Version = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["Version"];
+whatsAppConfig.WebhookVerifyToken = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WebhookVerifyToken"];
 
 builder.Services.AddWhatsAppBusinessCloudApiService(whatsAppConfig);
 
