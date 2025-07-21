@@ -1,7 +1,12 @@
 @{
     ViewData["Title"] = "WhatsApp Messages Monitor";
+    ViewData["CurrentPage"] = "Messages Monitor";
+    Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+    ViewData["ControllerName"] = "Home";
+    ViewData["ActionName"] = "Messages";
 }
 
+<section class="content">
 <div class="row">
     <div class="col-12">
         <h2>@ViewData["Title"]</h2>
@@ -29,6 +34,7 @@
         </div>
     </div>
 </div>
+</section>
 
 @section Scripts {
     <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
