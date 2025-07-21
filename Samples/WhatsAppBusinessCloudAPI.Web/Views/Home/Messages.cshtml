@@ -1,0 +1,128 @@
+@{
+    ViewData["Title"] = "WhatsApp Messages Monitor";
+    ViewData["CurrentPage"] = "Messages Monitor";
+    Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+    ViewData["ControllerName"] = "Home";
+    ViewData["ActionName"] = "Messages";
+}
+
+<section class="content">
+<div class="row">
+    <div class="col-12">
+        <h2>@ViewData["Title"]</h2>
+        <p>Real-time WhatsApp messages received via webhook</p>
+        
+        <div class="mb-3">
+            <button id="connectBtn" class="btn btn-success" onclick="startConnection()">Connect</button>
+            <button id="disconnectBtn" class="btn btn-danger" onclick="stopConnection()" disabled>Disconnect</button>
+            <button id="clearBtn" class="btn btn-warning" onclick="clearMessages()">Clear Messages</button>
+        </div>
+        
+        <div id="connectionStatus" class="alert alert-secondary">
+            Status: Disconnected
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5>Incoming Messages <span id="messageCount" class="badge bg-primary">0</span></h5>
+            </div>
+            <div class="card-body">
+                <div id="messagesList" style="height: 600px; overflow-y: auto;">
+                    <!-- Messages will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+@section Scripts {
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        "use strict";
+
+        var connection = null;
+        var messageCount = 0;
+
+        async function startConnection() {
+            connection = new signalR.HubConnectionBuilder()
+                .withUrl("/whatsappmessageshub")
+                .build();
+
+            connection.start().then(function () {
+                updateConnectionStatus("Connected", "alert-success");
+                document.getElementById("connectBtn").disabled = true;
+                document.getElementById("disconnectBtn").disabled = false;
+                
+                // Listen for messages
+                connection.on("ReceiveMessage", function (message) {
+                    addMessageToUI(message);
+                });
+                
+            }).catch(function (err) {
+                console.error(err.toString());
+                updateConnectionStatus("Connection Failed: " + err.toString(), "alert-danger");
+            });
+
+            connection.onclose(function () {
+                updateConnectionStatus("Disconnected", "alert-secondary");
+                document.getElementById("connectBtn").disabled = false;
+                document.getElementById("disconnectBtn").disabled = true;
+            });
+        }
+
+        function stopConnection() {
+            if (connection) {
+                connection.stop();
+            }
+        }
+
+        function updateConnectionStatus(status, alertClass) {
+            const statusDiv = document.getElementById("connectionStatus");
+            statusDiv.className = "alert " + alertClass;
+            statusDiv.textContent = "Status: " + status;
+        }
+
+        function addMessageToUI(message) {
+            messageCount++;
+            document.getElementById("messageCount").textContent = messageCount;
+            
+            const messagesList = document.getElementById("messagesList");
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "mb-3 p-3 border rounded";
+            
+            const timestamp = new Date(message.timestamp).toLocaleString();
+            
+            messageDiv.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><span class="badge bg-info">${message.messageType}</span> from: ${message.from}</h6>
+                        <small class="text-muted">Received: ${timestamp} | Status: ${message.status}</small>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Raw JSON:</h6>
+                        <pre style="font-size: 10px; max-height: 200px; overflow: auto; background: #f8f9fa; padding: 10px;">${JSON.stringify(JSON.parse(message.rawJson), null, 2)}</pre>
+                    </div>
+                </div>
+            `;
+            
+            messagesList.insertBefore(messageDiv, messagesList.firstChild);
+            
+            // Keep only last 50 messages
+            while (messagesList.children.length > 50) {
+                messagesList.removeChild(messagesList.lastChild);
+            }
+        }
+
+        function clearMessages() {
+            document.getElementById("messagesList").innerHTML = "";
+            messageCount = 0;
+            document.getElementById("messageCount").textContent = messageCount;
+        }
+
+        // Auto-connect on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            startConnection();
+        });
+    </script>
+}
