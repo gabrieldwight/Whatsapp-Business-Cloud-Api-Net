@@ -1,0 +1,479 @@
+@model WhatsappBusiness.CloudApi.Configurations.EmbeddedSignupConfiguration
+@{
+    ViewData["Title"] = "Embedded Signup";
+    ViewData["CurrentPage"] = "Embedded Signup";
+    Layout = "~/Views/Shared/AdminLTE/_AdminLayout.cshtml";
+    ViewData["ControllerName"] = "Home";
+    ViewData["ActionName"] = "EmbeddedSignup";
+}
+
+<style>
+    .readonly-config {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+    .config-info {
+        background-color: #e7f3ff;
+        border-left: 4px solid #007bff;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<section class="content">
+<div class="row">
+    <div class="col-md-12">
+        <h2>WhatsApp Business Embedded Signup</h2>
+        <p>This page allows other businesses to login and give your app permission to send WhatsApp messages on their behalf.</p>
+        
+        <div class="card">
+            <div class="card-header">
+                <h4>Embedded Signup Flow</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-exclamation-triangle"></i> <strong>Tech Provider Status Required</strong></h5>
+                    <p><strong>IMPORTANT:</strong> To use WhatsApp Business Embedded Signup, you must have <strong>Tech Provider</strong> status with Meta.</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Instructions:</strong>
+                    <ol>
+                        <li><strong>Tech Provider Status:</strong> <span style="color: #d10014;">Ensure you have Tech Provider status with Meta before proceeding.</span> </li>
+                        <li>The configuration below is loaded from your appsettings.json</li>
+                        <li>The Base URL is automatically detected if not configured in appsettings.json</li>
+                        <li><strong>Critical Meta App Configuration:</strong> In your Meta/Facebook app settings, you must configure THREE essential settings:
+                            <ul>
+                                <li><strong>App Domains:</strong> Add your domain WITHOUT protocol (e.g., <code style="color: #0066cc;">lingodub.com</code> or <code style="color: #0066cc;">localhost</code>) in Settings > Basic > App Domains. <span style="color: #d10014;">This is CRITICAL - the domain must match exactly without https:// or www.</span></li>
+                                <li><strong>Valid OAuth Redirect URIs:</strong> Add your base domain (e.g., <code style="color: #0066cc;">https://whatsapp.lingodub.com</code> or <code style="color: #0066cc;">http://localhost:5000</code>) in Facebook Login > Settings > Valid OAuth Redirect URIs. <strong>Do not include paths</strong> - Facebook will add its own paths during the OAuth flow. <strong>Note:</strong> Meta will automatically add a trailing slash to your domain.</li>
+                                <li><strong>JavaScript SDK Domains:</strong> Add the base URL (e.g., <code style="color: #0066cc;">https://whatsapp.lingodub.com</code>) to Allowed Domains in Facebook Login for Business > Settings. <strong>Note:</strong> Meta will automatically add a trailing slash making it <code style="color: #0066cc;">https://whatsapp.lingodub.com/</code>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>OAuth Flow Options:</strong> This page now supports two OAuth flows:
+                            <ul>
+                                <li><strong>Manual OAuth Flow (Recommended):</strong> Uses direct URL redirection following Facebook's manual flow documentation. This avoids redirect URI mismatch issues that are common with the JavaScript SDK.</li>
+                                <li><strong>SDK-based Flow (Fallback):</strong> Uses Facebook's JavaScript SDK. May encounter redirect URI validation issues on some configurations.</li>
+                            </ul>
+                        </li>
+                        <li><strong>OAuth Redirect URI Important Note:</strong> The redirect URI must match your domain exactly. For Facebook Embedded Signup, you need to add <code style="color: #0066cc;">https://whatsapp.lingodub.com</code> (just the base domain, no path) to Valid OAuth Redirect URIs in your Meta app settings. <strong>Note:</strong> Meta will automatically add a trailing slash making it <code style="color: #0066cc;">https://whatsapp.lingodub.com/</code> - this is normal. Facebook will automatically append its own paths during the OAuth flow. <span style="color: #d10014;">Missing this configuration will cause OAuth error 191.</span></li>
+                        <li><strong>App Domains Configuration:</strong> In Meta app Settings > Basic > App Domains, add <code style="color: #0066cc;">lingodub.com</code> (your root domain without subdomain, protocol, or paths). <span style="color: #d10014;">This must match the base_domain shown in console logs.</span></li>
+                        <li><strong>App Mode:</strong> Your Meta app should be in <strong>Live mode</strong> for token exchange to work properly. Development mode has restrictions that may cause token exchange failures.</li>
+                        <li>Click the "Login with Facebook (Manual OAuth)" button to start the embedded signup flow with the recommended manual flow</li>
+                        <li>Complete the WhatsApp Business signup process</li>
+                        <li>The system will automatically exchange the authorization code for an access token</li>
+                    </ol>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Configuration</h5>
+                        <div class="form-group mb-3">
+                            <label>Base URL:</label>
+                            <input type="text" id="baseUrl" class="form-control readonly-config" value="@Model.BaseUrl" readonly />
+                            <small class="form-text text-muted">Auto-detected if empty in appsettings.json</small>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Calculated Redirect URI:</label>
+                            <input type="text" id="redirectUri" class="form-control readonly-config" value="" readonly />
+                            <small class="form-text text-muted">This is the redirect URI that will be used for OAuth</small>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Meta App ID:</label>
+                            <input type="text" id="appId" class="form-control readonly-config" value="@Model.AppId" readonly />
+                            <small class="form-text text-muted">Configured in appsettings.json</small>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Meta App Secret:</label>
+                            <input type="password" id="appSecret" class="form-control readonly-config" value="@Model.AppSecret" readonly />
+                            <small class="form-text text-muted">Configured in appsettings.json (hidden for security)</small>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Configuration ID:</label>
+                            <input type="text" id="configId" class="form-control readonly-config" value="@Model.ConfigurationId" readonly />
+                            <small class="form-text text-muted">Configured in appsettings.json</small>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Graph API Version:</label>
+                            <input type="text" id="apiVersion" class="form-control readonly-config" value="@Model.GraphApiVersion" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Signup Flow</h5>
+                        <div id="fb-root"></div>
+                        
+                        <div class="mb-3">
+                            <button id="signup-btn" onclick="launchWhatsAppSignup()" 
+                                    style="background-color: #1877f2; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; height: 40px; padding: 0 24px; margin-right: 10px;">
+                                Login with Facebook (Manual OAuth)
+                            </button>
+                            
+                            <button id="signup-sdk-btn" onclick="launchWhatsAppSignupSDK()" 
+                                    style="background-color: #42b883; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; height: 40px; padding: 0 20px;">
+                                Fallback: SDK Flow
+                            </button>
+                        </div>
+                        
+                        <div class="alert alert-info mb-3">
+                            <small>
+                                <strong>Manual OAuth (Recommended):</strong> Uses direct URL redirection to avoid redirect URI mismatch issues.<br>
+                                <strong>SDK Flow (Fallback):</strong> Uses Facebook SDK - try if manual flow doesn't work.
+                            </small>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <h6>Status:</h6>
+                            <div id="status" class="alert alert-secondary">Ready to start signup process</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Session Info Response:</h5>
+                            <pre id="session-info-response" class="bg-light p-3" style="max-height: 300px; overflow-y: auto;">Waiting for response...</pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>SDK Response:</h5>
+                            <pre id="sdk-response" class="bg-light p-3" style="max-height: 300px; overflow-y: auto;">Waiting for response...</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <h5>Token Exchange Request:</h5>
+                    <pre id="token-request" class="bg-light p-3" style="max-height: 200px; overflow-y: auto;">No token exchange performed yet...</pre>
+                </div>
+
+                <div class="mt-4">
+                    <h5>Token Exchange Response:</h5>
+                    <pre id="token-response" class="bg-light p-3" style="max-height: 200px; overflow-y: auto;">No token exchange performed yet...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+@Html.AntiForgeryToken()
+
+@section Scripts {
+    <script>
+        // Function to get runtime base URL
+        function getRuntimeBaseUrl() {
+            return window.location.origin;
+        }
+
+        // Function to get runtime page URL
+        function getRuntimePageUrl() {
+            return window.location.href;
+        }
+
+        // Function to get base domain (for Meta app configuration)
+        function getBaseDomain(url) {
+            // Extract just the base domain with protocol, without any paths
+            const urlObj = new URL(url);
+            return `${urlObj.protocol}//${urlObj.host}`;
+        }
+
+        // Global variables for configuration (loaded from server and runtime)
+        const pageUrlOfTheDeployedWebpage = getRuntimePageUrl();
+        const baseUrlOfTheDeployedWebpage = getBaseDomain(pageUrlOfTheDeployedWebpage);
+        const appSettingsBaseUrl = "@Model.BaseUrl";
+        const redirectUri = (appSettingsBaseUrl ? appSettingsBaseUrl : baseUrlOfTheDeployedWebpage) + '/Home/EmbeddedSignup';
+        const baseUrl = getBaseDomain(redirectUri);
+        const appId = "@Model.AppId";
+        const appSecret = "@Model.AppSecret";
+        const embeddedSignupConfigurationId = "@Model.ConfigurationId";
+        const metaGraphApiVersion = "@Model.GraphApiVersion";
+
+        // Log the URLs for debugging
+        console.log('App Settings Base URL:', appSettingsBaseUrl);
+        console.log('Original Runtime Base URL:', baseUrlOfTheDeployedWebpage);
+        console.log('Original Runtime Page URL:', pageUrlOfTheDeployedWebpage);
+        console.log('Redirect URI used (for Meta app config):', redirectUri);
+        console.log('Base Domain (for Meta app config):', baseUrl);
+
+        // Update the Base URL display field with the runtime URL
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('baseUrl').value = baseUrl;
+            document.getElementById('redirectUri').value = redirectUri;
+            
+            // Check for authorization code in URL on page load
+            if (!checkForAuthCode()) {
+                // Only show ready status if no auth code was found
+                updateStatus('Ready to start signup process', 'secondary');
+            }
+        });
+
+        // Update status message
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `alert alert-${type}`;
+            statusDiv.textContent = message;
+        }
+
+        // Initialize Facebook SDK
+        window.fbAsyncInit = function() {
+            try {
+                FB.init({
+                    appId: appId,
+                    autoLogAppEvents: true,
+                    xfbml: true,
+                    version: metaGraphApiVersion
+                });
+                updateStatus('Facebook SDK initialized successfully', 'success');
+            } catch (error) {
+                console.error('Facebook SDK initialization error:', error);
+                updateStatus('Facebook SDK initialization failed: ' + error.message, 'danger');
+            }
+        };
+
+        // Load Facebook SDK
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            js.onerror = function() {
+                updateStatus('Failed to load Facebook SDK', 'danger');
+            };
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        // Message event listener for embedded signup
+        window.addEventListener('message', (event) => {
+            if (event.origin !== "https://www.facebook.com" && event.origin !== "https://web.facebook.com") {
+                return;
+            }
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === 'WA_EMBEDDED_SIGNUP') {
+                    // if user finishes the Embedded Signup flow
+                    if (data.event === 'FINISH') {
+                        const { phone_number_id, waba_id } = data.data;
+                        console.log("Phone number ID ", phone_number_id, " WhatsApp business account ID ", waba_id);
+                        updateStatus(`Signup completed! Phone ID: ${phone_number_id}, WABA ID: ${waba_id}`, 'success');
+                        // if user cancels the Embedded Signup flow
+                    } else if (data.event === 'CANCEL') {
+                        const { current_step } = data.data;
+                        console.warn("Cancel at ", current_step);
+                        updateStatus(`Signup cancelled at step: ${current_step}`, 'warning');
+                        // if user reports an error during the Embedded Signup flow
+                    } else if (data.event === 'ERROR') {
+                        const { error_message } = data.data;
+                        console.error("error ", error_message);
+                        updateStatus(`Error occurred: ${error_message}`, 'danger');
+                    }
+                }
+                document.getElementById("session-info-response").textContent = JSON.stringify(data, null, 2);
+            } catch {
+                console.log('Message received:', event.data);
+            }
+        });
+
+        // Check for authorization code in URL (for manual OAuth flow)
+        function checkForAuthCode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const state = urlParams.get('state');
+            const error = urlParams.get('error');
+            const errorDescription = urlParams.get('error_description');
+            
+            if (error) {
+                updateStatus(`OAuth error: ${error} - ${errorDescription || 'Unknown error'}`, 'danger');
+                document.getElementById("sdk-response").textContent = JSON.stringify({
+                    error: error,
+                    error_description: errorDescription,
+                    url_params: Object.fromEntries(urlParams)
+                }, null, 2);
+                return;
+            }
+            
+            if (code) {
+                // Validate state parameter for security (if we have one stored)
+                const storedState = sessionStorage.getItem('oauth_state');
+                if (storedState && state !== storedState) {
+                    updateStatus('OAuth state validation failed - possible CSRF attack', 'danger');
+                    document.getElementById("sdk-response").textContent = JSON.stringify({
+                        error: 'state_mismatch',
+                        error_description: 'State parameter validation failed',
+                        received_state: state,
+                        expected_state: storedState
+                    }, null, 2);
+                    return;
+                }
+                
+                // Clear stored state
+                sessionStorage.removeItem('oauth_state');
+                
+                updateStatus('Authorization code received from URL, exchanging for access token...', 'info');
+                console.log('Authorization code from URL:', code);
+                console.log('State validation:', state === storedState ? 'PASSED' : 'N/A');
+                console.log('Using redirect URI for token exchange:', redirectUri);
+                
+                // Show the received authorization response
+                document.getElementById("sdk-response").textContent = JSON.stringify({
+                    authorization_code: code,
+                    state: state,
+                    state_valid: !storedState || state === storedState,
+                    method: 'Manual OAuth Flow',
+                    redirect_uri_used: redirectUri,
+                    url_params: Object.fromEntries(urlParams)
+                }, null, 2);
+                
+                // Prepare the token exchange request
+                const tokenRequest = {
+                    code: code,
+                    clientId: appId,
+                    clientSecret: appSecret,
+                    redirectUri: redirectUri
+                };
+                
+                // Display the token exchange request
+                document.getElementById("token-request").textContent = JSON.stringify(tokenRequest, null, 2);
+                
+                // Exchange the code for an access token via our backend
+                fetch('/Home/ExchangeToken', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val(),
+                        'Accept-Language': 'en-US,en;q=0.9'
+                    },
+                    body: JSON.stringify(tokenRequest)
+                }).then(tokenResponse => {
+                    return tokenResponse.json();
+                }).then(tokenResult => {
+                    document.getElementById("token-response").textContent = JSON.stringify(tokenResult, null, 2);
+                    
+                    if (tokenResult.success) {
+                        updateStatus('Token exchange successful! Check the token response below.', 'success');
+                        
+                        // Clean up URL parameters after successful token exchange
+                        const cleanUrl = window.location.pathname;
+                        window.history.replaceState({}, document.title, cleanUrl);
+                    } else {
+                        updateStatus(`Token exchange failed: ${tokenResult.error}`, 'danger');
+                    }
+                }).catch(error => {
+                    console.error('Token exchange error:', error);
+                    updateStatus(`Token exchange error: ${error.message}`, 'danger');
+                    document.getElementById("token-response").textContent = `Error: ${error.message}`;
+                });
+                
+                return true; // Code was found and processed
+            }
+            
+            return false; // No code found
+        }
+
+        // Facebook login callback (for SDK-based flow - fallback)
+        const fbLoginCallback = (response) => {
+            document.getElementById("sdk-response").textContent = JSON.stringify(response, null, 2);
+            
+            if (response.authResponse) {
+                const code = response.authResponse.code;
+                updateStatus('Authorization code received from SDK, exchanging for access token...', 'info');
+                console.log('Using redirect URI for token exchange:', redirectUri);
+                
+                // Prepare the token exchange request
+                const tokenRequest = {
+                    code: code,
+                    clientId: appId,
+                    clientSecret: appSecret,
+                    redirectUri: redirectUri
+                };
+                
+                // Display the token exchange request
+                document.getElementById("token-request").textContent = JSON.stringify(tokenRequest, null, 2);
+                
+                // Exchange the code for an access token via our backend
+                fetch('/Home/ExchangeToken', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val(),
+                        'Accept-Language': 'en-US,en;q=0.9'
+                    },
+                    body: JSON.stringify(tokenRequest)
+                }).then(tokenResponse => {
+                    return tokenResponse.json();
+                }).then(tokenResult => {
+                    document.getElementById("token-response").textContent = JSON.stringify(tokenResult, null, 2);
+                    
+                    if (tokenResult.success) {
+                        updateStatus('Token exchange successful! Check the token response below.', 'success');
+                    } else {
+                        updateStatus(`Token exchange failed: ${tokenResult.error}`, 'danger');
+                    }
+                }).catch(error => {
+                    console.error('Token exchange error:', error);
+                    updateStatus(`Token exchange error: ${error.message}`, 'danger');
+                    document.getElementById("token-response").textContent = `Error: ${error.message}`;
+                });
+            } else {
+                updateStatus('Facebook login failed or was cancelled', 'warning');
+            }
+        };
+
+        // Generate random state parameter for OAuth security
+        function generateState() {
+            return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        }
+
+        // Launch WhatsApp signup flow using Manual OAuth Flow
+        const launchWhatsAppSignup = () => {
+            updateStatus('Starting WhatsApp signup flow using manual OAuth...', 'info');
+            
+            // Generate state parameter for security
+            const state = generateState();
+            sessionStorage.setItem('oauth_state', state);
+            
+            // Construct manual OAuth authorization URL
+            const authParams = new URLSearchParams({
+                client_id: appId,
+                redirect_uri: redirectUri,
+                state: state,
+                response_type: 'code',
+                config_id: embeddedSignupConfigurationId,
+                extras: JSON.stringify({ "version": "v3" })
+            });
+            
+            const authUrl = `https://www.facebook.com/${metaGraphApiVersion}/dialog/oauth?${authParams.toString()}`;
+            
+            console.log('Manual OAuth URL:', authUrl);
+            console.log('Redirect URI used:', redirectUri);
+            console.log('State parameter:', state);
+            
+            // Redirect to Facebook authorization page
+            window.location.href = authUrl;
+        };
+
+        // Fallback function to use SDK-based flow if needed
+        const launchWhatsAppSignupSDK = () => {
+            // Check if Facebook SDK is loaded
+            if (typeof FB === 'undefined') {
+                updateStatus('Facebook SDK not loaded yet. Please wait and try again.', 'warning');
+                return;
+            }
+            
+            updateStatus('Starting WhatsApp signup flow using SDK...', 'info');
+            console.log('Using redirect URI for FB.login:', redirectUri);
+            
+            try {
+                // Launch Facebook login
+                FB.login(fbLoginCallback, {
+                    config_id: embeddedSignupConfigurationId,
+                    response_type: 'code',
+                    override_default_response_type: true,
+                    fallback_redirect_uri: redirectUri,
+                    extras: { "version": "v3" }
+                });
+            } catch (error) {
+                console.error('FB.login error:', error);
+                updateStatus('Error starting Facebook login: ' + error.message, 'danger');
+            }
+        };
+    </script>
+}

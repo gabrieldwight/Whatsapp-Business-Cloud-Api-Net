@@ -11,6 +11,7 @@ using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.MessageHistory.Requests;
 using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
+using WhatsappBusiness.CloudApi.OAuth.Requests;
 using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
 using WhatsappBusiness.CloudApi.Registration.Requests;
 using WhatsappBusiness.CloudApi.Response;
@@ -1735,6 +1736,26 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
 		BaseSuccessResponse ManageWhatsAppCallAction(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		#endregion
+
+		#region OAuth functions
+		/// <summary>
+		/// Exchanges an authorization code for an access token asynchronously.
+		/// This is used as part of the OAuth 2.0 authorization code flow for Meta Embedded Signup.
+		/// </summary>
+		/// <param name="exchangeTokenRequest">The exchange token request containing the authorization code and client credentials</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>ExchangeTokenResponse containing the access token or error information</returns>
+		Task<ExchangeTokenResponse> ExchangeTokenAsync(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Exchanges an authorization code for an access token synchronously.
+		/// This is used as part of the OAuth 2.0 authorization code flow for Meta Embedded Signup.
+		/// </summary>
+		/// <param name="exchangeTokenRequest">The exchange token request containing the authorization code and client credentials</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>ExchangeTokenResponse containing the access token or error information</returns>
+		ExchangeTokenResponse ExchangeToken(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default);
 		#endregion
 	}
 }

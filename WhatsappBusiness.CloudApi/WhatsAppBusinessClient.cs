@@ -22,6 +22,7 @@ using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.MessageHistory.Requests;
 using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
 using WhatsappBusiness.CloudApi.Messages.Requests;
+using WhatsappBusiness.CloudApi.OAuth.Requests;
 using WhatsappBusiness.CloudApi.PhoneNumbers.Requests;
 using WhatsappBusiness.CloudApi.Registration.Requests;
 using WhatsappBusiness.CloudApi.Response;
@@ -1877,6 +1878,64 @@ namespace WhatsappBusiness.CloudApi
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Calls.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(callRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
+
+		#region OAuth functions
+		/// <summary>
+		/// Exchanges an authorization code for an access token asynchronously.
+		/// This is used as part of the OAuth 2.0 authorization code flow for Meta Embedded Signup.
+		/// </summary>
+		/// <param name="exchangeTokenRequest">The exchange token request containing the authorization code and client credentials</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>ExchangeTokenResponse containing the access token or error information</returns>
+		public async Task<ExchangeTokenResponse> ExchangeTokenAsync(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default)
+		{
+			var formData = new Dictionary<string, string>
+			{
+				{ "grant_type", exchangeTokenRequest.GrantType },
+				{ "client_id", exchangeTokenRequest.ClientId },
+				{ "client_secret", exchangeTokenRequest.ClientSecret },
+				{ "code", exchangeTokenRequest.Code }
+			};
+
+			if (!string.IsNullOrEmpty(exchangeTokenRequest.RedirectUri))
+			{
+				formData.Add("redirect_uri", exchangeTokenRequest.RedirectUri);
+			}
+
+			var formContent = new FormUrlEncodedContent(formData);
+			var request = new HttpRequestMessage(HttpMethod.Post, WhatsAppBusinessRequestEndpoint.OAuthAccessToken)
+			{
+				Content = formContent
+			};
+
+			var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+			var responseContent = await response.Content.ReadAsStringAsync();
+
+			var result = JsonSerializer.Deserialize<ExchangeTokenResponse>(responseContent);
+			
+			if (!response.IsSuccessStatusCode && result?.Error != null)
+			{
+				throw new WhatsappBusinessCloudAPIException(
+					response.StatusCode,
+					$"OAuth token exchange failed: {result.Error} - {result.ErrorDescription}"
+				);
+			}
+
+			return result ?? new ExchangeTokenResponse();
+		}
+
+		/// <summary>
+		/// Exchanges an authorization code for an access token synchronously.
+		/// This is used as part of the OAuth 2.0 authorization code flow for Meta Embedded Signup.
+		/// </summary>
+		/// <param name="exchangeTokenRequest">The exchange token request containing the authorization code and client credentials</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>ExchangeTokenResponse containing the access token or error information</returns>
+		public ExchangeTokenResponse ExchangeToken(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default)
+		{
+			return ExchangeTokenAsync(exchangeTokenRequest, cancellationToken).GetAwaiter().GetResult();
+		}
+		#endregion
 
 		/// <summary>
 		/// When you receive an incoming message from Webhooks, you could use messages endpoint to change the status of it to read.

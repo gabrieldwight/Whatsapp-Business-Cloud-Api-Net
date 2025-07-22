@@ -21,14 +21,16 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IWhatsAppBusinessClient _whatsAppBusinessClient;
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
+        private readonly EmbeddedSignupConfiguration _embeddedSignupConfig;
         private readonly IWebHostEnvironment _environment;
 
         public HomeController(ILogger<HomeController> logger, IWhatsAppBusinessClient whatsAppBusinessClient,
-            IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IWebHostEnvironment environment)
+            IOptions<WhatsAppBusinessCloudApiConfig> whatsAppConfig, IOptions<EmbeddedSignupConfiguration> embeddedSignupConfig, IWebHostEnvironment environment)
         {
             _logger = logger;
             _whatsAppBusinessClient = whatsAppBusinessClient;
             _whatsAppConfig = whatsAppConfig.Value;
+            _embeddedSignupConfig = embeddedSignupConfig.Value;
             _environment = environment;
         }
 
@@ -1591,5 +1593,76 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 return RedirectToAction(nameof(bulkFile)).WithDanger("Error", ex.Message);
             }
         }
+
+        public IActionResult EmbeddedSignup()
+        {
+            // Create a copy of the configuration with runtime base URL
+            var config = new EmbeddedSignupConfiguration
+            {
+                AppId = _embeddedSignupConfig.AppId,
+                AppSecret = _embeddedSignupConfig.AppSecret,
+                ConfigurationId = _embeddedSignupConfig.ConfigurationId,
+                GraphApiVersion = _embeddedSignupConfig.GraphApiVersion,
+                // Use configured BaseUrl if provided, otherwise use runtime detection
+                BaseUrl = string.IsNullOrEmpty(_embeddedSignupConfig.BaseUrl) 
+                    ? $"{Request.Scheme}://{Request.Host}{Request.PathBase}" 
+                    : _embeddedSignupConfig.BaseUrl
+            };
+            
+            return View(config);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExchangeToken([FromBody] TokenExchangeRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Code) || string.IsNullOrEmpty(request.ClientId) || string.IsNullOrEmpty(request.ClientSecret))
+                {
+                    return Json(new { success = false, error = "Missing required parameters" });
+                }
+
+                // Use the CloudApi library for token exchange
+                var exchangeRequest = new WhatsappBusiness.CloudApi.OAuth.Requests.ExchangeTokenRequest
+                {
+                    ClientId = request.ClientId,
+                    ClientSecret = request.ClientSecret,
+                    Code = request.Code,
+                    RedirectUri = request.RedirectUri
+                };
+
+                var result = await _whatsAppBusinessClient.ExchangeTokenAsync(exchangeRequest);
+
+                if (!string.IsNullOrEmpty(result.AccessToken))
+                {
+                    _logger.LogInformation("Token exchange successful");
+                    return Json(new { success = true, data = result });
+                }
+                else
+                {
+                    _logger.LogError("Token exchange failed: {Error}", result.Error ?? "Unknown error");
+                    return Json(new { success = false, error = result.Error ?? "Token exchange failed" });
+                }
+            }
+            catch (WhatsappBusinessCloudAPIException ex)
+            {
+                _logger.LogError(ex, "WhatsApp API error during token exchange");
+                return Json(new { success = false, error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during token exchange");
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+    }
+
+    public class TokenExchangeRequest
+    {
+        public string? Code { get; set; }
+        public string? ClientId { get; set; }
+        public string? ClientSecret { get; set; }
+        public string? RedirectUri { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Extensions;
 using WhatsAppBusinessCloudAPI.Web.Hubs;
+using WhatsAppBusinessCloudAPI.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,11 @@ builder.Services.AddSignalR();
 builder.Services.Configure<WhatsAppBusinessCloudApiConfig>(options =>
 {
     builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration").Bind(options);
+});
+
+builder.Services.Configure<EmbeddedSignupConfiguration>(options =>
+{
+    builder.Configuration.GetSection("EmbeddedSignupConfiguration").Bind(options);
 });
 
 WhatsAppBusinessCloudApiConfig whatsAppConfig = new WhatsAppBusinessCloudApiConfig();

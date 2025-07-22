@@ -1,6 +1,8 @@
 ﻿using WhatsappBusiness.CloudApi.Messages.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Templates;
+using WhatsappBusiness.CloudApi.OAuth.Requests;
+using WhatsappBusiness.CloudApi.Exceptions;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +12,7 @@ namespace WhatsappBusiness.CloudApi.Tests
     public class WhatsappBusinessClientTests : IClassFixture<TestSetup>
     {
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
+        private readonly EmbeddedSignupConfiguration _embeddedSignupConfig;
         private readonly WhatsAppBusinessClient _client;
 
         public WhatsappBusinessClientTests(TestSetup testSetup)
@@ -25,6 +28,13 @@ namespace WhatsappBusiness.CloudApi.Tests
             _whatsAppConfig.Version = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["Version"];
             _whatsAppConfig.WebhookVerifyToken = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WebhookVerifyToken"];
             
+            _embeddedSignupConfig = new EmbeddedSignupConfiguration();
+            _embeddedSignupConfig.AppId = configuration.GetSection("EmbeddedSignupConfiguration")["AppId"];
+            _embeddedSignupConfig.AppSecret = configuration.GetSection("EmbeddedSignupConfiguration")["AppSecret"];
+            _embeddedSignupConfig.ConfigurationId = configuration.GetSection("EmbeddedSignupConfiguration")["ConfigurationId"];
+            _embeddedSignupConfig.GraphApiVersion = configuration.GetSection("EmbeddedSignupConfiguration")["GraphApiVersion"];
+            _embeddedSignupConfig.BaseUrl = configuration.GetSection("EmbeddedSignupConfiguration")["BaseUrl"];
+
             var factory = new WhatsAppBusinessClientFactory();
             _client = factory.Create(_whatsAppConfig);
         }
@@ -337,6 +347,34 @@ namespace WhatsappBusiness.CloudApi.Tests
             response.Should().NotBeNull();
             response.Messages.Should().NotBeNullOrEmpty();
             response.Contacts.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact(Skip = "Complete the EmbeddedSignupConfiguration to run the test.")]
+        public async Task ExchangeTokenAsync_WithValidAuthorizationCode_ShouldReturnAccessToken()
+        {
+            // Arrange
+            var authorizationCode = "your_authorization_code"; // Replace with actual authorization code obtained from the OAuth flow
+            var clientId = "your_meta_app_id"; // Replace with actual Meta App ID from configuration
+            var clientSecret = "your_meta_app_secret"; // Replace with actual Meta App Secret from configuration
+            var redirectUri = "your_redirect_uri"; // Replace with actual redirect URI
+
+            var exchangeRequest = new ExchangeTokenRequest
+            {
+                ClientId = clientId,
+                ClientSecret = clientSecret,
+                Code = authorizationCode,
+                RedirectUri = redirectUri
+            };
+
+            // Act
+            var response = await _client.ExchangeTokenAsync(exchangeRequest);
+
+            // Assert
+            response.Should().NotBeNull();
+            response.AccessToken.Should().NotBeNullOrEmpty();
+            response.TokenType.Should().Be("bearer");
+            response.ExpiresIn.Should().BeGreaterThan(0);
+            response.Error.Should().BeNullOrEmpty();
         }
     }
 }
