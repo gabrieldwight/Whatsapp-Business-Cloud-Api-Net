@@ -184,5 +184,7 @@ namespace WhatsappBusiness.CloudApi
         public static string CallPermissionState { get; private set; } = "{{Phone-Number-ID}}/call_permissions?user_wa_id={{Consumer-WhatsApp-ID}}";
 
         public static string Calls { get; private set; } = "{{Phone-Number-ID}}/calls";
+
+        public static string OAuthAccessToken { get; private set; } = "oauth/access_token";
 	}
 }

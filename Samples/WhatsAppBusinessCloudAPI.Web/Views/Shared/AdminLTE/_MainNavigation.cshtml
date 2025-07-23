@@ -35,6 +35,15 @@
 				</li>
 
 				<li class="nav-item ">
+					<a asp-controller="Home" asp-action="EmbeddedSignup" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.EmbeddedSignup))">
+						<i class="nav-icon fa-solid fa-user-plus"></i>
+						<p>
+							Embedded Signup
+						</p>
+					</a>
+				</li>
+
+				<li class="nav-item ">
 					<a href="#" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""))">
 						<i class="nav-icon fa-solid fa-paper-plane"></i>
 						<p>
