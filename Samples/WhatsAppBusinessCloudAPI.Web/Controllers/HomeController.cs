@@ -1614,7 +1614,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExchangeToken([FromBody] TokenExchangeRequest request)
+        public async Task<IActionResult> ExchangeToken([FromBody] ExchangeTokenRequestViewModel request)
         {
             try
             {
@@ -1656,13 +1656,5 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                 return Json(new { success = false, error = ex.Message });
             }
         }
-    }
-
-    public class TokenExchangeRequest
-    {
-        public string? Code { get; set; }
-        public string? ClientId { get; set; }
-        public string? ClientSecret { get; set; }
-        public string? RedirectUri { get; set; }
     }
 }
