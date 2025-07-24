@@ -1148,16 +1148,18 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <summary>
         /// Get Shared WhatsApp Business Account
         /// </summary>
+        /// <param name="inputToken">Business Integration System User Access Token</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAIDResponse</returns>
-        Task<SharedWABAIDResponse> GetSharedWABAIdAsync(CancellationToken cancellationToken = default);
+        Task<SharedWABAIDResponse> GetSharedWABAIdAsync(string inputToken, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get Shared WhatsApp Business Account
         /// </summary>
+        /// <param name="inputToken">Business Integration System User Access Token</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAIDResponse</returns>
-        SharedWABAIDResponse GetSharedWABAId(CancellationToken cancellationToken = default);
+        SharedWABAIDResponse GetSharedWABAId(string inputToken, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get Shared WhatsApp Business Account List
