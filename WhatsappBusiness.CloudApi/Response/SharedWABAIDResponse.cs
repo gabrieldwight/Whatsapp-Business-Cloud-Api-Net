@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace WhatsappBusiness.CloudApi.Response
@@ -7,6 +8,15 @@ namespace WhatsappBusiness.CloudApi.Response
     {
         [JsonPropertyName("data")]
         public SharedWABAIDData Data { get; set; }
+
+        public string? GetSharedWABAId()
+        {
+            return Data
+                ?.GranularScopes
+                ?.FirstOrDefault(x => x.Scope == "whatsapp_business_management" || x.Scope == "whatsapp_business_messaging")
+                ?.TargetIds
+                ?.FirstOrDefault();
+        }
     }
 
     public class SharedWABAIDData
@@ -45,6 +55,7 @@ namespace WhatsappBusiness.CloudApi.Response
         public string Scope { get; set; }
 
         [JsonPropertyName("target_ids")]
-        public List<string> TargetIds { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string>? TargetIds { get; set; }
     }
 }

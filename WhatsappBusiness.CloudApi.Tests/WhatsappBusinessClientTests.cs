@@ -376,5 +376,35 @@ namespace WhatsappBusiness.CloudApi.Tests
             response.ExpiresIn.Should().BeGreaterThan(0);
             response.Error.Should().BeNullOrEmpty();
         }
+
+        [Fact(Skip = "Complete the WhatsAppBusinessCloudApiConfig to run the test.")]
+        public async Task GetSharedWABAIdAsync_ShouldReturnData()
+        {
+            // Arrange
+            var inputToken = "business_token_obtained_after_embedded_signup";
+            // Act
+            var response = await _client.GetSharedWABAIdAsync(inputToken);
+
+            // Assert
+            response.Should().NotBeNull();
+            response.Data.Should().NotBeNull();
+            var sharedWABAId = response.GetSharedWABAId();
+            sharedWABAId.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact(Skip = "Complete the WhatsAppBusinessCloudApiConfig to run the test.")]
+        public async Task GetWhatsAppBusinessAccountPhoneNumberAsync_ShouldReturnData()
+        {
+            // Arrange
+            var whatsAppBusinessAccountId = "your_waba_id";
+            // Act
+            var response = await _client.GetWhatsAppBusinessAccountPhoneNumberAsync(whatsAppBusinessAccountId);
+
+            // Assert
+            response.Should().NotBeNull();
+            response.Data.Should().NotBeNull();
+            var lastOnboardedPhoneNumberId = response.GetMostRecentlyOnboardedPhoneNumberId();
+            lastOnboardedPhoneNumberId.Should().NotBeNullOrEmpty();
+        }
     }
 }
