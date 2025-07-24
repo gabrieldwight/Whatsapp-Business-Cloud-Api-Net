@@ -1403,9 +1403,9 @@ namespace WhatsappBusiness.CloudApi
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAIDResponse</returns>
-        public SharedWABAIDResponse GetSharedWABAId(CancellationToken cancellationToken = default)
+        public SharedWABAIDResponse GetSharedWABAId(string inputToken, CancellationToken cancellationToken = default)
         {
-            return WhatsAppBusinessGetAsync<SharedWABAIDResponse>(WhatsAppBusinessRequestEndpoint.GetSharedWABAID, cancellationToken).GetAwaiter().GetResult();
+            return WhatsAppBusinessGetAsync<SharedWABAIDResponse>(WhatsAppBusinessRequestEndpoint.GetSharedWABAID.Replace("{{Input-Token}}", inputToken), cancellationToken).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -1413,9 +1413,9 @@ namespace WhatsappBusiness.CloudApi
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAIDResponse</returns>
-        public async Task<SharedWABAIDResponse> GetSharedWABAIdAsync(CancellationToken cancellationToken = default)
+        public async Task<SharedWABAIDResponse> GetSharedWABAIdAsync(string inputToken, CancellationToken cancellationToken = default)
         {
-            return await WhatsAppBusinessGetAsync<SharedWABAIDResponse>(WhatsAppBusinessRequestEndpoint.GetSharedWABAID, cancellationToken);
+            return await WhatsAppBusinessGetAsync<SharedWABAIDResponse>(WhatsAppBusinessRequestEndpoint.GetSharedWABAID.Replace("{{Input-Token}}", inputToken), cancellationToken);
         }
 
         /// <summary>
