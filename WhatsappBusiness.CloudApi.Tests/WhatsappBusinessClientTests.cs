@@ -13,7 +13,9 @@ namespace WhatsappBusiness.CloudApi.Tests
     {
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
         private readonly EmbeddedSignupConfiguration _embeddedSignupConfig;
+        private readonly List<WhatsAppBusinessCloudApiConfig> _sharedWhatsAppConfigs;
         private readonly WhatsAppBusinessClient _client;
+        private readonly List<WhatsAppBusinessClient> _sharedClients = new List<WhatsAppBusinessClient>();
 
         public WhatsappBusinessClientTests(TestSetup testSetup)
         {
@@ -27,7 +29,7 @@ namespace WhatsappBusiness.CloudApi.Tests
             _whatsAppConfig.AppName = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AppName"];
             _whatsAppConfig.Version = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["Version"];
             _whatsAppConfig.WebhookVerifyToken = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WebhookVerifyToken"];
-            
+
             _embeddedSignupConfig = new EmbeddedSignupConfiguration();
             _embeddedSignupConfig.AppId = configuration.GetSection("EmbeddedSignupConfiguration")["AppId"];
             _embeddedSignupConfig.AppSecret = configuration.GetSection("EmbeddedSignupConfiguration")["AppSecret"];
@@ -36,7 +38,28 @@ namespace WhatsappBusiness.CloudApi.Tests
             _embeddedSignupConfig.BaseUrl = configuration.GetSection("EmbeddedSignupConfiguration")["BaseUrl"];
 
             var factory = new WhatsAppBusinessClientFactory();
+            // Initialize WhatsApp client with primary configuration
             _client = factory.Create(_whatsAppConfig);
+
+            // Initialize shared WhatsApp configurations
+            _sharedWhatsAppConfigs = new List<WhatsAppBusinessCloudApiConfig>();
+            var sharedConfigsSection = configuration.GetSection("SharedWhatsAppBusinessCloudApiConfigurations");
+
+            foreach (var configSection in sharedConfigsSection.GetChildren())
+            {
+                var sharedConfig = new WhatsAppBusinessCloudApiConfig();
+                sharedConfig.WhatsAppBusinessPhoneNumberId = configSection["WhatsAppBusinessPhoneNumberId"];
+                sharedConfig.WhatsAppBusinessAccountId = configSection["WhatsAppBusinessAccountId"];
+                sharedConfig.WhatsAppBusinessId = configSection["WhatsAppBusinessId"];
+                sharedConfig.AccessToken = configSection["AccessToken"];
+                sharedConfig.AppName = configSection["AppName"];
+                sharedConfig.Version = configSection["Version"];
+                sharedConfig.WebhookVerifyToken = configSection["WebhookVerifyToken"];
+
+                _sharedWhatsAppConfigs.Add(sharedConfig);
+                var sharedClient = factory.Create(sharedConfig);
+                _sharedClients.Add(sharedClient);
+            }
         }
 
         [Fact(Skip = "Complete the WhatsAppBusinessCloudApiConfig to run the test.")]
@@ -405,6 +428,144 @@ namespace WhatsappBusiness.CloudApi.Tests
             response.Data.Should().NotBeNull();
             var lastOnboardedPhoneNumberId = response.GetMostRecentlyOnboardedPhoneNumberId();
             lastOnboardedPhoneNumberId.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact(Skip = "Complete the WhatsAppBusinessCloudApiConfig to run the test.")]
+        public async Task CreateTemplateMessageAsync_InSharedWaba_UsingPositionalParameters_ShouldReturnCorrectStatus()
+        {
+            // Arrange
+            var firstNameExampleText = "John";
+            var companyNameExampleText = "My Company";
+            var templateCategory = "MARKETING"; // or "UTILITY" or "AUTHENTICATION"
+            var sharedWabaId = _sharedWhatsAppConfigs.First().WhatsAppBusinessAccountId;
+            var sharedWhatsAppClient = _sharedClients.First();
+
+            var request = new BaseCreateTemplateMessageRequest
+            {
+                Name = $"test_template",
+                Category = templateCategory,
+                Language = "en_US",
+                Components = new List<object>
+                {
+                    new TemplateComponent
+                    {
+                        Type = "HEADER",
+                        Format = "TEXT",
+                        Text = "{{1}} Intro",
+                        Example = new TemplateComponentParameterExample
+                        {
+                            HeaderText = new List<string> { companyNameExampleText }
+                        }
+                    },
+                    new TemplateComponent
+                    {
+                        Type = "BODY",
+                        Text = "Hey {{1}}! {{2}} would love for you to schedule an appointment with us.",
+                        Example = new TemplateComponentParameterExample
+                        {
+                            BodyText = new List<List<string>>
+                            {
+                                new List<string>{ firstNameExampleText, companyNameExampleText }
+                            }
+                        }
+                    },
+                    new TemplateComponent
+                    {
+                        Type = "FOOTER",
+                        Text = "Reply STOP to unsubscribe."
+                    },
+                    new TemplateComponent
+                    {
+                        Type = "BUTTONS",
+                        Buttons = new List<TemplateComponentButton>
+                        {
+                            new TemplateComponentButton
+                            {
+                                Type = "QUICK_REPLY",
+                                Text = "YES"
+                            },
+                            new TemplateComponentButton
+                            {
+                                Type = "QUICK_REPLY",
+                                Text = "NO"
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Act
+            var response = await sharedWhatsAppClient.CreateTemplateMessageAsync(sharedWabaId, request);
+
+            // Assert
+            response.Status.Should().NotBeNullOrEmpty();
+            response.Status.Should().BeOneOf("PENDING", "APPROVED");
+            response.Id.Should().NotBeNullOrEmpty();
+            response.Category.Should().Be(templateCategory);
+        }
+
+        [Fact(Skip = "Complete the WhatsAppBusinessCloudApiConfig to run the test.")]
+        public async Task SendTextMessageTemplateAsync_FromSharedWaba_WithParameters_ShouldReturnSuccess()
+        {
+            // Arrange
+            var phoneNumber = "phone_number_to_contact_from_shared_waba"; // Example phone number, should be a valid WhatsApp registered number
+            var templateName = "test_template"; // Example template name, should match an existing template
+            var firstName = "John";
+            var companyName = "My Company";
+            var sharedWhatsAppClient = _sharedClients.First();
+
+            var request = new TextTemplateMessageRequest
+            {
+                To = phoneNumber,
+                Template = new TextMessageTemplate
+                {
+                    Name = templateName,
+                    Language = new TextMessageLanguage
+                    {
+                        Code = "en_US"
+                    },
+                    Components = new List<TextMessageComponent>
+                    {
+                        new TextMessageComponent
+                        {
+                            Type = "HEADER",
+                            Parameters = new List<TextMessageParameter>
+                            {
+                                new TextMessageParameter
+                                {
+                                    Type = "text",
+                                    Text = companyName
+                                }
+                            }
+                        },
+                        new TextMessageComponent
+                        {
+                            Type = "BODY",
+                            Parameters = new List<TextMessageParameter>
+                            {
+                                new TextMessageParameter
+                                {
+                                    Type = "text",
+                                    Text = firstName
+                                },
+                                new TextMessageParameter
+                                {
+                                    Type = "text",
+                                    Text = companyName
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Act
+            var response = await sharedWhatsAppClient.SendTextMessageTemplateAsync(request);
+
+            // Assert
+            response.Should().NotBeNull();
+            response.Messages.Should().NotBeNullOrEmpty();
+            response.Contacts.Should().NotBeNullOrEmpty();
         }
     }
 }
