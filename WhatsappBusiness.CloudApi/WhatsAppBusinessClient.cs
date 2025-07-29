@@ -44,7 +44,7 @@ namespace WhatsappBusiness.CloudApi
         /// Initialize WhatsAppBusinessClient with httpclient factory
         /// </summary>
         /// <param name="whatsAppConfig">WhatsAppBusiness configuration</param>
-        public WhatsAppBusinessClient(WhatsAppBusinessCloudApiConfig whatsAppConfig, string graphAPIVersion = null)
+        public WhatsAppBusinessClient(WhatsAppBusinessCloudApiConfig whatsAppConfig, string? graphAPIVersion = null)
         {
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
                 .WaitAndRetryAsync(1, retryAttempt =>
@@ -69,7 +69,11 @@ namespace WhatsappBusiness.CloudApi
                 }
 
                 return handler;
+#if !NET472
             }).AddPolicyHandler(request => request.Method.Equals(HttpMethod.Get) ? retryPolicy : noOpPolicy);
+#else
+            });
+#endif
 
             var serviceProvider = services.BuildServiceProvider();
 
@@ -4324,9 +4328,7 @@ namespace WhatsappBusiness.CloudApi
 
 #if NET5_0_OR_GREATER
             var bytesDownloaded = await _httpClient.GetByteArrayAsync(whatsAppBusinessEndpoint, cancellationToken).ConfigureAwait(false);
-#endif
-
-#if NETSTANDARD2_0_OR_GREATER
+#elif NETSTANDARD2_0_OR_GREATER || NET472
             var bytesDownloaded = await _httpClient.GetByteArrayAsync(whatsAppBusinessEndpoint).ConfigureAwait(false);
 #endif
 
