@@ -17,7 +17,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <param name="whatsAppBusinessPhoneNumberId"></param>
-        public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, string graphAPIVersion = null)
+        public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, string? graphAPIVersion = null)
         {
             Random jitterer = new Random();
 
@@ -56,10 +56,14 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 }
 
                 return handler;
+#if !NET472
             }).AddPolicyHandler(request => request.Method.Equals(HttpMethod.Get) ? retryPolicy : noOpPolicy);
+#else
+            });
+#endif
         }
 
-        public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, string graphAPIVersion = null) where THandler : HttpMessageHandler
+        public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, string? graphAPIVersion = null) where THandler : HttpMessageHandler
         {
             Random jitterer = new Random();
 
@@ -90,7 +94,11 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 options.Timeout = TimeSpan.FromMinutes(10);
             }).SetHandlerLifetime(Timeout.InfiniteTimeSpan)
               .ConfigurePrimaryHttpMessageHandler<THandler>()
+#if !NET472
               .AddPolicyHandler(request => request.Method.Equals(HttpMethod.Get) ? retryPolicy : noOpPolicy);
+#else
+              ;
+#endif
         }
     }
 }
