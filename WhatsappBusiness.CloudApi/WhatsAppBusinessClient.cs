@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+#if !NET472
 using Polly;
 using Polly.Extensions.Http;
+#endif
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,7 +39,9 @@ namespace WhatsappBusiness.CloudApi
     public class WhatsAppBusinessClient : IWhatsAppBusinessClient
     {
         private readonly HttpClient _httpClient;
+#if !NET472
         readonly Random jitterer = new Random();
+#endif
         private WhatsAppBusinessCloudApiConfig _whatsAppConfig;
 
         /// <summary>
@@ -46,6 +50,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppConfig">WhatsAppBusiness configuration</param>
         public WhatsAppBusinessClient(WhatsAppBusinessCloudApiConfig whatsAppConfig, string? graphAPIVersion = null)
         {
+#if !NET472
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
                 .WaitAndRetryAsync(1, retryAttempt =>
                 {
@@ -53,6 +58,7 @@ namespace WhatsappBusiness.CloudApi
                 });
 
             var noOpPolicy = Policy.NoOpAsync().AsAsyncPolicy<HttpResponseMessage>();
+#endif
 
             var services = new ServiceCollection();
             services.AddHttpClient("WhatsAppBusinessApiClient", client =>
