@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+#if !NET472
 using Polly;
 using Polly.Extensions.Http;
+#endif
 using System;
 using System.Net;
 using System.Net.Http;
@@ -19,6 +21,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
         /// <param name="whatsAppBusinessPhoneNumberId"></param>
         public static void AddWhatsAppBusinessCloudApiService(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, string? graphAPIVersion = null)
         {
+#if !NET472
             Random jitterer = new Random();
 
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
@@ -28,6 +31,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 });
 
             var noOpPolicy = Policy.NoOpAsync().AsAsyncPolicy<HttpResponseMessage>();
+#endif
 
             services.AddTransient<IWhatsAppBusinessClientFactory, WhatsAppBusinessClientFactory>();
 
@@ -65,6 +69,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
 
         public static void AddWhatsAppBusinessCloudApiService<THandler>(this IServiceCollection services, WhatsAppBusinessCloudApiConfig whatsAppConfig, string? graphAPIVersion = null) where THandler : HttpMessageHandler
         {
+#if !NET472
             Random jitterer = new Random();
 
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
@@ -74,6 +79,7 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 });
 
             var noOpPolicy = Policy.NoOpAsync().AsAsyncPolicy<HttpResponseMessage>();
+#endif
 
 			services.AddTransient<IWhatsAppBusinessClientFactory, WhatsAppBusinessClientFactory>();
 
