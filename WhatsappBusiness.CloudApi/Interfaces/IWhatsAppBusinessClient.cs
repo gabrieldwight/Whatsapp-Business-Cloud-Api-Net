@@ -1176,6 +1176,25 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAResponse</returns>
         SharedWABAResponse GetSharedWABAList(string businessId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get detailed WhatsApp Business Account information by WABA ID
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">WhatsApp Business Account ID</param>
+        /// <param name="cloudApiConfig">Cloud API configuration</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WABADetailsResponse</returns>
+        Task<WABADetailsResponse> GetWABADetailsAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get detailed WhatsApp Business Account information by WABA ID
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">WhatsApp Business Account ID</param>
+        /// <param name="cloudApiConfig">Cloud API configuration</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WABADetailsResponse</returns>
+        WABADetailsResponse GetWABADetails(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
         #endregion
         
         #region Flows Encryption functions

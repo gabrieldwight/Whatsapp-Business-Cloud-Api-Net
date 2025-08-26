@@ -1543,6 +1543,42 @@ namespace WhatsappBusiness.CloudApi
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetListSharedWABA.Replace("{{Business-ID}}", businessId);
             return await WhatsAppBusinessGetAsync<SharedWABAResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
+
+        /// <summary>
+        /// Get detailed WhatsApp Business Account information by WABA ID
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">WhatsApp Business Account ID</param>
+        /// <param name="cloudApiConfig">Cloud API configuration</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WABADetailsResponse</returns>
+        public WABADetailsResponse GetWABADetails(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetWABADetails.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            return WhatsAppBusinessGetAsync<WABADetailsResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Get detailed WhatsApp Business Account information by WABA ID
+        /// </summary>
+        /// <param name="whatsAppBusinessAccountId">WhatsApp Business Account ID</param>
+        /// <param name="cloudApiConfig">Cloud API configuration</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>WABADetailsResponse</returns>
+        public async Task<WABADetailsResponse> GetWABADetailsAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetWABADetails.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            return await WhatsAppBusinessGetAsync<WABADetailsResponse>(formattedWhatsAppEndpoint, cancellationToken);
+        }
         
         
 
