@@ -567,5 +567,20 @@ namespace WhatsappBusiness.CloudApi.Tests
             response.Messages.Should().NotBeNullOrEmpty();
             response.Contacts.Should().NotBeNullOrEmpty();
         }
+
+        [Fact(Skip = "Complete the WhatsAppBusinessCloudApiConfig to run the test.")]
+        public async Task GetWABADetails_ShouldReturnSuccess()
+        {
+            // Arrange
+            var wabaId = _whatsAppConfig.WhatsAppBusinessAccountId;
+
+            // Act
+            var response = await _client.GetWABADetailsAsync(wabaId);
+
+            // Assert
+            response.Should().NotBeNull();
+            response.Name.Should().NotBeNullOrEmpty();
+            response.BusinessVerificationStatus.Should().NotBeNullOrEmpty();
+        }
     }
 }

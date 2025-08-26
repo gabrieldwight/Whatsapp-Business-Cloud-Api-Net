@@ -125,6 +125,11 @@ namespace WhatsappBusiness.CloudApi
         public static string GetListSharedWABA { get; private set; } = "{{Business-ID}}/client_whatsapp_business_accounts";
 
         /// <summary>
+        /// Get WhatsApp Business Account details directly by WABA ID with additional fields
+        /// </summary>
+        public static string GetWABADetails { get; private set; } = "{{WABA-ID}}?fields=id,name,currency,timezone_id,message_template_namespace,account_review_status,business_verification_status,country,owner_business_info,primary_business_location,purchase_order_number,status,health_status";
+
+        /// <summary>
         /// Subscribe an app to a WhatsApp Business Account.
         /// </summary>
         public static string SubscribeAppToWABA { get; private set; } = "{{WABA-ID}}/subscribed_apps";
