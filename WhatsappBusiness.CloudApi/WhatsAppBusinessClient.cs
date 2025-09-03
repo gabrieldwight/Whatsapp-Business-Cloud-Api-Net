@@ -4428,7 +4428,7 @@ namespace WhatsappBusiness.CloudApi
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
 				}
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -4445,7 +4445,7 @@ namespace WhatsappBusiness.CloudApi
 				}
 				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
@@ -4482,7 +4482,7 @@ namespace WhatsappBusiness.CloudApi
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
 				}
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -4499,7 +4499,7 @@ namespace WhatsappBusiness.CloudApi
 				}
 				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
@@ -4536,7 +4536,7 @@ namespace WhatsappBusiness.CloudApi
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
 				}
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -4553,7 +4553,7 @@ namespace WhatsappBusiness.CloudApi
 				}
 				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
@@ -4592,7 +4592,7 @@ namespace WhatsappBusiness.CloudApi
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
 				}
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -4609,7 +4609,7 @@ namespace WhatsappBusiness.CloudApi
 				}
 				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
