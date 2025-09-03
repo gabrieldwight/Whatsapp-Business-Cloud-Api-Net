@@ -1,23 +1,26 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
-namespace WhatsappBusiness.CloudApi.Tests;
-public class TestSetup
+namespace WhatsappBusiness.CloudApi.Tests
 {
-    public TestSetup()
+    public class TestSetup
     {
-        var serviceCollection = new ServiceCollection();
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile(
-                 path: "appsettings.json",
-                 optional: false,
-                 reloadOnChange: true)
-           .Build();
-        serviceCollection.AddSingleton<IConfiguration>(configuration);
+        public TestSetup()
+        {
+            var serviceCollection = new ServiceCollection();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(
+                     path: "appsettings.json",
+                     optional: false,
+                     reloadOnChange: true)
+               .Build();
+            serviceCollection.AddSingleton<IConfiguration>(configuration);
 
-        ServiceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+        }
+
+        public ServiceProvider ServiceProvider { get; private set; }
     }
-
-    public ServiceProvider ServiceProvider { get; private set; }
 }
