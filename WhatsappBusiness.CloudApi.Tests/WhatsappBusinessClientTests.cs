@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using Xunit;
+using WhatsappBusiness.CloudApi.Interfaces;
 
 namespace WhatsappBusiness.CloudApi.Tests
 {
@@ -18,8 +19,8 @@ namespace WhatsappBusiness.CloudApi.Tests
         private readonly WhatsAppBusinessCloudApiConfig _whatsAppConfig;
         private readonly EmbeddedSignupConfiguration _embeddedSignupConfig;
         private readonly List<WhatsAppBusinessCloudApiConfig> _sharedWhatsAppConfigs;
-        private readonly WhatsAppBusinessClient _client;
-        private readonly List<WhatsAppBusinessClient> _sharedClients = new List<WhatsAppBusinessClient>();
+        private readonly IWhatsAppBusinessClient _client;
+        private readonly List<IWhatsAppBusinessClient> _sharedClients = new List<IWhatsAppBusinessClient>();
 
         public WhatsappBusinessClientTests(TestSetup testSetup)
         {

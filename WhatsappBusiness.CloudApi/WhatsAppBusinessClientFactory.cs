@@ -5,7 +5,7 @@ namespace WhatsappBusiness.CloudApi
 {
 	public class WhatsAppBusinessClientFactory : IWhatsAppBusinessClientFactory
 	{
-		public WhatsAppBusinessClient Create(WhatsAppBusinessCloudApiConfig config)
+		public IWhatsAppBusinessClient Create(WhatsAppBusinessCloudApiConfig config)
 		{
 			return new WhatsAppBusinessClient(config);
 		}

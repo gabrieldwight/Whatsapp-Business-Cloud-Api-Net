@@ -4,6 +4,6 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 {
 	public interface IWhatsAppBusinessClientFactory
 	{
-		WhatsAppBusinessClient Create(WhatsAppBusinessCloudApiConfig config);
+		IWhatsAppBusinessClient Create(WhatsAppBusinessCloudApiConfig config);
 	}
 }

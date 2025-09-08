@@ -38,11 +38,11 @@ namespace WhatsappBusiness.CloudApi
     /// </summary>
     public class WhatsAppBusinessClient : IWhatsAppBusinessClient
     {
-        private readonly HttpClient _httpClient;
+        protected readonly HttpClient _httpClient;
 #if !NET472
-        readonly Random jitterer = new Random();
+        protected readonly Random _jitterer = new Random();
 #endif
-        private WhatsAppBusinessCloudApiConfig _whatsAppConfig;
+        protected WhatsAppBusinessCloudApiConfig _whatsAppConfig;
 
         /// <summary>
         /// Initialize WhatsAppBusinessClient with httpclient factory
@@ -54,7 +54,7 @@ namespace WhatsappBusiness.CloudApi
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
                 .WaitAndRetryAsync(1, retryAttempt =>
                 {
-                    return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) + TimeSpan.FromMilliseconds(jitterer.Next(0, 100));
+                    return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) + TimeSpan.FromMilliseconds(_jitterer.Next(0, 100));
                 });
 
             var noOpPolicy = Policy.NoOpAsync().AsAsyncPolicy<HttpResponseMessage>();
@@ -100,7 +100,7 @@ namespace WhatsappBusiness.CloudApi
             _whatsAppConfig = whatsAppConfig;
         }
 
-        public void SetWhatsAppBusinessConfig(WhatsAppBusinessCloudApiConfig cloudApiConfig)
+        public virtual void SetWhatsAppBusinessConfig(WhatsAppBusinessCloudApiConfig cloudApiConfig)
         {
             _whatsAppConfig = cloudApiConfig;
 		}
@@ -112,7 +112,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BlockUserResponse</returns>
-		public BlockUserResponse BlockUser(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BlockUserResponse BlockUser(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -135,7 +135,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BlockUserResponse</returns>
-		public async Task<BlockUserResponse> BlockUserAsync(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<BlockUserResponse> BlockUserAsync(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -152,7 +152,7 @@ namespace WhatsappBusiness.CloudApi
 		}
 
 
-		public BaseSuccessResponse ConfigureConversationalCommands(ConversationalComponentCommand conversationalComponentCommand, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse ConfigureConversationalCommands(ConversationalComponentCommand conversationalComponentCommand, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -169,7 +169,7 @@ namespace WhatsappBusiness.CloudApi
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
-        public async Task<BaseSuccessResponse> ConfigureConversationalCommandsAsync(ConversationalComponentCommand conversationalComponentCommand, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> ConfigureConversationalCommandsAsync(ConversationalComponentCommand conversationalComponentCommand, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -186,7 +186,7 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        public BaseSuccessResponse ConfigureConversationalComponentPrompt(List<string> prompts, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse ConfigureConversationalComponentPrompt(List<string> prompts, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -203,7 +203,7 @@ namespace WhatsappBusiness.CloudApi
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
-        public async Task<BaseSuccessResponse> ConfigureConversationalComponentPromptAsync(List<string> prompts, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> ConfigureConversationalComponentPromptAsync(List<string> prompts, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -220,7 +220,7 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        public BaseSuccessResponse CreateConversationalMessage(ConversationalComponentRequest conversationalComponentRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse CreateConversationalMessage(ConversationalComponentRequest conversationalComponentRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -231,7 +231,7 @@ namespace WhatsappBusiness.CloudApi
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(conversationalComponentRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
-        public async Task<BaseSuccessResponse> CreateConversationalMessageAsync(ConversationalComponentRequest conversationalComponentRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> CreateConversationalMessageAsync(ConversationalComponentRequest conversationalComponentRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -249,7 +249,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="qrImageFormat"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>QRCodeMessageResponse</returns>
-        public QRCodeMessageResponse CreateQRCodeMessage(string messageText, string qrImageFormat, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual QRCodeMessageResponse CreateQRCodeMessage(string messageText, string qrImageFormat, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -279,7 +279,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="qrImageFormat"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>QRCodeMessageResponse</returns>
-        public async Task<QRCodeMessageResponse> CreateQRCodeMessageAsync(string messageText, string qrImageFormat, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<QRCodeMessageResponse> CreateQRCodeMessageAsync(string messageText, string qrImageFormat, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -310,7 +310,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileName">Full Path of the file</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public async Task<ResumableUploadResponse> CreateResumableUploadSessionAsync(long fileLength, string fileType, string fileName, CancellationToken cancellationToken = default)
+        public virtual async Task<ResumableUploadResponse> CreateResumableUploadSessionAsync(long fileLength, string fileType, string fileName, CancellationToken cancellationToken = default)
         {
             var builder = new StringBuilder();
 
@@ -332,7 +332,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileName">Full Path of the file</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public ResumableUploadResponse CreateResumableUploadSession(long fileLength, string fileType, string fileName, CancellationToken cancellationToken = default)
+        public virtual ResumableUploadResponse CreateResumableUploadSession(long fileLength, string fileType, string fileName, CancellationToken cancellationToken = default)
         {
             var builder = new StringBuilder();
 
@@ -352,7 +352,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public BaseSuccessResponse CreateWABASubscription(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse CreateWABASubscription(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -369,7 +369,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> CreateWABASubscriptionAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> CreateWABASubscriptionAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -387,7 +387,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="template">Message template type</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>Template Message Creation Response</returns>
-		public async Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, object template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, object template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -405,7 +405,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="template">Message template type</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>Template Message Creation Response</returns>
-		public async Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, BaseCreateTemplateMessageRequest template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateMessageCreationResponse> CreateTemplateMessageAsync(string whatsAppBusinessAccountId, BaseCreateTemplateMessageRequest template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -423,7 +423,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="template">Message template type</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Template Message Creation Response</returns>
-        public TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, object template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, object template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -441,7 +441,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="template">Message template type</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Template Message Creation Response</returns>
-        public TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, BaseCreateTemplateMessageRequest template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual TemplateMessageCreationResponse CreateTemplateMessage(string whatsAppBusinessAccountId, BaseCreateTemplateMessageRequest template, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -459,7 +459,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public BaseSuccessResponse DeleteMedia(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse DeleteMedia(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -485,7 +485,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> DeleteMediaAsync(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> DeleteMediaAsync(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -510,7 +510,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="qrCodeId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>BaseSuccessResponse</returns>
-        public BaseSuccessResponse DeleteQRCodeMessage(string qrCodeId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse DeleteQRCodeMessage(string qrCodeId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -533,7 +533,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="qrCodeId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> DeleteQRCodeMessageAsync(string qrCodeId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> DeleteQRCodeMessageAsync(string qrCodeId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -557,7 +557,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateName">Template Name</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public async Task<BaseSuccessResponse> DeleteTemplateByNameAsync(string whatsAppBusinessAccountId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<BaseSuccessResponse> DeleteTemplateByNameAsync(string whatsAppBusinessAccountId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -581,7 +581,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateName">Template Name</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public BaseSuccessResponse DeleteTemplateByName(string whatsAppBusinessAccountId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse DeleteTemplateByName(string whatsAppBusinessAccountId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -606,7 +606,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateName">Template Name</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public async Task<BaseSuccessResponse> DeleteTemplateByIdAsync(string whatsAppBusinessAccountId, string templateId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<BaseSuccessResponse> DeleteTemplateByIdAsync(string whatsAppBusinessAccountId, string templateId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -632,7 +632,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateName">Template Name</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public BaseSuccessResponse DeleteTemplatebyId(string whatsAppBusinessAccountId, string templateId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse DeleteTemplatebyId(string whatsAppBusinessAccountId, string templateId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -656,7 +656,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public BaseSuccessResponse DeleteWABASubscription(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse DeleteWABASubscription(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -673,7 +673,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> DeleteWABASubscriptionAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> DeleteWABASubscriptionAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -690,7 +690,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessPhoneNumberId">ID for the phone number connected to the WhatsApp Business API. You can get this with a Get Phone Number ID request.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public BaseSuccessResponse DeRegisterWhatsAppBusinessPhoneNumber(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse DeRegisterWhatsAppBusinessPhoneNumber(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -707,7 +707,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessPhoneNumberId">ID for the phone number connected to the WhatsApp Business API. You can get this with a Get Phone Number ID request.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> DeRegisterWhatsAppBusinessPhoneNumberAsync(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> DeRegisterWhatsAppBusinessPhoneNumberAsync(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -724,7 +724,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>byte[]</returns>
-        public byte[] DownloadMedia(string mediaUrl, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual byte[] DownloadMedia(string mediaUrl, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -742,7 +742,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="mediaUrl">The URL generated from whatsapp cloud api</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>byte[]</returns>
-        public async Task<byte[]> DownloadMediaAsync(string mediaUrl, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<byte[]> DownloadMediaAsync(string mediaUrl, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -761,7 +761,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateId">Template Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public async Task<BaseSuccessResponse> EditTemplateAsync(object messageTemplate, string templateId, CancellationToken cancellationToken = default)
+		public virtual async Task<BaseSuccessResponse> EditTemplateAsync(object messageTemplate, string templateId, CancellationToken cancellationToken = default)
         {
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
 			return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(messageTemplate, formattedWhatsAppEndpoint, cancellationToken);
@@ -774,13 +774,13 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateId">Template Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public BaseSuccessResponse EditTemplate(object messageTemplate, string templateId, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse EditTemplate(object messageTemplate, string templateId, CancellationToken cancellationToken = default)
         {
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
 			return WhatsAppBusinessPostAsync<BaseSuccessResponse>(messageTemplate, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
-        public BaseSuccessResponse EnableConversationalWelcomeMessage(bool isWelcomeMessageEnabled, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse EnableConversationalWelcomeMessage(bool isWelcomeMessageEnabled, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -797,7 +797,7 @@ namespace WhatsappBusiness.CloudApi
             return WhatsAppBusinessPostAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
-        public async Task<BaseSuccessResponse> EnableConversationalWelcomeMessageAsync(bool isWelcomeMessageEnabled, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> EnableConversationalWelcomeMessageAsync(bool isWelcomeMessageEnabled, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -826,7 +826,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="countryCodes">The countries for which you would like to retrieve analytics. Provide an array with 2 letter country codes for the countries you would like to include. If not provided, analytics will be returned for all countries you have communicated with</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>AnalyticsResponse</returns>
-        public AnalyticsResponse GetAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? productTypes = null, List<string>? countryCodes = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual AnalyticsResponse GetAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? productTypes = null, List<string>? countryCodes = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -879,7 +879,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="countryCodes">The countries for which you would like to retrieve analytics. Provide an array with 2 letter country codes for the countries you would like to include. If not provided, analytics will be returned for all countries you have communicated with</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>AnalyticsResponse</returns>
-        public async Task<AnalyticsResponse> GetAnalyticMetricsAsync(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? productTypes = null, List<string>? countryCodes = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<AnalyticsResponse> GetAnalyticMetricsAsync(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? productTypes = null, List<string>? countryCodes = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -929,7 +929,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>GetBlockedUserResponse</returns>
-		public GetBlockedUserResponse GetBlockedUsers(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual GetBlockedUserResponse GetBlockedUsers(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -969,7 +969,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>GetBlockedUserResponse</returns>
-		public async Task<GetBlockedUserResponse> GetBlockedUsersAsync(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<GetBlockedUserResponse> GetBlockedUsersAsync(int? limit = null, string after = null, string before = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -1014,7 +1014,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="dimensions">List of breakdowns you would like to apply to your metrics. If you send an empty list, we return results without any breakdowns.</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>ConversationAnalyticsResponse</returns>
-		public ConversationAnalyticsResponse GetConversationAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual ConversationAnalyticsResponse GetConversationAnalyticMetrics(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1081,7 +1081,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="dimensions">List of breakdowns you would like to apply to your metrics. If you send an empty list, we return results without any breakdowns.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ConversationAnalyticsResponse</returns>
-        public async Task<ConversationAnalyticsResponse> GetConversationAnalyticMetricsAsync(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<ConversationAnalyticsResponse> GetConversationAnalyticMetricsAsync(string whatsAppBusinessAccountId, DateTime startDate, DateTime endDate, string granularity, List<string>? phoneNumbers = null, List<string>? metricTypes = null, List<string>? conversationTypes = null, List<string>? conversationDirections = null, List<string>? dimensions = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1134,7 +1134,7 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessGetAsync<ConversationAnalyticsResponse>(formattedWhatsAppEndpoint, cancellationToken, isHeaderAccessTokenProvided: false);
         }
 
-        public ConversationalComponentResponse GetConversationalMessage(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual ConversationalComponentResponse GetConversationalMessage(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1145,7 +1145,7 @@ namespace WhatsappBusiness.CloudApi
             return WhatsAppBusinessPostAsync<ConversationalComponentResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
-        public async Task<ConversationalComponentResponse> GetConversationalMessageAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<ConversationalComponentResponse> GetConversationalMessageAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1162,7 +1162,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessPhoneNumberId">ID for the phone number connected to the WhatsApp Business API. You can get this with a Get Phone Number ID request.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BusinessProfileResponse</returns>
-        public BusinessProfileResponse GetBusinessProfileId(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BusinessProfileResponse GetBusinessProfileId(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1179,7 +1179,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessPhoneNumberId">ID for the phone number connected to the WhatsApp Business API. You can get this with a Get Phone Number ID request.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BusinessProfileResponse</returns>
-        public async Task<BusinessProfileResponse> GetBusinessProfileIdAsync(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BusinessProfileResponse> GetBusinessProfileIdAsync(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1197,7 +1197,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="consumerWhatsAppID">Consumer WhatsApp Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>Call permission state response</returns>
-		public async Task<CallPermissionStateResponse> GetCallPermissionStateAsync(string phoneNumber, string consumerWhatsAppID, CancellationToken cancellationToken = default)
+		public virtual async Task<CallPermissionStateResponse> GetCallPermissionStateAsync(string phoneNumber, string consumerWhatsAppID, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.CallPermissionState
 				.Replace("{{Phone-Number-ID}}", phoneNumber)
@@ -1213,7 +1213,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="consumerWhatsAppID">Consumer WhatsApp Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>Call permission state response</returns>
-		public CallPermissionStateResponse GetCallPermissionState(string phoneNumber, string consumerWhatsAppID, CancellationToken cancellationToken = default)
+		public virtual CallPermissionStateResponse GetCallPermissionState(string phoneNumber, string consumerWhatsAppID, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.CallPermissionState
 				.Replace("{{Phone-Number-ID}}", phoneNumber)
@@ -1229,7 +1229,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>MediaUrlResponse</returns>
-		public MediaUrlResponse GetMediaUrl(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
+		public virtual MediaUrlResponse GetMediaUrl(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1255,7 +1255,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="isMediaOwnershipVerified">Verify the media ownership using PHONE_NUMBER_ID</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUrlResponse</returns>
-        public async Task<MediaUrlResponse> GetMediaUrlAsync(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
+        public virtual async Task<MediaUrlResponse> GetMediaUrlAsync(string mediaId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, bool isMediaOwnershipVerified = false, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1281,7 +1281,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">custom cloud api config</param>
 		/// <param name="cancellationToken">cancellation token</param>
 		/// <returns>MessageHistoryResponse</returns>
-		public MessageHistoryResponse GetMessageHistorySynchronization(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual MessageHistoryResponse GetMessageHistorySynchronization(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1304,7 +1304,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">custom cloud api config</param>
 		/// <param name="cancellationToken">cancellation token</param>
 		/// <returns>MessageHistoryResponse</returns>
-		public async Task<MessageHistoryResponse> GetMessageHistorySynchronizationAsync(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<MessageHistoryResponse> GetMessageHistorySynchronizationAsync(MessageHistoryRequest messageHistoryRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1325,7 +1325,7 @@ namespace WhatsappBusiness.CloudApi
 		/// </summary>
 		/// <param name="cancellationToken"></param>
 		/// <returns>QRCodeMessageFilterResponse</returns>
-		public QRCodeMessageFilterResponse GetQRCodeMessageList(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual QRCodeMessageFilterResponse GetQRCodeMessageList(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1346,7 +1346,7 @@ namespace WhatsappBusiness.CloudApi
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns>QRCodeMessageFilterResponse</returns>
-        public async Task<QRCodeMessageFilterResponse> GetQRCodeMessageListAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<QRCodeMessageFilterResponse> GetQRCodeMessageListAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1368,7 +1368,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="qrCodeId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>QRCodeMessageFilterResponse</returns>
-        public QRCodeMessageFilterResponse GetQRCodeMessageById(string qrCodeId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual QRCodeMessageFilterResponse GetQRCodeMessageById(string qrCodeId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1391,7 +1391,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="qrCodeId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>QRCodeMessageFilterResponse</returns>
-        public async Task<QRCodeMessageFilterResponse> GetQRCodeMessageByIdAsync(string qrCodeId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<QRCodeMessageFilterResponse> GetQRCodeMessageByIdAsync(string qrCodeId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1413,7 +1413,7 @@ namespace WhatsappBusiness.CloudApi
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAIDResponse</returns>
-        public SharedWABAIDResponse GetSharedWABAId(string inputToken, CancellationToken cancellationToken = default)
+        public virtual SharedWABAIDResponse GetSharedWABAId(string inputToken, CancellationToken cancellationToken = default)
         {
             return WhatsAppBusinessGetAsync<SharedWABAIDResponse>(WhatsAppBusinessRequestEndpoint.GetSharedWABAID.Replace("{{Input-Token}}", inputToken), cancellationToken).GetAwaiter().GetResult();
         }
@@ -1423,7 +1423,7 @@ namespace WhatsappBusiness.CloudApi
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAIDResponse</returns>
-        public async Task<SharedWABAIDResponse> GetSharedWABAIdAsync(string inputToken, CancellationToken cancellationToken = default)
+        public virtual async Task<SharedWABAIDResponse> GetSharedWABAIdAsync(string inputToken, CancellationToken cancellationToken = default)
         {
             return await WhatsAppBusinessGetAsync<SharedWABAIDResponse>(WhatsAppBusinessRequestEndpoint.GetSharedWABAID.Replace("{{Input-Token}}", inputToken), cancellationToken);
         }
@@ -1434,7 +1434,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="businessId">Your Business' ID. Once you have your Phone-Number-ID, make a Get Business Profile request to get your Business' ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAResponse</returns>
-        public SharedWABAResponse GetSharedWABAList(string businessId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual SharedWABAResponse GetSharedWABAList(string businessId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1446,13 +1446,13 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
-        /// Get Business Public Key
+        /// Get Business public virtual Key
         /// </summary>
         /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
         /// <param name="cloudApiConfig">Custom cloudapi config</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsappBusinessEncryptionResponse</returns>
-        public async Task<WhatsappBusinessEncryptionResponse> GetWhatsappBusinessEncryptionAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsappBusinessEncryptionResponse> GetWhatsappBusinessEncryptionAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 	        if (cloudApiConfig is not null)
 	        {
@@ -1464,13 +1464,13 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
-        /// Get Business Public Key
+        /// Get Business public virtual Key
         /// </summary>
         /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
         /// <param name="cloudApiConfig">Custom cloudapi config</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsappBusinessEncryptionResponse</returns>
-        public WhatsappBusinessEncryptionResponse GetWhatsappBusinessEncryption(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsappBusinessEncryptionResponse GetWhatsappBusinessEncryption(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 	        if (cloudApiConfig is not null)
 	        {
@@ -1482,14 +1482,14 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
-        /// Set Business Public Key
+        /// Set Business public virtual Key
         /// </summary>
         /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
-        /// <param name="publicKey">The 2048-bit RSA business public key generated</param>
+        /// <param name="publicKey">The 2048-bit RSA business public virtual key generated</param>
         /// <param name="cloudApiConfig">Custom cloudapi config</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsappBusinessEncryptionResponse</returns>
-        public async Task<BaseSuccessResponse> SetWhatsappBusinessEncryptionAsync(string publicKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> SetWhatsappBusinessEncryptionAsync(string publicKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 	        if (cloudApiConfig is not null)
 	        {
@@ -1505,14 +1505,14 @@ namespace WhatsappBusiness.CloudApi
         }
 
         /// <summary>
-        /// Set Business Public Key
+        /// Set Business public virtual Key
         /// </summary>
         /// <remarks>You must have the whatsapp_business_messaging permission</remarks>
-        /// <param name="publicKey">The 2048-bit RSA business public key generated</param>
+        /// <param name="publicKey">The 2048-bit RSA business public virtual key generated</param>
         /// <param name="cloudApiConfig">Custom cloudapi config</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsappBusinessEncryptionResponse</returns>
-        public BaseSuccessResponse SetWhatsappBusinessEncryption(string publicKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse SetWhatsappBusinessEncryption(string publicKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 	        if (cloudApiConfig is not null)
 	        {
@@ -1533,7 +1533,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="businessId">Your Business' ID. Once you have your Phone-Number-ID, make a Get Business Profile request to get your Business' ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SharedWABAResponse</returns>
-        public async Task<SharedWABAResponse> GetSharedWABAListAsync(string businessId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<SharedWABAResponse> GetSharedWABAListAsync(string businessId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1551,7 +1551,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Cloud API configuration</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WABADetailsResponse</returns>
-        public WABADetailsResponse GetWABADetails(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WABADetailsResponse GetWABADetails(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1569,7 +1569,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Cloud API configuration</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WABADetailsResponse</returns>
-        public async Task<WABADetailsResponse> GetWABADetailsAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WABADetailsResponse> GetWABADetailsAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1588,7 +1588,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>TemplateNamespaceResponse</returns>
-		public async Task<TemplateNamespaceResponse> GetTemplateNamespaceAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateNamespaceResponse> GetTemplateNamespaceAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1605,7 +1605,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="whatsAppBusinessAccountId">Whatsapp Business Account Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>TemplateNamespaceResponse</returns>
-		public TemplateNamespaceResponse GetTemplateNamespace(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual TemplateNamespaceResponse GetTemplateNamespace(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1622,7 +1622,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateId">Template Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>TemplateByIdResponse</returns>
-		public async Task<TemplateByIdResponse> GetTemplateByIdAsync(string templateId, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateByIdResponse> GetTemplateByIdAsync(string templateId, CancellationToken cancellationToken = default)
         {
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
 			return await WhatsAppBusinessGetAsync<TemplateByIdResponse>(formattedWhatsAppEndpoint, cancellationToken);
@@ -1634,7 +1634,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateId">Template Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>TemplateByIdResponse</returns>
-		public TemplateByIdResponse GetTemplateById(string templateId, CancellationToken cancellationToken = default)
+		public virtual TemplateByIdResponse GetTemplateById(string templateId, CancellationToken cancellationToken = default)
         {
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
 			return WhatsAppBusinessGetAsync<TemplateByIdResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
@@ -1647,7 +1647,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateName">Template Name</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>TemplateByNameResponse</returns>
-		public async Task<TemplateByNameResponse> GetTemplateByNameAsync(string whatsAppBusinessAccountId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateByNameResponse> GetTemplateByNameAsync(string whatsAppBusinessAccountId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1671,7 +1671,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateName">Template Name</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>TemplateByNameResponse</returns>
-		public TemplateByNameResponse GetTemplateByName(string whatsAppBusinessAccountId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual TemplateByNameResponse GetTemplateByName(string whatsAppBusinessAccountId, string templateName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1696,7 +1696,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="pagingUrl">Cursor paging url</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>TemplateResponse</returns>
-        public async Task<TemplateResponse> GetAllTemplatesAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
+        public virtual async Task<TemplateResponse> GetAllTemplatesAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1728,7 +1728,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="pagingUrl">Cursor paging url</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>TemplateResponse</returns>
-        public TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
+        public virtual TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1758,7 +1758,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SubscribedAppsResponse</returns>
-        public SubscribedAppsResponse GetWABASubscribedApps(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual SubscribedAppsResponse GetWABASubscribedApps(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1775,7 +1775,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>SubscribedAppsResponse</returns>
-        public async Task<SubscribedAppsResponse> GetWABASubscribedAppsAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<SubscribedAppsResponse> GetWABASubscribedAppsAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1792,7 +1792,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>PhoneNumberResponse</returns>
-        public PhoneNumberResponse GetWhatsAppBusinessAccountPhoneNumber(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual PhoneNumberResponse GetWhatsAppBusinessAccountPhoneNumber(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1809,7 +1809,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessPhoneNumberId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>PhoneNumberByIdResponse</returns>
-        public PhoneNumberByIdResponse GetWhatsAppBusinessAccountPhoneNumberById(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual PhoneNumberByIdResponse GetWhatsAppBusinessAccountPhoneNumberById(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1826,7 +1826,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessPhoneNumberId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>PhoneNumberByIdResponse</returns>
-        public async Task<PhoneNumberByIdResponse> GetWhatsAppBusinessAccountPhoneNumberByIdAsync(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<PhoneNumberByIdResponse> GetWhatsAppBusinessAccountPhoneNumberByIdAsync(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1843,7 +1843,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="whatsAppBusinessAccountId">Your WhatsApp Business Account (WABA) ID.</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>PhoneNumberResponse</returns>
-        public async Task<PhoneNumberResponse> GetWhatsAppBusinessAccountPhoneNumberAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<PhoneNumberResponse> GetWhatsAppBusinessAccountPhoneNumberAsync(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1861,7 +1861,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppCallResponse</returns>
-		public async Task<WhatsAppCallResponse> InitiateWhatsAppCallAsync(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppCallResponse> InitiateWhatsAppCallAsync(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1879,7 +1879,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppCallResponse</returns>
-		public WhatsAppCallResponse InitiateWhatsAppCall(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppCallResponse InitiateWhatsAppCall(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1896,7 +1896,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public async Task<BaseSuccessResponse> ManageWhatsAppCallActionAsync(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<BaseSuccessResponse> ManageWhatsAppCallActionAsync(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1914,7 +1914,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public BaseSuccessResponse ManageWhatsAppCallAction(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse ManageWhatsAppCallAction(CallRequest callRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1933,7 +1933,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="exchangeTokenRequest">The exchange token request containing the authorization code and client credentials</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>ExchangeTokenResponse containing the access token or error information</returns>
-		public async Task<ExchangeTokenResponse> ExchangeTokenAsync(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default)
+		public virtual async Task<ExchangeTokenResponse> ExchangeTokenAsync(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default)
 		{
 			var formData = new Dictionary<string, string>
 			{
@@ -1977,7 +1977,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="exchangeTokenRequest">The exchange token request containing the authorization code and client credentials</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>ExchangeTokenResponse containing the access token or error information</returns>
-		public ExchangeTokenResponse ExchangeToken(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default)
+		public virtual ExchangeTokenResponse ExchangeToken(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default)
 		{
 			return ExchangeTokenAsync(exchangeTokenRequest, cancellationToken).GetAwaiter().GetResult();
 		}
@@ -1993,7 +1993,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>MarkMessageResponse</returns>
-		public MarkMessageResponse MarkMessageAsRead(MarkMessageRequest markMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual MarkMessageResponse MarkMessageAsRead(MarkMessageRequest markMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -2014,7 +2014,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>MarkMessageResponse</returns>
-		public async Task<MarkMessageResponse> MarkMessageAsReadAsync(MarkMessageRequest markMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<MarkMessageResponse> MarkMessageAsReadAsync(MarkMessageRequest markMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -2032,7 +2032,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="migrateAccountRequest">MigrateAccountRequest Object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public BaseSuccessResponse MigrateAccount(MigrateAccountRequest migrateAccountRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse MigrateAccount(MigrateAccountRequest migrateAccountRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2050,7 +2050,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="migrateAccountRequest">MigrateAccountRequest Object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> MigrateAccountAsync(MigrateAccountRequest migrateAccountRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> MigrateAccountAsync(MigrateAccountRequest migrateAccountRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2068,7 +2068,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="uploadId">Upload session</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public async Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, CancellationToken cancellationToken = default)
+        public virtual async Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
             return await WhatsAppBusinessGetAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken, true);
@@ -2081,7 +2081,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="uploadId">Upload session</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public ResumableUploadResponse QueryFileUploadStatus(string uploadId, CancellationToken cancellationToken = default)
+        public virtual ResumableUploadResponse QueryFileUploadStatus(string uploadId, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
             return WhatsAppBusinessGetAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken, true).GetAwaiter().GetResult();
@@ -2093,7 +2093,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="registerPhoneRequest">RegisterPhoneRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public BaseSuccessResponse RegisterWhatsAppBusinessPhoneNumber(RegisterPhoneRequest registerPhoneRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual BaseSuccessResponse RegisterWhatsAppBusinessPhoneNumber(RegisterPhoneRequest registerPhoneRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2110,7 +2110,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="registerPhoneRequest">RegisterPhoneRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> RegisterWhatsAppBusinessPhoneNumberAsync(RegisterPhoneRequest registerPhoneRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> RegisterWhatsAppBusinessPhoneNumberAsync(RegisterPhoneRequest registerPhoneRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2129,7 +2129,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="requestVerification">RequestVerificationCode object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>VerificationResponse</returns>
-        public VerificationResponse RequestVerificationCode(RequestVerificationCode requestVerification, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual VerificationResponse RequestVerificationCode(RequestVerificationCode requestVerification, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2148,7 +2148,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="requestVerification">RequestVerificationCode object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>VerificationResponse</returns>
-        public async Task<VerificationResponse> RequestVerificationCodeAsync(RequestVerificationCode requestVerification, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<VerificationResponse> RequestVerificationCodeAsync(RequestVerificationCode requestVerification, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2166,7 +2166,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendAudioAttachmentMessageById(AudioMessageByIdRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendAudioAttachmentMessageById(AudioMessageByIdRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2184,7 +2184,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendAudioAttachmentMessageByIdAsync(AudioMessageByIdRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendAudioAttachmentMessageByIdAsync(AudioMessageByIdRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2202,7 +2202,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendAudioAttachmentMessageByUrl(AudioMessageByUrlRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendAudioAttachmentMessageByUrl(AudioMessageByUrlRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2220,7 +2220,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendAudioAttachmentMessageByUrlAsync(AudioMessageByUrlRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendAudioAttachmentMessageByUrlAsync(AudioMessageByUrlRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2238,7 +2238,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendContactAttachmentMessage(ContactMessageRequest contactMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendContactAttachmentMessage(ContactMessageRequest contactMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2256,7 +2256,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendContactAttachmentMessageAsync(ContactMessageRequest contactMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendContactAttachmentMessageAsync(ContactMessageRequest contactMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2274,7 +2274,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendDocumentAttachmentMessageById(DocumentMessageByIdRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendDocumentAttachmentMessageById(DocumentMessageByIdRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2292,7 +2292,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendDocumentAttachmentMessageByIdAsync(DocumentMessageByIdRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendDocumentAttachmentMessageByIdAsync(DocumentMessageByIdRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2310,7 +2310,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendDocumentAttachmentMessageByUrl(DocumentMessageByUrlRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendDocumentAttachmentMessageByUrl(DocumentMessageByUrlRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2328,7 +2328,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendDocumentAttachmentMessageByUrlAsync(DocumentMessageByUrlRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendDocumentAttachmentMessageByUrlAsync(DocumentMessageByUrlRequest documentMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2346,7 +2346,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendDocumentAttachmentTemplateMessageAsync(DocumentTemplateMessageRequest documentTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendDocumentAttachmentTemplateMessageAsync(DocumentTemplateMessageRequest documentTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2364,7 +2364,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendDocumentAttachmentTemplateMessage(DocumentTemplateMessageRequest documentTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendDocumentAttachmentTemplateMessage(DocumentTemplateMessageRequest documentTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2382,7 +2382,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendImageAttachmentMessageById(ImageMessageByIdRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendImageAttachmentMessageById(ImageMessageByIdRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2400,7 +2400,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendImageAttachmentMessageByIdAsync(ImageMessageByIdRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendImageAttachmentMessageByIdAsync(ImageMessageByIdRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2418,7 +2418,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendImageAttachmentMessageByUrl(ImageMessageByUrlRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendImageAttachmentMessageByUrl(ImageMessageByUrlRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2436,7 +2436,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendImageAttachmentMessageByUrlAsync(ImageMessageByUrlRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendImageAttachmentMessageByUrlAsync(ImageMessageByUrlRequest imageMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2454,7 +2454,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendImageAttachmentTemplateMessage(ImageTemplateMessageRequest imageTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendImageAttachmentTemplateMessage(ImageTemplateMessageRequest imageTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2472,7 +2472,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendImageAttachmentTemplateMessageAsync(ImageTemplateMessageRequest imageTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendImageAttachmentTemplateMessageAsync(ImageTemplateMessageRequest imageTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2490,7 +2490,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendInteractiveListMessage(InteractiveListMessageRequest interactiveListMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendInteractiveListMessage(InteractiveListMessageRequest interactiveListMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2508,7 +2508,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendInteractiveListMessageAsync(InteractiveListMessageRequest interactiveListMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendInteractiveListMessageAsync(InteractiveListMessageRequest interactiveListMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2526,7 +2526,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendInteractiveReplyButtonMessage(InteractiveReplyButtonMessageRequest interactiveReplyButtonMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendInteractiveReplyButtonMessage(InteractiveReplyButtonMessageRequest interactiveReplyButtonMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2544,7 +2544,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendInteractiveReplyButtonMessageAsync(InteractiveReplyButtonMessageRequest interactiveReplyButtonMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendInteractiveReplyButtonMessageAsync(InteractiveReplyButtonMessageRequest interactiveReplyButtonMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2562,7 +2562,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendInteractiveCTAButtonMessage(InteractiveCTAButtonMessageRequest interactiveCTAButtonMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendInteractiveCTAButtonMessage(InteractiveCTAButtonMessageRequest interactiveCTAButtonMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2580,7 +2580,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendInteractiveCTAButtonMessageAsync(InteractiveCTAButtonMessageRequest interactiveCTAButtonMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendInteractiveCTAButtonMessageAsync(InteractiveCTAButtonMessageRequest interactiveCTAButtonMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2598,7 +2598,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendInteractiveTemplateMessage(InteractiveTemplateMessageRequest interactiveTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendInteractiveTemplateMessage(InteractiveTemplateMessageRequest interactiveTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2616,7 +2616,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendInteractiveTemplateMessageAsync(InteractiveTemplateMessageRequest interactiveTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendInteractiveTemplateMessageAsync(InteractiveTemplateMessageRequest interactiveTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2634,7 +2634,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendLocationMessage(LocationMessageRequest locationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendLocationMessage(LocationMessageRequest locationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2652,7 +2652,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendLocationMessageAsync(LocationMessageRequest locationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendLocationMessageAsync(LocationMessageRequest locationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2670,7 +2670,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendLocationTemplateMessage(LocationTemplateMessageRequest locationTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendLocationTemplateMessage(LocationTemplateMessageRequest locationTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2688,7 +2688,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendLocationTemplateMessageAsync(LocationTemplateMessageRequest locationTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendLocationTemplateMessageAsync(LocationTemplateMessageRequest locationTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2706,7 +2706,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendReactionMessageReply(ReactionMessageReplyRequest reactionMessageReply, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendReactionMessageReply(ReactionMessageReplyRequest reactionMessageReply, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2724,7 +2724,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendReactionMessageReplyAsync(ReactionMessageReplyRequest reactionMessageReply, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendReactionMessageReplyAsync(ReactionMessageReplyRequest reactionMessageReply, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2742,7 +2742,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendStickerMessageById(StickerMessageByIdRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendStickerMessageById(StickerMessageByIdRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2760,7 +2760,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendStickerMessageByIdAsync(StickerMessageByIdRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendStickerMessageByIdAsync(StickerMessageByIdRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2778,7 +2778,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendStickerMessageByUrl(StickerMessageByUrlRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendStickerMessageByUrl(StickerMessageByUrlRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2796,7 +2796,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendStickerMessageByUrlAsync(StickerMessageByUrlRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendStickerMessageByUrlAsync(StickerMessageByUrlRequest stickerMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2814,7 +2814,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendTextMessage(TextMessageRequest textMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendTextMessage(TextMessageRequest textMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2832,7 +2832,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendTextMessageAsync(TextMessageRequest textMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendTextMessageAsync(TextMessageRequest textMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2850,7 +2850,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendTextMessageTemplate(TextTemplateMessageRequest textTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendTextMessageTemplate(TextTemplateMessageRequest textTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2868,7 +2868,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendTextMessageTemplateAsync(TextTemplateMessageRequest textTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendTextMessageTemplateAsync(TextTemplateMessageRequest textTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2886,7 +2886,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendVideoAttachmentMessageById(VideoMessageByIdRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendVideoAttachmentMessageById(VideoMessageByIdRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2904,7 +2904,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendVideoAttachmentMessageByIdAsync(VideoMessageByIdRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendVideoAttachmentMessageByIdAsync(VideoMessageByIdRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2922,7 +2922,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public WhatsAppResponse SendVideoAttachmentTemplateMessage(VideoTemplateMessageRequest videoTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendVideoAttachmentTemplateMessage(VideoTemplateMessageRequest videoTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2940,7 +2940,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendVideoAttachmentTemplateMessageAsync(VideoTemplateMessageRequest videoTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendVideoAttachmentTemplateMessageAsync(VideoTemplateMessageRequest videoTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2958,7 +2958,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendVideoAttachmentMessageByUrl(VideoMessageByUrlRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendVideoAttachmentMessageByUrl(VideoMessageByUrlRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2976,7 +2976,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendVideoAttachmentMessageByUrlAsync(VideoMessageByUrlRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendVideoAttachmentMessageByUrlAsync(VideoMessageByUrlRequest videoMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2995,7 +2995,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendSingleProductMessageAsync(SingleProductMessageRequest singleProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendSingleProductMessageAsync(SingleProductMessageRequest singleProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3014,7 +3014,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendSingleProductMessage(SingleProductMessageRequest singleProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendSingleProductMessage(SingleProductMessageRequest singleProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3033,7 +3033,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendMultipleProductMessageAsync(MultiProductMessageRequest multiProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendMultipleProductMessageAsync(MultiProductMessageRequest multiProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3052,7 +3052,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendMultipleProductMessage(MultiProductMessageRequest multiProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendMultipleProductMessage(MultiProductMessageRequest multiProductMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3070,7 +3070,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendAuthenticationMessageTemplateAsync(AuthenticationTemplateMessageRequest authenticationTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendAuthenticationMessageTemplateAsync(AuthenticationTemplateMessageRequest authenticationTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3088,7 +3088,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendAuthenticationMessageTemplate(AuthenticationTemplateMessageRequest authenticationTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendAuthenticationMessageTemplate(AuthenticationTemplateMessageRequest authenticationTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3106,7 +3106,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendMPMTemplateAsync(MultiProductTemplateMessageRequest multiProductTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendMPMTemplateAsync(MultiProductTemplateMessageRequest multiProductTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3124,7 +3124,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendMPMTemplate(MultiProductTemplateMessageRequest multiProductTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendMPMTemplate(MultiProductTemplateMessageRequest multiProductTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3142,7 +3142,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendSPMTemplateAsync(SingleProductTemplateMessageRequest singleProductTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendSPMTemplateAsync(SingleProductTemplateMessageRequest singleProductTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3160,7 +3160,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendSPMTemplate(SingleProductTemplateMessageRequest singleProductTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendSPMTemplate(SingleProductTemplateMessageRequest singleProductTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3178,7 +3178,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendCatalogMessageTemplateAsync(CatalogTemplateMessageRequest catalogTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendCatalogMessageTemplateAsync(CatalogTemplateMessageRequest catalogTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3196,7 +3196,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendCatalogMessageTemplate(CatalogTemplateMessageRequest catalogTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendCatalogMessageTemplate(CatalogTemplateMessageRequest catalogTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3214,7 +3214,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendCatalogMessageAsync(CatalogMessageRequest catalogMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendCatalogMessageAsync(CatalogMessageRequest catalogMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3232,7 +3232,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendCatalogMessage(CatalogMessageRequest catalogMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendCatalogMessage(CatalogMessageRequest catalogMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3250,7 +3250,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WHatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendCarouselMessageTemplateAsync(CarouselTemplateMessageRequest carouselTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendCarouselMessageTemplateAsync(CarouselTemplateMessageRequest carouselTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3268,7 +3268,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WHatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendCarouselMessageTemplate(CarouselTemplateMessageRequest carouselTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendCarouselMessageTemplate(CarouselTemplateMessageRequest carouselTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3286,7 +3286,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendCouponCodeMessageTemplateAsync(CouponCodeTemplateMessageRequest couponCodeTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendCouponCodeMessageTemplateAsync(CouponCodeTemplateMessageRequest couponCodeTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3304,7 +3304,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendCouponCodeMessageTemplate(CouponCodeTemplateMessageRequest couponCodeTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendCouponCodeMessageTemplate(CouponCodeTemplateMessageRequest couponCodeTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3322,7 +3322,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendLimitedTimeOfferMessageTemplateAsync(LimitedTimeOfferTemplateMessageRequest limitedTimeOfferTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendLimitedTimeOfferMessageTemplateAsync(LimitedTimeOfferTemplateMessageRequest limitedTimeOfferTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3340,7 +3340,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendLimitedTimeOfferMessageTemplate(LimitedTimeOfferTemplateMessageRequest limitedTimeOfferTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendLimitedTimeOfferMessageTemplate(LimitedTimeOfferTemplateMessageRequest limitedTimeOfferTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3358,7 +3358,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>FlowMessageResponse</returns>
-		public async Task<FlowMessageResponse> SendFlowMessageAsync(FlowMessageRequest flowMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<FlowMessageResponse> SendFlowMessageAsync(FlowMessageRequest flowMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3376,7 +3376,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>FlowMessageResponse</returns>
-		public FlowMessageResponse SendFlowMessage(FlowMessageRequest flowMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual FlowMessageResponse SendFlowMessage(FlowMessageRequest flowMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3394,7 +3394,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendFlowMessageTemplateAsync(FlowTemplateMessageRequest flowTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendFlowMessageTemplateAsync(FlowTemplateMessageRequest flowTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3412,7 +3412,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendFlowMessageTemplate(FlowTemplateMessageRequest flowTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendFlowMessageTemplate(FlowTemplateMessageRequest flowTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3430,7 +3430,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public async Task<WhatsAppResponse> SendGenericMessageAsync(object whatsAppMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> SendGenericMessageAsync(object whatsAppMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3448,7 +3448,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>WhatsAppResponse</returns>
-        public WhatsAppResponse SendGenericMessage(object whatsAppMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual WhatsAppResponse SendGenericMessage(object whatsAppMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3466,7 +3466,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendLocationRequestMessageAsync(InteractiveLocationMessageRequest interactiveLocationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendLocationRequestMessageAsync(InteractiveLocationMessageRequest interactiveLocationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3484,7 +3484,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendLocationRequestMessage(InteractiveLocationMessageRequest interactiveLocationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendLocationRequestMessage(InteractiveLocationMessageRequest interactiveLocationMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -3505,7 +3505,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendTemplateMessageAsync(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendTemplateMessageAsync(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			var processedComponents = new List<object>();
 
@@ -3567,7 +3567,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendTemplateMessage(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendTemplateMessage(string recipientPhoneNumber, string templateName, string languageCode, TemplateComponent[] components = null, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			var processedComponents = new List<object>();
 
@@ -3626,7 +3626,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendFreeFormCallPermissionMessageAsync(FreeFormCallPermissionMessageRequest freeFormCallPermissionMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendFreeFormCallPermissionMessageAsync(FreeFormCallPermissionMessageRequest freeFormCallPermissionMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
 			{
@@ -3644,7 +3644,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendFreeFormCallPermissionMessage(FreeFormCallPermissionMessageRequest freeFormCallPermissionMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendFreeFormCallPermissionMessage(FreeFormCallPermissionMessageRequest freeFormCallPermissionMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
 			{
@@ -3662,7 +3662,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendCallPermissionTemplateMessageAsync(CallPermissionTemplateMessageRequest callPermissionTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendCallPermissionTemplateMessageAsync(CallPermissionTemplateMessageRequest callPermissionTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3680,7 +3680,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendCallPermissionTemplateMessage(CallPermissionTemplateMessageRequest callPermissionTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendCallPermissionTemplateMessage(CallPermissionTemplateMessageRequest callPermissionTemplateMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3697,7 +3697,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public async Task<WhatsAppResponse> SendVoiceCallMessageAsync(VoiceCallMessageRequest voiceCallMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppResponse> SendVoiceCallMessageAsync(VoiceCallMessageRequest voiceCallMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3714,7 +3714,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>WhatsAppResponse</returns>
-		public WhatsAppResponse SendVoiceCallMessage(VoiceCallMessageRequest voiceCallMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual WhatsAppResponse SendVoiceCallMessage(VoiceCallMessageRequest voiceCallMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3732,7 +3732,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="twoStepVerificationRequest">TwoStepVerificationRequest object</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public BaseSuccessResponse SetTwoStepVerificatiion(TwoStepVerificationRequest twoStepVerificationRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse SetTwoStepVerificatiion(TwoStepVerificationRequest twoStepVerificationRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3750,7 +3750,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="twoStepVerificationRequest">TwoStepVerificationRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> SetTwoStepVerificationAsync(TwoStepVerificationRequest twoStepVerificationRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> SetTwoStepVerificationAsync(TwoStepVerificationRequest twoStepVerificationRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3768,7 +3768,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BlockUserResponse</returns>
-		public BlockUserResponse UnblockUser(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BlockUserResponse UnblockUser(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3791,7 +3791,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="cloudApiConfig">Custom cloud api config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BlockUserResponse</returns>
-		public async Task<BlockUserResponse> UnblockUserAsync(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<BlockUserResponse> UnblockUserAsync(BlockUserRequest blockUserRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -3814,7 +3814,7 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="updateBusinessProfileRequest">UpdateBusinessProfileRequest object</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public BaseSuccessResponse UpdateBusinessProfile(UpdateBusinessProfileRequest updateBusinessProfileRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse UpdateBusinessProfile(UpdateBusinessProfileRequest updateBusinessProfileRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3832,7 +3832,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="updateBusinessProfile">UpdateBusinessProfileRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>BaseSuccessResponse</returns>
-        public async Task<BaseSuccessResponse> UpdateBusinessProfileAsync(UpdateBusinessProfileRequest updateBusinessProfile, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<BaseSuccessResponse> UpdateBusinessProfileAsync(UpdateBusinessProfileRequest updateBusinessProfile, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3850,7 +3850,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="messageText"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>QRCodeMessageResponse</returns>
-        public QRCodeMessageResponse UpdateQRCodeMessage(string qrCodeId, string messageText, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual QRCodeMessageResponse UpdateQRCodeMessage(string qrCodeId, string messageText, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3880,7 +3880,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="messageText"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>QRCodeMessageResponse</returns>
-        public async Task<QRCodeMessageResponse> UpdateQRCodeMessageAsync(string qrCodeId, string messageText, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<QRCodeMessageResponse> UpdateQRCodeMessageAsync(string qrCodeId, string messageText, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3911,7 +3911,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileContentType">File content type</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default)
+        public virtual async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
             return await WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, filePath, fileContentType, cancellationToken);
@@ -3925,7 +3925,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileContentType">File content type</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public ResumableUploadResponse UploadFileData(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default)
+        public virtual ResumableUploadResponse UploadFileData(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
             return WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, filePath, fileContentType, cancellationToken).GetAwaiter().GetResult();
@@ -3940,7 +3940,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileData">Full file content data</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public ResumableUploadResponse UploadFileData(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default)
+        public virtual ResumableUploadResponse UploadFileData(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
             return WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, fileName, fileContentType, fileData, cancellationToken).GetAwaiter().GetResult();
@@ -3955,7 +3955,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileData">Full file content data</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default)
+        public virtual async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
             return await WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, fileName, fileContentType, fileData, cancellationToken);
@@ -3967,7 +3967,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="uploadMediaRequest">UploadMediaRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUploadResponse</returns>
-        public MediaUploadResponse UploadMedia(UploadMediaRequest uploadMediaRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual MediaUploadResponse UploadMedia(UploadMediaRequest uploadMediaRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -3984,7 +3984,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="uploadMediaRequest">UploadMediaRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUploadResponse</returns>
-        public async Task<MediaUploadResponse> UploadMediaAsync(UploadMediaRequest uploadMediaRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<MediaUploadResponse> UploadMediaAsync(UploadMediaRequest uploadMediaRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -4001,7 +4001,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="uploadMediaDataRequest">UploadMediaDataRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUploadResponse</returns>
-        public MediaUploadResponse UploadMedia(UploadMediaDataRequest uploadMediaDataRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual MediaUploadResponse UploadMedia(UploadMediaDataRequest uploadMediaDataRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -4018,7 +4018,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="uploadMediaDataRequest">UploadMediaDataRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>MediaUploadResponse</returns>
-        public async Task<MediaUploadResponse> UploadMediaAsync(UploadMediaDataRequest uploadMediaDataRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<MediaUploadResponse> UploadMediaAsync(UploadMediaDataRequest uploadMediaDataRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -4035,7 +4035,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="verifyCodeRequest">VerifyCodeRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>VerificationResponse</returns>
-        public VerificationResponse VerifyCode(VerifyCodeRequest verifyCodeRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual VerificationResponse VerifyCode(VerifyCodeRequest verifyCodeRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -4052,7 +4052,7 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="verifyCodeRequest">VerifyCodeRequest object</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>VerificationResponse</returns>
-        public async Task<VerificationResponse> VerifyCodeAsync(VerifyCodeRequest verifyCodeRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<VerificationResponse> VerifyCodeAsync(VerifyCodeRequest verifyCodeRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
