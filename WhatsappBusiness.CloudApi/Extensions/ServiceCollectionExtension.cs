@@ -40,7 +40,8 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 WhatsAppBusinessPhoneNumberId = whatsAppConfig.WhatsAppBusinessPhoneNumberId,
                 WhatsAppBusinessAccountId = whatsAppConfig.WhatsAppBusinessAccountId,
                 WhatsAppBusinessId = whatsAppConfig.WhatsAppBusinessId,
-                AccessToken = whatsAppConfig.AccessToken,
+                GroupId = whatsAppConfig.GroupId,
+				AccessToken = whatsAppConfig.AccessToken,
                 AppName = whatsAppConfig.AppName,
                 Version = whatsAppConfig.Version,
                 WebhookVerifyToken = whatsAppConfig.WebhookVerifyToken
@@ -88,7 +89,8 @@ namespace WhatsappBusiness.CloudApi.Extensions
                 WhatsAppBusinessPhoneNumberId = whatsAppConfig.WhatsAppBusinessPhoneNumberId,
                 WhatsAppBusinessAccountId = whatsAppConfig.WhatsAppBusinessAccountId,
                 WhatsAppBusinessId = whatsAppConfig.WhatsAppBusinessId,
-                AccessToken = whatsAppConfig.AccessToken,
+                GroupId = whatsAppConfig.GroupId,
+				AccessToken = whatsAppConfig.AccessToken,
                 AppName = whatsAppConfig.AppName,
                 Version = whatsAppConfig.Version,
                 WebhookVerifyToken = whatsAppConfig.WebhookVerifyToken

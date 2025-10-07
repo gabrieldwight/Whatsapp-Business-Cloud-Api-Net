@@ -9,7 +9,11 @@ public abstract class GenericMessage : IGenericMessage
     [JsonPropertyName("from")]
     public virtual string From { get; set; }
 
-    [JsonPropertyName("id")]
+	[JsonPropertyName("group_id")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual string GroupId { get; set; }
+
+	[JsonPropertyName("id")]
     public virtual string Id { get; set; }
 
     [JsonPropertyName("timestamp")]
