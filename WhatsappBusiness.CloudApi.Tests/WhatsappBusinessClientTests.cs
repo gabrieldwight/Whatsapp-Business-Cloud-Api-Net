@@ -30,7 +30,8 @@ namespace WhatsappBusiness.CloudApi.Tests
             _whatsAppConfig.WhatsAppBusinessPhoneNumberId = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessPhoneNumberId"];
             _whatsAppConfig.WhatsAppBusinessAccountId = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessAccountId"];
             _whatsAppConfig.WhatsAppBusinessId = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessId"];
-            _whatsAppConfig.AccessToken = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AccessToken"];
+            _whatsAppConfig.GroupId = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["GroupId"];
+			_whatsAppConfig.AccessToken = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AccessToken"];
             _whatsAppConfig.AppName = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AppName"];
             _whatsAppConfig.Version = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["Version"];
             _whatsAppConfig.WebhookVerifyToken = configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WebhookVerifyToken"];
@@ -56,7 +57,8 @@ namespace WhatsappBusiness.CloudApi.Tests
                 sharedConfig.WhatsAppBusinessPhoneNumberId = configSection["WhatsAppBusinessPhoneNumberId"];
                 sharedConfig.WhatsAppBusinessAccountId = configSection["WhatsAppBusinessAccountId"];
                 sharedConfig.WhatsAppBusinessId = configSection["WhatsAppBusinessId"];
-                sharedConfig.AccessToken = configSection["AccessToken"];
+                sharedConfig.GroupId = configSection["GroupId"];
+				sharedConfig.AccessToken = configSection["AccessToken"];
                 sharedConfig.AppName = configSection["AppName"];
                 sharedConfig.Version = configSection["Version"];
                 sharedConfig.WebhookVerifyToken = configSection["WebhookVerifyToken"];
