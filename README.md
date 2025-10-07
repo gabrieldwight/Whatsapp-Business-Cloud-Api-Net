@@ -1,6 +1,6 @@
 # WhatsApp Business Cloud API C# Wrapper Library for .NET Developers
 
-A Wrapper for Whatsapp Business Cloud API hosted by Meta.
+A Wrapper for the WhatsApp Business Cloud API hosted by Meta.
 
 [![Build status](https://dev.azure.com/gabrieldwight/WhatsappCloudApi/_apis/build/status/WhatsappCloudApi-CI)](https://dev.azure.com/gabrieldwight/WhatsappCloudApi/_build/latest?definitionId=9)
 [![NuGet version (WhatsappBusiness.CloudApi)](https://img.shields.io/nuget/v/WhatsappBusiness.CloudApi.svg?style=flat-square)](https://www.nuget.org/packages/WhatsappBusiness.CloudApi/)
@@ -19,7 +19,9 @@ WhatsApp Welcome Message: [Setting up Conversational Components](https://develop
 
 WhatsApp Block User API: [How to block a user](https://developers.facebook.com/docs/whatsapp/cloud-api/block-users?locale=en_US)
 
-WhatsApp Cloud API Calling: [How to setup cloud API VoIP calls](https://developers.facebook.com/docs/whatsapp/cloud-api/calling)
+WhatsApp Cloud API Calling: [How to set up cloud API VoIP calls](https://developers.facebook.com/docs/whatsapp/cloud-api/calling)
+
+WhatsApp Group API: [How to send messages to a group chat](https://developers.facebook.com/docs/whatsapp/cloud-api/groups/getting-started)
 
 Webhook Configuration Documentation: [WhatsApp Cloud API Webhook](https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests)
 
@@ -32,7 +34,7 @@ WhatsApp Cloud API Error Codes: [Error Codes](https://developers.facebook.com/do
 
 Take note: Sending a message to a phone number format `00[Country Code] xx xx xx` using the prefix `00` before the country code will make the cloud API return an invalid parameter error (#100) (Credits @Tekkharibo)
 
-Note: Downloading media from the generated WhatsApp media URL requires specifying the app name and version value as the user agent for the download media function to work. It is included as properties for the config class. (Credits @atmtrujillo)
+Note: Downloading media from the generated WhatsApp media URL requires specifying the app name and version value as the user agent for the download media function to work. It is included as a property for the config class. (Credits @atmtrujillo)
 
 ## Capabilities
 
@@ -53,6 +55,7 @@ Note: Downloading media from the generated WhatsApp media URL requires specifyin
   - [x] Conversational Components
   - [x] Block User
   - [X] VoIP Calls support
+  - [X] Sending Messages to Group
 - [x] Receiving Message (via Webhook)
   - [x] Text
   - [x] Media (image, video, audio, document, sticker)
@@ -68,7 +71,7 @@ Note: Downloading media from the generated WhatsApp media URL requires specifyin
 
 - [x] Sample project
   - [x] Read csv, and send over WhatsApp per record
-  - [x] Implements many of the samples of below
+  - [x] Implements many of the samples below
   - [x] Upload files to local server, before uploading to WhatsApp
      
 
@@ -76,14 +79,14 @@ Note: Downloading media from the generated WhatsApp media URL requires specifyin
 - PackageManager: ```PM> Install-Package WhatsappBusiness.CloudApi```
 - DotNetCLI: ```> dotnet add package WhatsappBusiness.CloudApi```
 
-## Setting yourself for successful WhatsApp Business Cloud Api integration
+## Setting yourself up for successful WhatsApp Business Cloud Api integration
 Before you proceed kindly acquaint yourself with WhatsApp Business Cloud Apis by going through the Docs in Meta's developer portal if you like.
 
 1.  Obtain a Temporary access token for the meta developers portal.
 
 2.  Ensure your project is running on the minimum supported versions of .Net 
 
-3.  WhatsAppBusinessCloudAPi is dependency injection (DI) friendly and can be readily injected into your classes. You can read more on DI in Asp.Net core [**here**](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0). If you can't use DI you can always manually create a new instance of WhatsAppBusinessClient and pass in an httpClient instance in it's constructor. eg.
+3.  WhatsAppBusinessCloudAPi is dependency injection (DI) friendly and can be readily injected into your classes. You can read more on DI in Asp.Net core [**here**](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0). If you can't use DI you can always manually create a new instance of WhatsAppBusinessClient and pass in an httpClient instance in its constructor. eg.
 
 ```c#
 // When Dependency Injection is not possible...
@@ -97,7 +100,7 @@ httpClient.BaseAddress = WhatsAppBusinessRequestEndpoint.BaseAddress;
 var whatsAppBusinessClient = new WhatsAppBusinessClient(httpClient, whatsAppConfig); //make sure to pass httpclient and whatsAppConfig instance as an argument
 	
 ```
-I would recommend creating WhatsAppBusinessClient using Dependency Injection. [Optional] You can use any IOC container or Microsoft DI container in your legacy projects.
+I recommend creating WhatsAppBusinessClient using Dependency Injection. [Optional] You can use any IOC container or Microsoft DI container in your legacy projects.
 ```c#
 // Adding Dependency Injection into legacy projects
 
