@@ -19,6 +19,7 @@ using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
 using WhatsappBusiness.CloudApi.Calls.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Exceptions;
+using WhatsappBusiness.CloudApi.Groups.Requests;
 using WhatsappBusiness.CloudApi.Interfaces;
 using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.MessageHistory.Requests;
@@ -2061,14 +2062,36 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(migrateAccountRequest, formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// Query the status of an upload session by making a GET call to an endpoint that is named based on the Upload-ID that was returned through the Resumable Upload - Create an Upload Session request.
-        /// When uploading data, you must include the access token as an HTTP header.
-        /// </summary>
-        /// <param name="uploadId">Upload session</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>ResumableUploadResponse</returns>
-        public virtual async Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, CancellationToken cancellationToken = default)
+        public virtual async Task<WhatsAppResponse> PinGroupMessageAsync(PinGroupMessageRequest pinGroupMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			return await WhatsAppBusinessPostAsync<WhatsAppResponse>(pinGroupMessageRequest, formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+		public virtual WhatsAppResponse PinGroupMessage(PinGroupMessageRequest pinGroupMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SendMessage.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			return WhatsAppBusinessPostAsync<WhatsAppResponse>(pinGroupMessageRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Query the status of an upload session by making a GET call to an endpoint that is named based on the Upload-ID that was returned through the Resumable Upload - Create an Upload Session request.
+		/// When uploading data, you must include the access token as an HTTP header.
+		/// </summary>
+		/// <param name="uploadId">Upload session</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>ResumableUploadResponse</returns>
+		public virtual async Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, CancellationToken cancellationToken = default)
         {
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
             return await WhatsAppBusinessGetAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken, true);
@@ -4089,7 +4112,7 @@ namespace WhatsappBusiness.CloudApi
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
 				}
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -4106,7 +4129,7 @@ namespace WhatsappBusiness.CloudApi
 				}
 				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
@@ -4143,7 +4166,7 @@ namespace WhatsappBusiness.CloudApi
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
 				}
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -4160,7 +4183,7 @@ namespace WhatsappBusiness.CloudApi
 				}
 				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
@@ -4199,7 +4222,7 @@ namespace WhatsappBusiness.CloudApi
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
 				}
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -4216,7 +4239,7 @@ namespace WhatsappBusiness.CloudApi
 				}
 				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
@@ -4321,7 +4344,7 @@ namespace WhatsappBusiness.CloudApi
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
 				}
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -4338,7 +4361,7 @@ namespace WhatsappBusiness.CloudApi
 				}
 				throw new WhatsappBusinessCloudAPIException(new HttpRequestException(whatsAppErrorResponse.Error.Message), response.StatusCode, whatsAppErrorResponse);
 #endif
-#if NETSTANDARD2_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER || NET472
                 using (var stream = await response.Content.ReadAsStreamAsync())
 				{
 					whatsAppErrorResponse = await JsonSerializer.DeserializeAsync<WhatsAppErrorResponse>(stream, cancellationToken: cancellationToken);
