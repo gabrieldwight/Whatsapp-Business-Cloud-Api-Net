@@ -2,7 +2,6 @@
 using WhatsappBusiness.CloudApi.Configurations;
 using WhatsappBusiness.CloudApi.Extensions;
 using WhatsAppBusinessCloudAPI.Web.Hubs;
-using WhatsAppBusinessCloudAPI.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +29,7 @@ WhatsAppBusinessCloudApiConfig whatsAppConfig = new WhatsAppBusinessCloudApiConf
 whatsAppConfig.WhatsAppBusinessPhoneNumberId = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessPhoneNumberId"];
 whatsAppConfig.WhatsAppBusinessAccountId = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessAccountId"];
 whatsAppConfig.WhatsAppBusinessId = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["WhatsAppBusinessId"];
+whatsAppConfig.GroupId = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["GroupId"];
 whatsAppConfig.AccessToken = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AccessToken"];
 whatsAppConfig.AppName = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["AppName"];
 whatsAppConfig.Version = builder.Configuration.GetSection("WhatsAppBusinessCloudApiConfiguration")["Version"];
