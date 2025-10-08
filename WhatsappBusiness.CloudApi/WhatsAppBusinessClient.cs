@@ -106,6 +106,26 @@ namespace WhatsappBusiness.CloudApi
             _whatsAppConfig = cloudApiConfig;
 		}
 
+		public virtual async Task<WhatsAppGroupJoinRequestResponse> ApproveJoinRequestsAsync(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupJoinRequests.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+			return await WhatsAppBusinessPostAsync<WhatsAppGroupJoinRequestResponse>(groupJoinRequest, formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        public virtual WhatsAppGroupJoinRequestResponse ApproveJoinRequests(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupJoinRequests.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return WhatsAppBusinessPostAsync<WhatsAppGroupJoinRequestResponse>(groupJoinRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
 		/// <summary>
 		/// Use this endpoint to block a list of WhatsApp user numbers.
 		/// </summary>
@@ -243,14 +263,35 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(conversationalComponentRequest, formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// To create a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls endpoint with the prefilled_message parameter set to your message text and generate_qr_image parameter set to your preferred image format, either SVG or PNG.
-        /// </summary>
-        /// <param name="messageText"></param>
-        /// <param name="qrImageFormat"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>QRCodeMessageResponse</returns>
-        public virtual QRCodeMessageResponse CreateQRCodeMessage(string messageText, string qrImageFormat, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppGroupResponse> CreateGroupAsync(GroupRequest createGroupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Groups.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+			return await WhatsAppBusinessPostAsync<WhatsAppGroupResponse>(createGroupRequest, formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupResponse CreateGroup(GroupRequest createGroupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Groups.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<WhatsAppGroupResponse>(createGroupRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// To create a QR code for a business, send a POST request to the /{phone-number-ID}/message_qrdls endpoint with the prefilled_message parameter set to your message text and generate_qr_image parameter set to your preferred image format, either SVG or PNG.
+		/// </summary>
+		/// <param name="messageText"></param>
+		/// <param name="qrImageFormat"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns>QRCodeMessageResponse</returns>
+		public virtual QRCodeMessageResponse CreateQRCodeMessage(string messageText, string qrImageFormat, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -685,13 +726,35 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessDeleteAsync<BaseSuccessResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// To deregister your phone, make a POST call to {{Phone-Number-ID}}/deregister. Deregister Phone removes a previously registered phone. You can always re-register your phone using by repeating the registration process.
-        /// </summary>
-        /// <param name="whatsAppBusinessPhoneNumberId">ID for the phone number connected to the WhatsApp Business API. You can get this with a Get Phone Number ID request.</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>BaseSuccessResponse</returns>
-        public virtual BaseSuccessResponse DeRegisterWhatsAppBusinessPhoneNumber(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppGroupResponse> DeleteWhatsAppGroupAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupDetails.Replace("{{Group-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessDeleteAsync<WhatsAppGroupResponse>(formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupResponse DeleteWhatsAppGroup(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupDetails.Replace("{{Group-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessDeleteAsync<WhatsAppGroupResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// To deregister your phone, make a POST call to {{Phone-Number-ID}}/deregister. Deregister Phone removes a previously registered phone. You can always re-register your phone using by repeating the registration process.
+		/// </summary>
+		/// <param name="whatsAppBusinessPhoneNumberId">ID for the phone number connected to the WhatsApp Business API. You can get this with a Get Phone Number ID request.</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		public virtual BaseSuccessResponse DeRegisterWhatsAppBusinessPhoneNumber(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -1223,6 +1286,27 @@ namespace WhatsappBusiness.CloudApi
             return WhatsAppBusinessGetAsync<CallPermissionStateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
+		public virtual async Task<WhatsAppGroupResponse> GetGroupJoinRequestsAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupJoinRequests.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return await WhatsAppBusinessGetAsync<WhatsAppGroupResponse>(formattedWhatsAppEndpoint, cancellationToken);
+        }
+
+        public virtual WhatsAppGroupResponse GetGroupJoinRequests(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupJoinRequests.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return WhatsAppBusinessGetAsync<WhatsAppGroupResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
 		/// <summary>
 		/// To retrieve your media’s URL, make a GET call to /{{Media-ID}}. Later, you can use this URL to download the media file.
 		/// </summary>
@@ -1580,8 +1664,28 @@ namespace WhatsappBusiness.CloudApi
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetWABADetails.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
             return await WhatsAppBusinessGetAsync<WABADetailsResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
-        
-        
+
+		public virtual async Task<WhatsAppGroupInviteLinkResponse> GetWhatsAppGroupInviteLinkAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupInviteLink.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return await WhatsAppBusinessGetAsync<WhatsAppGroupInviteLinkResponse>(formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupInviteLinkResponse GetWhatsAppGroupInviteLink(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupInviteLink.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return WhatsAppBusinessGetAsync<WhatsAppGroupInviteLinkResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
 
 		/// <summary>
 		/// Get Whatsapp template message by namespace
@@ -1854,6 +1958,49 @@ namespace WhatsappBusiness.CloudApi
             var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetPhoneNumbers.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
             return await WhatsAppBusinessGetAsync<PhoneNumberResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
+
+		public virtual async Task<WhatsAppGroupResponse> GetWhatsAppGroupInfoAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupDetails.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return await WhatsAppBusinessGetAsync<WhatsAppGroupResponse>(formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupResponse GetWhatsAppGroupInfo(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupDetails.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return WhatsAppBusinessGetAsync<WhatsAppGroupResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		public virtual async Task<WhatsAppGroupResponse> GetActiveWhatsAppGroupsAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Groups.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessGetAsync<WhatsAppGroupResponse>(formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupResponse GetActiveWhatsAppGroups(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.Groups.Replace("{{Phone-Number-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessGetAsync<WhatsAppGroupResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
 
 		/// <summary>
 		/// Initiate a Business Initiated Call to WhatsApp user.
@@ -2144,15 +2291,59 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(registerPhoneRequest, formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// You need to verify the phone number you want to use to send messages to your customers. Phone numbers must be verified through SMS/voice call. The verification process can be done through the Graph API calls specified below.
-        /// To verify a phone number using Graph API, make a POST request to {{PHONE_NUMBER_ID
-        /// }}/ request_code.In your call, include your chosen verification method and locale. You need to authenticate yourself using { { User - Access - Token} } (This is automatically done for you in the Request Verification Code request).
-        /// </summary>
-        /// <param name="requestVerification">RequestVerificationCode object</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>VerificationResponse</returns>
-        public virtual VerificationResponse RequestVerificationCode(RequestVerificationCode requestVerification, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppGroupJoinRequestResponse> RejectJoinRequestsAsync(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupJoinRequests.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return await WhatsAppBusinessDeleteAsync<WhatsAppGroupJoinRequestResponse>(groupJoinRequest, formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupJoinRequestResponse RejectJoinRequests(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupJoinRequests.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return WhatsAppBusinessDeleteAsync<WhatsAppGroupJoinRequestResponse>(groupJoinRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		public virtual async Task<WhatsAppGroupResponse> RemoveWhatsAppGroupParticipantsAsync(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.RemoveGroupParticipant.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return await WhatsAppBusinessDeleteAsync<WhatsAppGroupResponse>(groupRequest, formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupResponse RemoveWhatsAppGroupParticipants(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.RemoveGroupParticipant.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return WhatsAppBusinessDeleteAsync<WhatsAppGroupResponse>(groupRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// You need to verify the phone number you want to use to send messages to your customers. Phone numbers must be verified through SMS/voice call. The verification process can be done through the Graph API calls specified below.
+		/// To verify a phone number using Graph API, make a POST request to {{PHONE_NUMBER_ID
+		/// }}/ request_code.In your call, include your chosen verification method and locale. You need to authenticate yourself using { { User - Access - Token} } (This is automatically done for you in the Request Verification Code request).
+		/// </summary>
+		/// <param name="requestVerification">RequestVerificationCode object</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>VerificationResponse</returns>
+		public virtual VerificationResponse RequestVerificationCode(RequestVerificationCode requestVerification, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -2182,14 +2373,36 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<VerificationResponse>(requestVerification, formattedWhatsAppEndpoint, cancellationToken);
         }
 
-        /// <summary>
-        /// Send Audio Message using Media Id
-        /// </summary>
-        /// <param name="audioMessage">Audio Message Object</param>
-        /// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>WhatsAppResponse</returns>
-        public virtual WhatsAppResponse SendAudioAttachmentMessageById(AudioMessageByIdRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppGroupInviteLinkResponse> ResetWhatsAppGroupInviteLinkAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupInviteLink.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return await WhatsAppBusinessPostAsync<WhatsAppGroupInviteLinkResponse>(new GroupRequest(), formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupInviteLinkResponse ResetWhatsAppGroupInviteLink(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupInviteLink.Replace("{{Group-ID}}", _whatsAppConfig.GroupId);
+            return WhatsAppBusinessPostAsync<WhatsAppGroupInviteLinkResponse>(new GroupRequest(), formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// Send Audio Message using Media Id
+		/// </summary>
+		/// <param name="audioMessage">Audio Message Object</param>
+		/// <param name="cloudApiConfig">Custom WhatsAppBusinessCloudApiConfig</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>WhatsAppResponse</returns>
+		public virtual WhatsAppResponse SendAudioAttachmentMessageById(AudioMessageByIdRequest audioMessage, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {
@@ -4052,13 +4265,34 @@ namespace WhatsappBusiness.CloudApi
             return await WhatsAppBusinessPostAsync<MediaUploadResponse>(formattedWhatsAppEndpoint, uploadMediaDataRequest.FileName, uploadMediaDataRequest.Type, uploadMediaDataRequest.Data, cancellationToken, true);
         }
 
-        /// <summary>
-        /// After you received a SMS or Voice request code from Request Verification Code, you need to verify the code that was sent to you. To verify this code, make a POST request to {{PHONE_NUMBER_ID}}/verify_code that includes the code as a parameter.
-        /// </summary>
-        /// <param name="verifyCodeRequest">VerifyCodeRequest object</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>VerificationResponse</returns>
-        public virtual VerificationResponse VerifyCode(VerifyCodeRequest verifyCodeRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<WhatsAppGroupResponse> UpdateWhatsAppGroupSettingsAsync(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupDetails.Replace("{{Group-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return await WhatsAppBusinessPostAsync<WhatsAppGroupResponse>(groupRequest, formattedWhatsAppEndpoint, cancellationToken);
+		}
+
+        public virtual WhatsAppGroupResponse UpdateWhatsAppGroupSettings(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GroupDetails.Replace("{{Group-ID}}", _whatsAppConfig.WhatsAppBusinessPhoneNumberId);
+            return WhatsAppBusinessPostAsync<WhatsAppGroupResponse>(groupRequest, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// After you received a SMS or Voice request code from Request Verification Code, you need to verify the code that was sent to you. To verify this code, make a POST request to {{PHONE_NUMBER_ID}}/verify_code that includes the code as a parameter.
+		/// </summary>
+		/// <param name="verifyCodeRequest">VerifyCodeRequest object</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>VerificationResponse</returns>
+		public virtual VerificationResponse VerifyCode(VerifyCodeRequest verifyCodeRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
             {

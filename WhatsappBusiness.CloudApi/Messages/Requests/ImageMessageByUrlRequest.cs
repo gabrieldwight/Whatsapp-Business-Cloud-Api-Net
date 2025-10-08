@@ -10,7 +10,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
         [JsonPropertyName("recipient_type")]
         [JsonInclude]
-		public string RecipientType { get; private set; } = "individual";
+		public string RecipientType { get; set; } = "individual";
 
         [JsonPropertyName("to")]
         public string To { get; set; }

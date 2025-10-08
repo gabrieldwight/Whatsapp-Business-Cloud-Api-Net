@@ -8,7 +8,7 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         public string MessagingProduct { get; private set; } = "whatsapp";
 
         [JsonPropertyName("recipient_type")]
-        public string RecipientType { get; private set; } = "individual";
+        public string RecipientType { get; set; } = "individual";
 
         [JsonPropertyName("to")]
         public string To { get; set; }

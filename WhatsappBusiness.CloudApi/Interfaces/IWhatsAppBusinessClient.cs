@@ -7,6 +7,7 @@ using WhatsappBusiness.CloudApi.BlockUser.Requests;
 using WhatsappBusiness.CloudApi.BusinessProfile.Requests;
 using WhatsappBusiness.CloudApi.Calls.Requests;
 using WhatsappBusiness.CloudApi.Configurations;
+using WhatsappBusiness.CloudApi.Groups.Requests;
 using WhatsappBusiness.CloudApi.Media.Requests;
 using WhatsappBusiness.CloudApi.MessageHistory.Requests;
 using WhatsappBusiness.CloudApi.Messages.ReplyRequests;
@@ -1777,6 +1778,80 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>ExchangeTokenResponse containing the access token or error information</returns>
 		ExchangeTokenResponse ExchangeToken(ExchangeTokenRequest exchangeTokenRequest, CancellationToken cancellationToken = default);
+		#endregion
+
+		#region Group Management
+        /// <summary>
+        /// Pins a message in a WhatsApp group, making it prominently visible to group members.
+        /// </summary>
+        /// <remarks>Use this method to pin an important message in a WhatsApp group. Ensure that the
+        /// provided group and message IDs are valid and that the user has the necessary permissions to pin messages in
+        /// the specified group.</remarks>
+        /// <param name="pinGroupMessageRequest">The request containing the details of the message to be pinned, including the group ID and message ID.</param>
+        /// <param name="cloudApiConfig">Optional configuration for the WhatsApp Business Cloud API. If not provided, the default configuration will
+        /// be used.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests. The operation will be canceled if the token is triggered.</param>
+        /// <returns>A <see cref="WhatsAppResponse"/> indicating the result of the operation, including success or failure
+        /// details.</returns>
+        Task<WhatsAppResponse> PinGroupMessageAsync(PinGroupMessageRequest pinGroupMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Pins a message in a WhatsApp group, making it prominently visible to group members.
+		/// </summary>
+		/// <remarks>Use this method to pin an important message in a WhatsApp group. Ensure that the
+		/// provided group and message IDs are valid and that the user has the necessary permissions to pin messages in
+		/// the specified group.</remarks>
+		/// <param name="pinGroupMessageRequest">The request containing the details of the message to be pinned, including the group ID and message ID.</param>
+		/// <param name="cloudApiConfig">Optional configuration for the WhatsApp Business Cloud API. If not provided, the default configuration will
+		/// be used.</param>
+		/// <param name="cancellationToken">A token to monitor for cancellation requests. The operation will be canceled if the token is triggered.</param>
+		/// <returns>A <see cref="WhatsAppResponse"/> indicating the result of the operation, including success or failure
+		/// details.</returns>
+		WhatsAppResponse PinGroupMessage(PinGroupMessageRequest pinGroupMessageRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		
+        Task<WhatsAppGroupResponse> CreateGroupAsync(GroupRequest createGroupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupResponse CreateGroup(GroupRequest createGroupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupResponse> GetGroupJoinRequestsAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupResponse GetGroupJoinRequests(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupJoinRequestResponse> ApproveJoinRequestsAsync(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupJoinRequestResponse ApproveJoinRequests(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupJoinRequestResponse> RejectJoinRequestsAsync(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupJoinRequestResponse RejectJoinRequests(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+		
+        Task<WhatsAppGroupInviteLinkResponse> GetWhatsAppGroupInviteLinkAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupInviteLinkResponse GetWhatsAppGroupInviteLink(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupInviteLinkResponse> ResetWhatsAppGroupInviteLinkAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupInviteLinkResponse ResetWhatsAppGroupInviteLink(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupResponse> DeleteWhatsAppGroupAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupResponse DeleteWhatsAppGroup(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupResponse> RemoveWhatsAppGroupParticipantsAsync(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupResponse RemoveWhatsAppGroupParticipants(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupResponse> GetWhatsAppGroupInfoAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupResponse GetWhatsAppGroupInfo(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupResponse> GetActiveWhatsAppGroupsAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupResponse GetActiveWhatsAppGroups(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<WhatsAppGroupResponse> UpdateWhatsAppGroupSettingsAsync(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        WhatsAppGroupResponse UpdateWhatsAppGroupSettings(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 		#endregion
 	}
 }

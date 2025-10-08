@@ -1,4 +1,5 @@
 ﻿using System;
+using WhatsappBusiness.CloudApi.Webhook;
 
 namespace WhatsappBusiness.CloudApi
 {
@@ -191,5 +192,15 @@ namespace WhatsappBusiness.CloudApi
         public static string Calls { get; private set; } = "{{Phone-Number-ID}}/calls";
 
         public static string OAuthAccessToken { get; private set; } = "oauth/access_token";
+
+        public static string Groups { get; private set; } = "{{Phone-Number-ID}}/groups";
+
+        public static string GroupJoinRequests { get; private set; } = "{{Group-ID}}/join_requests";
+
+        public static string GroupInviteLink { get; private set; } = "{{Group-ID}}/invite_link";
+
+        public static string GroupDetails { get; private set; } = "{{Group-ID}}";
+
+        public static string RemoveGroupParticipant { get; private set; } = "{{Group-ID}}/participants";
 	}
 }
