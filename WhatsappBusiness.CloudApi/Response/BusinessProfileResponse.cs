@@ -11,40 +11,28 @@ namespace WhatsappBusiness.CloudApi.Response
 
     public class BusinessProfileData
     {
-        [JsonPropertyName("business_profile")]
-        public BusinessProfile BusinessProfile { get; set; }
+		[JsonPropertyName("messaging_product")]
+		public string MessagingProduct { get; set; }
 
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-    }
+		[JsonPropertyName("address")]
+		public string Address { get; set; }
 
-    public partial class BusinessProfile
-    {
-        [JsonPropertyName("messaging_product")]
-        public string MessagingProduct { get; set; }
+		[JsonPropertyName("description")]
+		public string Description { get; set; }
 
-        [JsonPropertyName("address")]
-        public string Address { get; set; }
+		[JsonPropertyName("vertical")]
+		public string Vertical { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description { get; set; }
+		[JsonPropertyName("about")]
+		public string About { get; set; }
 
-        [JsonPropertyName("vertical")]
-        public string Vertical { get; set; }
+		[JsonPropertyName("email")]
+		public string Email { get; set; }
 
-        [JsonPropertyName("about")]
-        public string About { get; set; }
+		[JsonPropertyName("websites")]
+		public List<string> Websites { get; set; }
 
-        [JsonPropertyName("email")]
-        public string Email { get; set; }
-
-        [JsonPropertyName("websites")]
-        public List<string> Websites { get; set; }
-
-        [JsonPropertyName("profile_picture_url")]
-        public string ProfilePictureUrl { get; set; }
-
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-    }
+		[JsonPropertyName("profile_picture_url")]
+		public string ProfilePictureUrl { get; set; }
+	}
 }
