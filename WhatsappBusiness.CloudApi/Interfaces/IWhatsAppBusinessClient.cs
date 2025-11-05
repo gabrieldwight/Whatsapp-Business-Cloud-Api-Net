@@ -1544,23 +1544,25 @@ namespace WhatsappBusiness.CloudApi.Interfaces
 		/// <returns>TemplateResponse</returns>
 		TemplateResponse GetAllTemplates(string whatsAppBusinessAccountId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Edit Message Template for update
-        /// </summary>
-        /// <param name="messageTemplate">MessageTemplate Object</param>
-        /// <param name="templateId">Template Id</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>BaseSuccessResponse</returns>
-        Task<BaseSuccessResponse> EditTemplateAsync(object messageTemplate, string templateId, CancellationToken cancellationToken = default);
+		/// <summary>
+		/// Edit Message Template for update
+		/// </summary>
+		/// <param name="messageTemplate">MessageTemplate Object</param>
+		/// <param name="templateId">Template Id</param>
+		/// <param name="cloudApiConfig">Custom cloudapi config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		Task<BaseSuccessResponse> EditTemplateAsync(object messageTemplate, string templateId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Edit Message Template for update
-        /// </summary>
-        /// <param name="messageTemplate">MessageTemplate Object</param>
-        /// <param name="templateId">Template Id</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>BaseSuccessResponse</returns>
-        BaseSuccessResponse EditTemplate(object messageTemplate, string templateId, CancellationToken cancellationToken = default);
+		/// <summary>
+		/// Edit Message Template for update
+		/// </summary>
+		/// <param name="messageTemplate">MessageTemplate Object</param>
+		/// <param name="templateId">Template Id</param>
+		/// <param name="cloudApiConfig">Custom cloudapi config</param>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns>BaseSuccessResponse</returns>
+		BaseSuccessResponse EditTemplate(object messageTemplate, string templateId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete Message Template By Template Name

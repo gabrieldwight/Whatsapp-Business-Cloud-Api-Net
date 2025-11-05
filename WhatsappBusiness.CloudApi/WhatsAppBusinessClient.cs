@@ -823,10 +823,16 @@ namespace WhatsappBusiness.CloudApi
 		/// </summary>
 		/// <param name="messageTemplate">MessageTemplate Object</param>
 		/// <param name="templateId">Template Id</param>
+		/// <param name="cloudApiConfig">Custom cloudapi config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public virtual async Task<BaseSuccessResponse> EditTemplateAsync(object messageTemplate, string templateId, CancellationToken cancellationToken = default)
+		public virtual async Task<BaseSuccessResponse> EditTemplateAsync(object messageTemplate, string templateId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
 			return await WhatsAppBusinessPostAsync<BaseSuccessResponse>(messageTemplate, formattedWhatsAppEndpoint, cancellationToken);
 		}
@@ -836,10 +842,16 @@ namespace WhatsappBusiness.CloudApi
 		/// </summary>
 		/// <param name="messageTemplate">MessageTemplate Object</param>
 		/// <param name="templateId">Template Id</param>
+		/// <param name="cloudApiConfig">Custom cloudapi config</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>BaseSuccessResponse</returns>
-		public virtual BaseSuccessResponse EditTemplate(object messageTemplate, string templateId, CancellationToken cancellationToken = default)
+		public virtual BaseSuccessResponse EditTemplate(object messageTemplate, string templateId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
 			return WhatsAppBusinessPostAsync<BaseSuccessResponse>(messageTemplate, formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
