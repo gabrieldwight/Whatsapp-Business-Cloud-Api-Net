@@ -1854,6 +1854,32 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         Task<WhatsAppGroupResponse> UpdateWhatsAppGroupSettingsAsync(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         WhatsAppGroupResponse UpdateWhatsAppGroupSettings(GroupRequest groupRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+        #endregion
+
+        #region Template Library
+        Task<TemplateLibraryResponse> GetTemplateLibraryAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        TemplateLibraryResponse GetTemplateLibrary(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<TemplateLibraryResponse> GetTemplateLibraryBySearchKeyAsync(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        TemplateLibraryResponse GetTemplateLibraryBySearchKey(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<TemplateLibraryResponse> GetTemplateLibraryByTopicAsync(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        TemplateLibraryResponse GetTemplateLibraryByTopic(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<TemplateLibraryResponse> GetTemplateLibraryByUseCaseAsync(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        TemplateLibraryResponse GetTemplateLibraryByUseCase(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<TemplateLibraryResponse> GetTemplateLibraryByIndustryAsync(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        TemplateLibraryResponse GetTemplateLibraryByIndustry(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<TemplateLibraryResponse> GetTemplateLibraryByLanguageAsync(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        TemplateLibraryResponse GetTemplateLibraryByLanguage(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 		#endregion
 	}
 }

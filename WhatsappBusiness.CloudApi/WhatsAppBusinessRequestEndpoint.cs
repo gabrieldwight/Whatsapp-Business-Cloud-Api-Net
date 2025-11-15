@@ -202,5 +202,17 @@ namespace WhatsappBusiness.CloudApi
         public static string GroupDetails { get; private set; } = "{{Group-ID}}";
 
         public static string RemoveGroupParticipant { get; private set; } = "{{Group-ID}}/participants";
+
+        public static string TemplateLibrary { get; private set; } = "message_template_library";
+
+        public static string SearchTemplateLibrary { get; private set; } = "message_template_library?search={{Search-Key}}";
+
+        public static string TopicTemplateLibrary { get; private set; } = "message_template_library?topic={{topic}}";
+
+        public static string UseCaseTemplateLibrary { get; private set; } = "message_template_library?usecase={{usecase}}";
+
+        public static string IndustryTemplateLibrary { get; private set; } = "message_template_library?industry={{industry}}";
+
+        public static string LanguageTemplateLibrary { get; private set; } = "message_template_library?language={{language}}";
 	}
 }
