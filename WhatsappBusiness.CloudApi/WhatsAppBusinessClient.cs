@@ -1869,27 +1869,27 @@ namespace WhatsappBusiness.CloudApi
 			}
         }
 
-        public virtual async Task<TemplateLibraryResponse> GetTemplateLibraryAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<TemplateResponse> GetTemplateLibraryAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
 				_whatsAppConfig = cloudApiConfig;
 			}
 
-			return await WhatsAppBusinessGetAsync<TemplateLibraryResponse>(WhatsAppBusinessRequestEndpoint.TemplateLibrary, cancellationToken);
+			return await WhatsAppBusinessGetAsync<TemplateResponse>(WhatsAppBusinessRequestEndpoint.TemplateLibrary, cancellationToken);
 		}
 
-		public virtual TemplateLibraryResponse GetTemplateLibrary(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual TemplateResponse GetTemplateLibrary(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
 				_whatsAppConfig = cloudApiConfig;
 			}
 
-			return WhatsAppBusinessGetAsync<TemplateLibraryResponse>(WhatsAppBusinessRequestEndpoint.TemplateLibrary, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessGetAsync<TemplateResponse>(WhatsAppBusinessRequestEndpoint.TemplateLibrary, cancellationToken).GetAwaiter().GetResult();
 		}
 
-        public virtual async Task<TemplateLibraryResponse> GetTemplateLibraryBySearchKeyAsync(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<TemplateResponse> GetTemplateLibraryBySearchKeyAsync(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1897,10 +1897,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SearchTemplateLibrary.Replace("{{Search-Key}}", searchKey);
-			return await WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
 		}
 
-		public virtual TemplateLibraryResponse GetTemplateLibraryBySearchKey(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual TemplateResponse GetTemplateLibraryBySearchKey(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
 		{
 			if (cloudApiConfig is not null)
 			{
@@ -1908,10 +1908,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SearchTemplateLibrary.Replace("{{Search-Key}}", searchKey);
-			return WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
-		public virtual async Task<TemplateLibraryResponse> GetTemplateLibraryByTopicAsync(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateResponse> GetTemplateLibraryByTopicAsync(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1919,10 +1919,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.TopicTemplateLibrary.Replace("{{topic}}", topic);
-			return await WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
 		}
 
-		public virtual TemplateLibraryResponse GetTemplateLibraryByTopic(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual TemplateResponse GetTemplateLibraryByTopic(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1930,10 +1930,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.TopicTemplateLibrary.Replace("{{topic}}", topic);
-			return WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
-		public virtual async Task<TemplateLibraryResponse> GetTemplateLibraryByUseCaseAsync(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateResponse> GetTemplateLibraryByUseCaseAsync(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1941,10 +1941,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UseCaseTemplateLibrary.Replace("{{usecase}}", usecase);
-			return await WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
 		}
 
-		public virtual TemplateLibraryResponse GetTemplateLibraryByUseCase(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual TemplateResponse GetTemplateLibraryByUseCase(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1952,10 +1952,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UseCaseTemplateLibrary.Replace("{{usecase}}", usecase);
-			return WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
-		public virtual async Task<TemplateLibraryResponse> GetTemplateLibraryByIndustryAsync(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateResponse> GetTemplateLibraryByIndustryAsync(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1963,10 +1963,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.IndustryTemplateLibrary.Replace("{{industry}}", industry);
-			return await WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
 		}
 
-		public virtual TemplateLibraryResponse GetTemplateLibraryByIndustry(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual TemplateResponse GetTemplateLibraryByIndustry(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1974,10 +1974,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.IndustryTemplateLibrary.Replace("{{industry}}", industry);
-			return WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
-		public virtual async Task<TemplateLibraryResponse> GetTemplateLibraryByLanguageAsync(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateResponse> GetTemplateLibraryByLanguageAsync(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1985,10 +1985,10 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.LanguageTemplateLibrary.Replace("{{language}}", language);
-			return await WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken);
+			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
 		}
 
-		public virtual TemplateLibraryResponse GetTemplateLibraryByLanguage(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+		public virtual TemplateResponse GetTemplateLibraryByLanguage(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
 			if (cloudApiConfig is not null)
 			{
@@ -1996,7 +1996,7 @@ namespace WhatsappBusiness.CloudApi
 			}
 
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.LanguageTemplateLibrary.Replace("{{language}}", language);
-			return WhatsAppBusinessGetAsync<TemplateLibraryResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}
 
 		/// <summary>

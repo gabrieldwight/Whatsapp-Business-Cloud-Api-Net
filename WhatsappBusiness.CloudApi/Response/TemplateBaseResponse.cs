@@ -6,10 +6,12 @@ namespace WhatsappBusiness.CloudApi.Response
     public class TemplateBaseResponse
     {
         [JsonPropertyName("data")]
-        public List<TemplateData> Data { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public List<TemplateData> Data { get; set; }
 
         [JsonPropertyName("paging")]
-        public TemplatePaging Paging { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public TemplatePaging Paging { get; set; }
     }
 
     public class TemplateData
@@ -18,18 +20,32 @@ namespace WhatsappBusiness.CloudApi.Response
         public string Name { get; set; }
 
         [JsonPropertyName("components")]
-        public List<WhatsAppBusinessHSMWhatsAppHSMComponentGet> Components { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public List<WhatsAppBusinessHSMWhatsAppHSMComponentGet> Components { get; set; }
 
         [JsonPropertyName("language")]
         public string Language { get; set; }
 
         [JsonPropertyName("status")]
-        public string Status { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Status { get; set; }
 
         [JsonPropertyName("category")]
         public string Category { get; set; }
 
-        [JsonPropertyName("id")]
+		[JsonPropertyName("topic")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Topic { get; set; }
+
+		[JsonPropertyName("usecase")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Usecase { get; set; }
+
+		[JsonPropertyName("industry")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public List<string> Industry { get; set; }
+
+		[JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
