@@ -31,5 +31,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
     {
         [JsonPropertyName("link")]
         public string Link { get; set; }
-    }
+
+		[JsonPropertyName("voice")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+		public bool Voice { get; set; }
+	}
 }
