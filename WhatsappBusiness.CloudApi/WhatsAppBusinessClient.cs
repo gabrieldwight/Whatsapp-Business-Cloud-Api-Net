@@ -1869,135 +1869,219 @@ namespace WhatsappBusiness.CloudApi
 			}
         }
 
-        public virtual async Task<TemplateResponse> GetTemplateLibraryAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<TemplateResponse> GetTemplateLibraryAsync(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+				return await WhatsAppBusinessGetAsync<TemplateResponse>(WhatsAppBusinessRequestEndpoint.TemplateLibrary, cancellationToken);
 			}
+            else
+            {
+                return await WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken);
+            }
+        }
 
-			return await WhatsAppBusinessGetAsync<TemplateResponse>(WhatsAppBusinessRequestEndpoint.TemplateLibrary, cancellationToken);
-		}
-
-		public virtual TemplateResponse GetTemplateLibrary(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
-		{
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
-			}
-
-			return WhatsAppBusinessGetAsync<TemplateResponse>(WhatsAppBusinessRequestEndpoint.TemplateLibrary, cancellationToken).GetAwaiter().GetResult();
-		}
-
-        public virtual async Task<TemplateResponse> GetTemplateLibraryBySearchKeyAsync(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual TemplateResponse GetTemplateLibrary(WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                return WhatsAppBusinessGetAsync<TemplateResponse>(WhatsAppBusinessRequestEndpoint.TemplateLibrary, cancellationToken).GetAwaiter().GetResult();
+            }
+            else
+            {
+				return WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken).GetAwaiter().GetResult();
 			}
+        }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SearchTemplateLibrary.Replace("{{Search-Key}}", searchKey);
-			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
-		}
-
-		public virtual TemplateResponse GetTemplateLibraryBySearchKey(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
-		{
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
-			}
-
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SearchTemplateLibrary.Replace("{{Search-Key}}", searchKey);
-			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
-		}
-
-		public virtual async Task<TemplateResponse> GetTemplateLibraryByTopicAsync(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<TemplateResponse> GetTemplateLibraryBySearchKeyAsync(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SearchTemplateLibrary.Replace("{{Search-Key}}", searchKey);
+                return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+            }
+            else
+            {
+				return await WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken);
 			}
+        }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.TopicTemplateLibrary.Replace("{{topic}}", topic);
-			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
-		}
-
-		public virtual TemplateResponse GetTemplateLibraryByTopic(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual TemplateResponse GetTemplateLibraryBySearchKey(string searchKey, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.SearchTemplateLibrary.Replace("{{Search-Key}}", searchKey);
+                return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+            }
+            else
+            {
+				return WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken).GetAwaiter().GetResult();
 			}
+        }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.TopicTemplateLibrary.Replace("{{topic}}", topic);
-			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
-		}
-
-		public virtual async Task<TemplateResponse> GetTemplateLibraryByUseCaseAsync(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<TemplateResponse> GetTemplateLibraryByTopicAsync(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.TopicTemplateLibrary.Replace("{{topic}}", topic);
+                return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+            }
+            else
+            {
+				return await WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken);
 			}
+        }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UseCaseTemplateLibrary.Replace("{{usecase}}", usecase);
-			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
-		}
-
-		public virtual TemplateResponse GetTemplateLibraryByUseCase(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual TemplateResponse GetTemplateLibraryByTopic(string topic, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.TopicTemplateLibrary.Replace("{{topic}}", topic);
+                return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+            }
+            else
+            {
+				return WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken).GetAwaiter().GetResult();
 			}
+        }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UseCaseTemplateLibrary.Replace("{{usecase}}", usecase);
-			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
-		}
-
-		public virtual async Task<TemplateResponse> GetTemplateLibraryByIndustryAsync(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<TemplateResponse> GetTemplateLibraryByUseCaseAsync(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UseCaseTemplateLibrary.Replace("{{usecase}}", usecase);
+                return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+            }
+            else
+            {
+				return await WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken);
 			}
+        }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.IndustryTemplateLibrary.Replace("{{industry}}", industry);
-			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
-		}
-
-		public virtual TemplateResponse GetTemplateLibraryByIndustry(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual TemplateResponse GetTemplateLibraryByUseCase(string usecase, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.UseCaseTemplateLibrary.Replace("{{usecase}}", usecase);
+                return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+            }
+            else
+            {
+				return WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken).GetAwaiter().GetResult();
 			}
+        }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.IndustryTemplateLibrary.Replace("{{industry}}", industry);
-			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
-		}
-
-		public virtual async Task<TemplateResponse> GetTemplateLibraryByLanguageAsync(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual async Task<TemplateResponse> GetTemplateLibraryByIndustryAsync(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.IndustryTemplateLibrary.Replace("{{industry}}", industry);
+                return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+            }
+            else
+            {
+				return await WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken);
 			}
+        }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.LanguageTemplateLibrary.Replace("{{language}}", language);
-			return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
-		}
-
-		public virtual TemplateResponse GetTemplateLibraryByLanguage(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
+        public virtual TemplateResponse GetTemplateLibraryByIndustry(string industry, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
         {
-			if (cloudApiConfig is not null)
-			{
-				_whatsAppConfig = cloudApiConfig;
-			}
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
 
-			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.LanguageTemplateLibrary.Replace("{{language}}", language);
-			return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
-		}
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.IndustryTemplateLibrary.Replace("{{industry}}", industry);
+                return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+            }
+            else
+            {
+				return WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken).GetAwaiter().GetResult();
+			}
+        }
+
+        public virtual async Task<TemplateResponse> GetTemplateLibraryByLanguageAsync(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.LanguageTemplateLibrary.Replace("{{language}}", language);
+                return await WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken);
+            }
+            else
+            {
+				return await WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken);
+			}
+        }
+
+        public virtual TemplateResponse GetTemplateLibraryByLanguage(string language, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, string pagingUrl = null, CancellationToken cancellationToken = default)
+        {
+            if (cloudApiConfig is not null)
+            {
+                _whatsAppConfig = cloudApiConfig;
+            }
+
+            if (string.IsNullOrWhiteSpace(pagingUrl))
+            {
+                var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.LanguageTemplateLibrary.Replace("{{language}}", language);
+                return WhatsAppBusinessGetAsync<TemplateResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
+            }
+            else
+            {
+				return WhatsAppBusinessGetAsync<TemplateResponse>(pagingUrl, cancellationToken).GetAwaiter().GetResult();
+			}
+        }
 
 		/// <summary>
 		/// List all the current app subscriptions to a given WhatsApp Business Account.
