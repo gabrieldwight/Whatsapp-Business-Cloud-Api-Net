@@ -45,6 +45,22 @@ namespace WhatsappBusiness.CloudApi.Response
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<string> Industry { get; set; }
 
+		[JsonPropertyName("header")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Header { get; set; }
+
+		[JsonPropertyName("body")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Body { get; set; }
+
+		[JsonPropertyName("body_params")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public List<string> BodyParams { get; set; }
+
+		[JsonPropertyName("buttons")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public List<TemplateLibraryButton> Buttons { get; set; }
+
 		[JsonPropertyName("id")]
         public string Id { get; set; }
     }
@@ -53,7 +69,11 @@ namespace WhatsappBusiness.CloudApi.Response
     {
         [JsonPropertyName("cursors")]
         public TemplateCursors Cursors { get; set; }
-    }
+
+        [JsonPropertyName("next")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Next { get; set; }
+	}
 
     public class TemplateCursors
     {
@@ -63,4 +83,19 @@ namespace WhatsappBusiness.CloudApi.Response
         [JsonPropertyName("after")]
         public string After { get; set; }
     }
+
+	public class TemplateLibraryButton
+	{
+		[JsonPropertyName("type")]
+		public string Type { get; set; }
+
+		[JsonPropertyName("text")]
+		public string Text { get; set; }
+
+		[JsonPropertyName("url")]
+		public string Url { get; set; }
+
+		[JsonPropertyName("phone_number")]
+		public string PhoneNumber { get; set; }
+	}
 }
