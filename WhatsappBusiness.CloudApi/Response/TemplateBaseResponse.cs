@@ -57,6 +57,10 @@ namespace WhatsappBusiness.CloudApi.Response
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<string> BodyParams { get; set; }
 
+		[JsonPropertyName("body_params_types")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public List<string> BodyParamTypes { get; set; }
+
 		[JsonPropertyName("buttons")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public List<TemplateLibraryButton> Buttons { get; set; }
