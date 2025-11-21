@@ -1739,8 +1739,13 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateId">Template Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>TemplateByIdResponse</returns>
-		public virtual async Task<TemplateByIdResponse> GetTemplateByIdAsync(string templateId, CancellationToken cancellationToken = default)
+		public virtual async Task<TemplateByIdResponse> GetTemplateByIdAsync(string templateId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
 			return await WhatsAppBusinessGetAsync<TemplateByIdResponse>(formattedWhatsAppEndpoint, cancellationToken);
 		}
@@ -1751,8 +1756,13 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="templateId">Template Id</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>TemplateByIdResponse</returns>
-		public virtual TemplateByIdResponse GetTemplateById(string templateId, CancellationToken cancellationToken = default)
+		public virtual TemplateByIdResponse GetTemplateById(string templateId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
 			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetTemplateById.Replace("{{TEMPLATE_ID}}", templateId);
 			return WhatsAppBusinessGetAsync<TemplateByIdResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
 		}

@@ -1496,7 +1496,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="templateId">Template Id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>TemplateByIdResponse</returns>
-        Task<TemplateByIdResponse> GetTemplateByIdAsync(string templateId, CancellationToken cancellationToken = default);
+        Task<TemplateByIdResponse> GetTemplateByIdAsync(string templateId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get Whatsapp Template Message by Id
@@ -1504,7 +1504,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="templateId">Template Id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>TemplateByIdResponse</returns>
-        TemplateByIdResponse GetTemplateById(string templateId, CancellationToken cancellationToken = default);
+        TemplateByIdResponse GetTemplateById(string templateId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get Whatsapp Template Message by Name
