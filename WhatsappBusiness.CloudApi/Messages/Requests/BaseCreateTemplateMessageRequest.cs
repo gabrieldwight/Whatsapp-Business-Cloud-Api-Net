@@ -11,6 +11,9 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonPropertyName("category")]
         public string Category { get; set; }
 
+        [JsonPropertyName("parameter_format")] // named or positional
+        public string ParameterFormat { get; set; }
+
         [JsonPropertyName("allow_category_change")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public bool? AllowCategoryChange { get; set; }
