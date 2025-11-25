@@ -20,6 +20,10 @@ namespace WhatsappBusiness.CloudApi.Response
 		[JsonPropertyName("category")]
 		public string Category { get; set; }
 
+		[JsonPropertyName("parameter_format")] // named or positional
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string ParameterFormat { get; set; }
+
 		[JsonPropertyName("id")]
 		public string Id { get; set; }
 	}
