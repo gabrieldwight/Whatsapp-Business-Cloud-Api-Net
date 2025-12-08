@@ -352,9 +352,14 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileName">Full Path of the file</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public virtual async Task<ResumableUploadResponse> CreateResumableUploadSessionAsync(long fileLength, string fileType, string fileName, CancellationToken cancellationToken = default)
+        public virtual async Task<ResumableUploadResponse> CreateResumableUploadSessionAsync(long fileLength, string fileType, string fileName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var builder = new StringBuilder();
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
 
             builder.Append(WhatsAppBusinessRequestEndpoint.ResumableUploadCreateUploadSession);
 
@@ -374,9 +379,14 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileName">Full Path of the file</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public virtual ResumableUploadResponse CreateResumableUploadSession(long fileLength, string fileType, string fileName, CancellationToken cancellationToken = default)
+        public virtual ResumableUploadResponse CreateResumableUploadSession(long fileLength, string fileType, string fileName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var builder = new StringBuilder();
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var builder = new StringBuilder();
 
             builder.Append(WhatsAppBusinessRequestEndpoint.ResumableUploadCreateUploadSession);
 
@@ -2474,9 +2484,14 @@ namespace WhatsappBusiness.CloudApi
 		/// <param name="uploadId">Upload session</param>
 		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>ResumableUploadResponse</returns>
-		public virtual async Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, CancellationToken cancellationToken = default)
+		public virtual async Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
             return await WhatsAppBusinessGetAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken, true);
         }
 
@@ -2487,9 +2502,14 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="uploadId">Upload session</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public virtual ResumableUploadResponse QueryFileUploadStatus(string uploadId, CancellationToken cancellationToken = default)
+        public virtual ResumableUploadResponse QueryFileUploadStatus(string uploadId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadQueryFileUploadStatus.Replace("{{Upload-ID}}", uploadId);
             return WhatsAppBusinessGetAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, cancellationToken, true).GetAwaiter().GetResult();
         }
 
@@ -4383,9 +4403,14 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileContentType">File content type</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public virtual async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default)
+        public virtual async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string filePath, string fileContentType, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
             return await WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, filePath, fileContentType, cancellationToken);
         }
 
@@ -4397,9 +4422,14 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileContentType">File content type</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public virtual ResumableUploadResponse UploadFileData(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default)
+        public virtual ResumableUploadResponse UploadFileData(string uploadId, string filePath, string fileContentType, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
             return WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, filePath, fileContentType, cancellationToken).GetAwaiter().GetResult();
         }
 
@@ -4412,9 +4442,14 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileData">Full file content data</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public virtual ResumableUploadResponse UploadFileData(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default)
+        public virtual ResumableUploadResponse UploadFileData(string uploadId, string fileName, string fileContentType, byte[] fileData, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
             return WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, fileName, fileContentType, fileData, cancellationToken).GetAwaiter().GetResult();
         }
         
@@ -4427,9 +4462,14 @@ namespace WhatsappBusiness.CloudApi
         /// <param name="fileData">Full file content data</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        public virtual async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default)
+        public virtual async Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string fileName, string fileContentType, byte[] fileData, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
+			if (cloudApiConfig is not null)
+			{
+				_whatsAppConfig = cloudApiConfig;
+			}
+
+			var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.ResumableUploadFileData.Replace("{{Upload-ID}}", uploadId);
             return await WhatsAppBusinessPostAsync<ResumableUploadResponse>(formattedWhatsAppEndpoint, fileName, fileContentType, fileData, cancellationToken);
         }
 

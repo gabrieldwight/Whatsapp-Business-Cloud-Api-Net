@@ -70,7 +70,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="fileName">Full Path of the file</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        Task<ResumableUploadResponse> CreateResumableUploadSessionAsync(long fileLength, string fileContentType, string fileName, CancellationToken cancellationToken = default);
+        Task<ResumableUploadResponse> CreateResumableUploadSessionAsync(long fileLength, string fileContentType, string fileName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// The Resumable Upload series of requests allow you to upload Profile Pictures to Meta so you can receive a handle to update these pictures in the Business Profile API.
@@ -80,7 +80,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="fileName">Full Path of the file</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        ResumableUploadResponse CreateResumableUploadSession(long fileLength, string fileContentType, string fileName, CancellationToken cancellationToken = default);
+        ResumableUploadResponse CreateResumableUploadSession(long fileLength, string fileContentType, string fileName, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To upload a profile picture to your business profile, make a POST call to the named endpoint v14.0/{{Upload-ID}}, where Upload-ID is the value you received from Resumable Upload - Create an Upload Session.
@@ -90,7 +90,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="fileContentType">File content type</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default);
+        Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string filePath, string fileContentType, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To upload a profile picture to your business profile, make a POST call to the named endpoint v14.0/{{Upload-ID}}, where Upload-ID is the value you received from Resumable Upload - Create an Upload Session.
@@ -100,7 +100,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="fileContentType">File content type</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        ResumableUploadResponse UploadFileData(string uploadId, string filePath, string fileContentType, CancellationToken cancellationToken = default);
+        ResumableUploadResponse UploadFileData(string uploadId, string filePath, string fileContentType, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To upload a profile picture to your business profile, make a POST call to the named endpoint v14.0/{{Upload-ID}}, where Upload-ID is the value you received from Resumable Upload - Create an Upload Session.
@@ -111,7 +111,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="fileData">Full file content data</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default);
+        Task<ResumableUploadResponse> UploadFileDataAsync(string uploadId, string fileName, string fileContentType, byte[] fileData, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// To upload a profile picture to your business profile, make a POST call to the named endpoint v14.0/{{Upload-ID}}, where Upload-ID is the value you received from Resumable Upload - Create an Upload Session.
@@ -122,7 +122,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="fileData">Full file content data</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        ResumableUploadResponse UploadFileData(string uploadId, string fileName, string fileContentType, byte[] fileData, CancellationToken cancellationToken = default);
+        ResumableUploadResponse UploadFileData(string uploadId, string fileName, string fileContentType, byte[] fileData, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Query the status of an upload session by making a GET call to an endpoint that is named based on the Upload-ID that was returned through the Resumable Upload - Create an Upload Session request.
@@ -131,7 +131,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="uploadId">Upload session</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, CancellationToken cancellationToken = default);
+        Task<ResumableUploadResponse> QueryFileUploadStatusAsync(string uploadId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Query the status of an upload session by making a GET call to an endpoint that is named based on the Upload-ID that was returned through the Resumable Upload - Create an Upload Session request.
@@ -140,7 +140,7 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <param name="uploadId">Upload session</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ResumableUploadResponse</returns>
-        ResumableUploadResponse QueryFileUploadStatus(string uploadId, CancellationToken cancellationToken = default);
+        ResumableUploadResponse QueryFileUploadStatus(string uploadId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update the business profile information such as the business description, email or address. To update your profile, make a POST call to /{{Phone-Number-ID}}/whatsapp_business_profile. In your request, you can include the parameters listed below.
