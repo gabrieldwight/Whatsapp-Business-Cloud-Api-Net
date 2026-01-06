@@ -88,6 +88,10 @@ public class Contact
 
     [JsonPropertyName("wa_id")]
     public string WaId { get; set; }
+
+    [JsonPropertyName("identity_key_hash")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string IdentityKeyHash { get; set; }
 }
 
 public class Profile

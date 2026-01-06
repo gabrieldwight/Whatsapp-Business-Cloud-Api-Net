@@ -12,7 +12,10 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonPropertyName("errors")]
         public List<Error> Errors { get; set; }
 
-    }
+        [JsonPropertyName("unsupported")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public Unsupported Unsupported { get; set; }
+	}
 
     public class Error
     {
@@ -25,5 +28,11 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonPropertyName("title")]
         public string Title { get; set; }
     }
-    
+
+    public class Unsupported
+    {
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+	}
+
 }

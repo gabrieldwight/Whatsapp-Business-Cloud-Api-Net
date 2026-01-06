@@ -12,13 +12,13 @@
     <RepositoryUrl>https://github.com/gabrieldwight/Whatsapp-Business-Cloud-Api-Net</RepositoryUrl>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Version>1.0.92</Version>
+    <Version>1.0.93</Version>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0'">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.1" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0'">
