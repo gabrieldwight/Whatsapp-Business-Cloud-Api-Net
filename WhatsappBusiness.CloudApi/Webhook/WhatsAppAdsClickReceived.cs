@@ -24,6 +24,10 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonPropertyName("video")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public WhatsAppAdsClickVideo? Video { get; set; }
+
+		[JsonPropertyName("sticker")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public WhatsAppAdsClickSticker? Sticker { get; set; }
 	}
 
     public class Referral
@@ -86,6 +90,11 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
     public class WhatsAppAdsClickVideo : Video
     {
+
+	}
+
+	public class WhatsAppAdsClickSticker : Sticker
+	{
 
 	}
 }
