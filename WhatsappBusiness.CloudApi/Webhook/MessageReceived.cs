@@ -9,6 +9,9 @@ public abstract class GenericMessage : IGenericMessage
     [JsonPropertyName("from")]
     public virtual string From { get; set; }
 
+    [JsonPropertyName("from_user_id")]
+    public virtual string FromUserId { get; set; }
+
 	[JsonPropertyName("group_id")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public virtual string GroupId { get; set; }
@@ -89,6 +92,9 @@ public class Contact
     [JsonPropertyName("wa_id")]
     public string WaId { get; set; }
 
+    [JsonPropertyName("user_id")]
+    public string UserId { get; set; }
+
     [JsonPropertyName("identity_key_hash")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string IdentityKeyHash { get; set; }
@@ -98,6 +104,12 @@ public class Profile
 {
     [JsonPropertyName("name")]
     public string Name { get; set; }
+
+    [JsonPropertyName("username")]
+	public string Username { get; set; }
+
+    [JsonPropertyName("country_code")]
+	public string CountryCode { get; set; }
 }
 
 public class MessageContext

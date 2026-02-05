@@ -42,7 +42,11 @@ public class StatusValue<TStatusType> where TStatusType : IGenericStatus
     [JsonPropertyName("metadata")]
     public MessageMetadata Metadata { get; set; }
 
-    [JsonPropertyName("statuses")]
+    [JsonPropertyName("contacts")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public List<Contact> Contacts { get; set; }
+
+	[JsonPropertyName("statuses")]
     public List<TStatusType> Statuses { get; set; }
 }
 
@@ -64,6 +68,10 @@ public class GenericStatus : IGenericStatus
 
     [JsonPropertyName("recipient_id")]
     public virtual string RecipientId { get; set; }
+
+    [JsonPropertyName("recipient_user_id")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual string RecipientUserId { get; set; }
 
 	[JsonPropertyName("biz_opaque_callback_data")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
