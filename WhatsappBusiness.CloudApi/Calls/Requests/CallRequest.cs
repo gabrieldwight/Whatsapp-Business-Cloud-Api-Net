@@ -12,6 +12,10 @@ namespace WhatsappBusiness.CloudApi.Calls.Requests
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string To { get; set; }
 
+		[JsonPropertyName("recipient")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Recipient { get; set; }
+
 		[JsonPropertyName("call_id")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string CallId { get; set; }

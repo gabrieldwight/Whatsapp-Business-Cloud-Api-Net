@@ -33,6 +33,18 @@ namespace WhatsappBusiness.CloudApi.Response
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string WaId { get; set; }
 
+		[JsonPropertyName("user_id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string UserId { get; set; }
+
+		[JsonPropertyName("parent_user_id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string ParentUserId { get; set; }
+
+		[JsonPropertyName("username")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Username { get; set; }
+
 		[JsonPropertyName("creation_timestamp")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string CreationTimestamp { get; set; }

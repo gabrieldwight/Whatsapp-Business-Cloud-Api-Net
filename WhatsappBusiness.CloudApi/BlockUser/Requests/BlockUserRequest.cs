@@ -17,5 +17,9 @@ namespace WhatsappBusiness.CloudApi.BlockUser.Requests
 	{
 		[JsonPropertyName("user")]
 		public string User { get; set; }
+
+		[JsonPropertyName("user_id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string UserId { get; set; }
 	}
 }

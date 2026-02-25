@@ -21,7 +21,12 @@ namespace WhatsappBusiness.CloudApi.Response
         public string Input { get; set; }
 
         [JsonPropertyName("wa_id")]
-        public string WaId { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string WaId { get; set; }
+
+		[JsonPropertyName("user_id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string UserId { get; set; }
     }
 
     public class Message

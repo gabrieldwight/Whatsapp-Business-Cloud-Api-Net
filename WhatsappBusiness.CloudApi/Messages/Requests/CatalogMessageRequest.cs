@@ -15,6 +15,10 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		[JsonPropertyName("to")]
 		public string To { get; set; }
 
+		[JsonPropertyName("recipient")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Recipient { get; set; }
+
 		[JsonPropertyName("type")]
 		public string Type { get; set; }
 

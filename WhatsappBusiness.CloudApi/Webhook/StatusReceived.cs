@@ -73,6 +73,10 @@ public class GenericStatus : IGenericStatus
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public virtual string RecipientUserId { get; set; }
 
+	[JsonPropertyName("parent_recipient_user_id")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual string ParentRecipientUserId { get; set; }
+
 	[JsonPropertyName("biz_opaque_callback_data")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public virtual string BizOpaqueCallbackData { get; set; }
