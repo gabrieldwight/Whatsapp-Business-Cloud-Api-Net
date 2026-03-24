@@ -23,11 +23,16 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public long Code { get; set; }
 
         [JsonPropertyName("details")]
-        public string Details { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Details { get; set; }
 
         [JsonPropertyName("title")]
         public string Title { get; set; }
-    }
+
+        [JsonPropertyName("message")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Message { get; set; }
+	}
 
     public class Unsupported
     {
