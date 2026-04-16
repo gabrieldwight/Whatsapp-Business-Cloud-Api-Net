@@ -33,5 +33,13 @@ namespace WhatsappBusiness.CloudApi.Response
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }
-    }
+
+        [JsonPropertyName("group_id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string GroupId { get; set; }
+
+        [JsonPropertyName("message_status")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string MessageStatus { get; set; }
+	}
 }
