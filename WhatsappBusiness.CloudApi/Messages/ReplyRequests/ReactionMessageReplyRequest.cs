@@ -13,7 +13,11 @@ namespace WhatsappBusiness.CloudApi.Messages.ReplyRequests
         [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonPropertyName("type")]
+		[JsonPropertyName("recipient")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Recipient { get; set; }
+
+		[JsonPropertyName("type")]
         public string Type { get; private set; } = "reaction";
 
         [JsonPropertyName("reaction")]
