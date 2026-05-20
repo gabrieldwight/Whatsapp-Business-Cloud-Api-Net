@@ -77,6 +77,18 @@ public class GenericStatus : IGenericStatus
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public virtual string ParentRecipientUserId { get; set; }
 
+	[JsonPropertyName("recipient_type")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual string RecipientType { get; set; }
+
+	[JsonPropertyName("recipient_participant_id")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual string RecipientParticipantId { get; set; }
+
+	[JsonPropertyName("recipient_identity_key_hash")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual string RecipientIdentityKeyHash { get; set; }
+
 	[JsonPropertyName("biz_opaque_callback_data")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public virtual string BizOpaqueCallbackData { get; set; }
@@ -88,6 +100,10 @@ public class GenericStatus : IGenericStatus
     [JsonPropertyName("pricing")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public virtual Pricing Pricing { get; set; }
+
+	[JsonPropertyName("errors")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public virtual List<MessageError> Errors { get; set; }
 }
 
 
@@ -101,6 +117,9 @@ public class Pricing
 
     [JsonPropertyName("category")]
     public string Category { get; set; }
+
+	[JsonPropertyName("type")]
+	public string Type { get; set; }
 }
 
 public class Conversation
@@ -115,11 +134,43 @@ public class Conversation
     public Origin? Origin { get; set; }
 
     [JsonPropertyName("type")]
-    public string? Type { get; set; }
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string? Type { get; set; }
 }
 
 public class Origin
 {
     [JsonPropertyName("type")]
     public string Type { get; set; }
+}
+
+public class MessageError
+{
+	[JsonPropertyName("code")]
+	public long Code { get; set; }
+
+	[JsonPropertyName("details")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string Details { get; set; }
+
+	[JsonPropertyName("title")]
+	public string Title { get; set; }
+
+	[JsonPropertyName("error_data")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public ErrorData MessageErrorData { get; set; }
+
+	[JsonPropertyName("message")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string Message { get; set; }
+
+	[JsonPropertyName("href")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string Href { get; set; }
+}
+
+public class ErrorData
+{
+	[JsonPropertyName("details")]
+	public string Details { get; set; }
 }

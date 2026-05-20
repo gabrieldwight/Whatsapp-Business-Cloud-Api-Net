@@ -98,6 +98,10 @@ namespace WhatsappBusiness.CloudApi.Webhook
 
 		[JsonPropertyName("category")]
 		public string Category { get; set; }
+
+		[JsonPropertyName("type")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Type { get; set; }
 	}
 
 	public class FailedMessageError
