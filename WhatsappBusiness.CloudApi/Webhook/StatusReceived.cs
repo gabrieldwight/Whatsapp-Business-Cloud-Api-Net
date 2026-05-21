@@ -12,7 +12,7 @@ public class StatusReceived<TStatusType> where TStatusType : IGenericStatus
     public string Object { get; set; }
 
     [JsonPropertyName("entry")]
-    public List<MessageEntry<TStatusType>> Entry { get; set; }
+    public List<StatusEntry<TStatusType>> Entry { get; set; }
 
 }
 
