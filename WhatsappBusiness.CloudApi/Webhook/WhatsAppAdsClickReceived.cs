@@ -60,7 +60,7 @@ namespace WhatsappBusiness.CloudApi.Webhook
         public string ThumbnailUrl { get; set; }
 
 		[JsonPropertyName("ctwa_clid")]
-		public string CtwaClId { get; set; }
+		public string? CtwaClId { get; set; }
 
 		[JsonPropertyName("welcome_message")]
 		public ReferralWelcomeMessage WelcomeMessage { get; set; }

@@ -24,9 +24,12 @@ namespace WhatsappBusiness.CloudApi.Webhook
 		[JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonPropertyName("voice")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public bool Voice { get; set; }
+        [JsonPropertyName("url")]
+        public string? Url { get; set; }
+
+		[JsonPropertyName("voice")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+		public bool Voice { get; set; }
 	}
     
 }

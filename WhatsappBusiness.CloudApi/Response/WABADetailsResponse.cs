@@ -45,5 +45,8 @@ namespace WhatsappBusiness.CloudApi.Response
 
         [JsonPropertyName("health_status")]
         public HealthStatus? HealthStatus { get; set; }
+
+        [JsonPropertyName("whatsapp_business_manager_messaging_limit")]
+        public string? WhatsAppBusinessManagerMessagingLimit { get; set; }
     }
 }
