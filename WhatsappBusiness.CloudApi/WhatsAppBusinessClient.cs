@@ -107,6 +107,21 @@ namespace WhatsappBusiness.CloudApi
             _whatsAppConfig = cloudApiConfig;
 		}
 
+        private bool SupportsPortfolioMessagingLimitFields
+        {
+            get
+            {
+                var baseAddress = _httpClient.BaseAddress;
+                if (baseAddress is null)
+                {
+                    return false;
+                }
+
+                var versionSegment = baseAddress.AbsolutePath.Trim('/').Split('/')[0].TrimStart('v', 'V');
+                return Version.TryParse(versionSegment, out var version) && version >= new Version(24, 0);
+            }
+        }
+
 		public virtual async Task<WhatsAppGroupJoinRequestResponse> ApproveJoinRequestsAsync(GroupJoinRequest groupJoinRequest, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default)
         {
             if (cloudApiConfig is not null)
@@ -1710,7 +1725,10 @@ namespace WhatsappBusiness.CloudApi
                 _whatsAppConfig = cloudApiConfig;
             }
 
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetWABADetails.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            var endpointTemplate = SupportsPortfolioMessagingLimitFields
+                ? WhatsAppBusinessRequestEndpoint.GetWABADetailsWithPortfolioMessagingLimit
+                : WhatsAppBusinessRequestEndpoint.GetWABADetails;
+            var formattedWhatsAppEndpoint = endpointTemplate.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
             return WhatsAppBusinessGetAsync<WABADetailsResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
@@ -1728,7 +1746,10 @@ namespace WhatsappBusiness.CloudApi
                 _whatsAppConfig = cloudApiConfig;
             }
 
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetWABADetails.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
+            var endpointTemplate = SupportsPortfolioMessagingLimitFields
+                ? WhatsAppBusinessRequestEndpoint.GetWABADetailsWithPortfolioMessagingLimit
+                : WhatsAppBusinessRequestEndpoint.GetWABADetails;
+            var formattedWhatsAppEndpoint = endpointTemplate.Replace("{{WABA-ID}}", whatsAppBusinessAccountId);
             return await WhatsAppBusinessGetAsync<WABADetailsResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 
@@ -2212,7 +2233,10 @@ namespace WhatsappBusiness.CloudApi
                 _whatsAppConfig = cloudApiConfig;
             }
 
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetPhoneNumberById.Replace("{{Phone-Number-ID}}", whatsAppBusinessPhoneNumberId);
+            var endpointTemplate = SupportsPortfolioMessagingLimitFields
+                ? WhatsAppBusinessRequestEndpoint.GetPhoneNumberByIdWithPortfolioMessagingLimit
+                : WhatsAppBusinessRequestEndpoint.GetPhoneNumberById;
+            var formattedWhatsAppEndpoint = endpointTemplate.Replace("{{Phone-Number-ID}}", whatsAppBusinessPhoneNumberId);
             return WhatsAppBusinessGetAsync<PhoneNumberByIdResponse>(formattedWhatsAppEndpoint, cancellationToken).GetAwaiter().GetResult();
         }
 
@@ -2229,7 +2253,10 @@ namespace WhatsappBusiness.CloudApi
                 _whatsAppConfig = cloudApiConfig;
             }
 
-            var formattedWhatsAppEndpoint = WhatsAppBusinessRequestEndpoint.GetPhoneNumberById.Replace("{{Phone-Number-ID}}", whatsAppBusinessPhoneNumberId);
+            var endpointTemplate = SupportsPortfolioMessagingLimitFields
+                ? WhatsAppBusinessRequestEndpoint.GetPhoneNumberByIdWithPortfolioMessagingLimit
+                : WhatsAppBusinessRequestEndpoint.GetPhoneNumberById;
+            var formattedWhatsAppEndpoint = endpointTemplate.Replace("{{Phone-Number-ID}}", whatsAppBusinessPhoneNumberId);
             return await WhatsAppBusinessGetAsync<PhoneNumberByIdResponse>(formattedWhatsAppEndpoint, cancellationToken);
         }
 

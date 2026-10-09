@@ -106,6 +106,8 @@ namespace WhatsappBusiness.CloudApi
         /// </summary>
         public static string GetPhoneNumberById { get; private set; } = "{{Phone-Number-ID}}";
 
+        public static string GetPhoneNumberByIdWithPortfolioMessagingLimit { get; private set; } = "{{Phone-Number-ID}}?fields=id,verified_name,display_phone_number,quality_rating,whatsapp_business_manager_messaging_limit,messaging_limit_tier";
+
         /// <summary>
         /// You need to verify the phone number you want to use to send messages to your customers. Phone numbers must be verified through SMS/voice call. The verification process can be done through the Graph API calls specified
         /// </summary>
@@ -129,6 +131,8 @@ namespace WhatsappBusiness.CloudApi
         /// Get WhatsApp Business Account details directly by WABA ID with additional fields
         /// </summary>
         public static string GetWABADetails { get; private set; } = "{{WABA-ID}}?fields=id,name,currency,timezone_id,message_template_namespace,account_review_status,business_verification_status,country,owner_business_info,primary_business_location,purchase_order_number,status,health_status";
+
+        public static string GetWABADetailsWithPortfolioMessagingLimit { get; private set; } = "{{WABA-ID}}?fields=id,name,currency,timezone_id,message_template_namespace,account_review_status,business_verification_status,country,owner_business_info,primary_business_location,purchase_order_number,status,health_status,whatsapp_business_manager_messaging_limit";
 
         /// <summary>
         /// Subscribe an app to a WhatsApp Business Account.

@@ -59,15 +59,33 @@ namespace WhatsappBusiness.CloudApi.Webhook
         [JsonPropertyName("recipient_id")]
         public string RecipientId { get; set; }
 
+        [JsonPropertyName("recipient_type")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? RecipientType { get; set; }
+
+        [JsonPropertyName("recipient_participant_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? RecipientParticipantId { get; set; }
+
+        [JsonPropertyName("recipient_identity_key_hash")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? RecipientIdentityKeyHash { get; set; }
+
+        [JsonPropertyName("biz_opaque_callback_data")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? BizOpaqueCallbackData { get; set; }
+
 		[JsonPropertyName("errors")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public List<FailedMessageError> Errors { get; set; }
+		public List<FailedMessageError>? Errors { get; set; }
 
 		[JsonPropertyName("conversation")]
-		public MessageConversation Conversation { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public MessageConversation? Conversation { get; set; }
 
 		[JsonPropertyName("pricing")]
-		public MessagePricing Pricing { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public MessagePricing? Pricing { get; set; }
 	}
 
     public class MessageConversation

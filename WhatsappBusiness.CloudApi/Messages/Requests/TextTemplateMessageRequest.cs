@@ -89,6 +89,19 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
         [JsonPropertyName("payload")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Payload { get; set; }
+
+        [JsonPropertyName("tap_target_configuration")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<TapTargetConfigurationData>? TapTargetConfiguration { get; set; }
+    }
+
+    public class TapTargetConfigurationData
+    {
+        [JsonPropertyName("url")]
+        public string Url { get; set; }
+
+        [JsonPropertyName("title")]
+        public string Title { get; set; }
     }
 
     public class TemplateCurrency
