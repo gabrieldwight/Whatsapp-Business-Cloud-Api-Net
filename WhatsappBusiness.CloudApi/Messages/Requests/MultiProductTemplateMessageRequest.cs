@@ -30,6 +30,14 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 		[JsonPropertyName("biz_opaque_callback_data")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string BizOpaqueCallbackData { get; set; }
+
+		[JsonPropertyName("product_policy")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string ProductPolicy { get; set; }
+
+		[JsonPropertyName("message_activity_sharing")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+		public bool MessageActivitySharing { get; set; }
 	}
 
 	public class MPMTemplate

@@ -26,6 +26,14 @@ namespace WhatsappBusiness.CloudApi.Messages.Requests
 
 		[JsonPropertyName("template")]
 		public CallPermissionMessageTemplate Template { get; set; }
+
+		[JsonPropertyName("product_policy")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string ProductPolicy { get; set; }
+
+		[JsonPropertyName("message_activity_sharing")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+		public bool MessageActivitySharing { get; set; }
 	}
 
 	public class CallPermissionMessageTemplate

@@ -228,5 +228,7 @@ namespace WhatsappBusiness.CloudApi
         public static string DirectSendMessageSample { get; private set; } = "{{WABA-ID}}/message_samples";
 
 		public static string VoiceCallConfig { get; private set; } = "{{Phone-Number-ID}}/settings";
+
+        public static string SendMarketingMessage { get; private set; } = "{{Phone-Number-ID}}/marketing_messages";
 	}
 }
