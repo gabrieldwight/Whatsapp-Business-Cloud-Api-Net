@@ -6,9 +6,9 @@ namespace WhatsappBusiness.CloudApi
     public static class WhatsAppBusinessRequestEndpoint
     {
         /// <summary>
-        /// WhatsApp Business Cloud API V21 BaseAddress
+        /// Default WhatsApp Business Cloud API base address
         /// </summary>
-        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v25.0/");
+        public static Uri BaseAddress { get; private set; } = new Uri("https://graph.facebook.com/v27.0/");
 
         /// <summary>
         /// Specified WhatsApp Business Cloud API Version BaseAddress
@@ -104,9 +104,13 @@ namespace WhatsappBusiness.CloudApi
         /// <summary>
         /// When you query all the phone numbers for a WhatsApp Business Account, each phone number has an id. You can directly query for a phone number using this id
         /// </summary>
-        public static string GetPhoneNumberById { get; private set; } = "{{Phone-Number-ID}}";
+        public static string GetPhoneNumberById { get; private set; } = "{{Phone-Number-ID}}?fields=id,verified_name,display_phone_number,quality_rating,name_status,code_verification_status,official_business_account";
 
-        public static string GetPhoneNumberByIdWithPortfolioMessagingLimit { get; private set; } = "{{Phone-Number-ID}}?fields=id,verified_name,display_phone_number,quality_rating,whatsapp_business_manager_messaging_limit,messaging_limit_tier";
+        public static string GetPhoneNumberByIdWithPortfolioMessagingLimit { get; private set; } = "{{Phone-Number-ID}}?fields=id,verified_name,display_phone_number,quality_rating,name_status,code_verification_status,official_business_account,whatsapp_business_manager_messaging_limit,messaging_limit_tier";
+
+        public static string UpdatePhoneNumber { get; private set; } = "{{Phone-Number-ID}}";
+
+        public static string OfficialBusinessAccountStatus { get; private set; } = "{{Phone-Number-ID}}/official_business_account";
 
         /// <summary>
         /// You need to verify the phone number you want to use to send messages to your customers. Phone numbers must be verified through SMS/voice call. The verification process can be done through the Graph API calls specified

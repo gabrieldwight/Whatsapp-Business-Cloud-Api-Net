@@ -81,6 +81,34 @@ public class MessageValue<TMessageType>
 	[JsonPropertyName("standby")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public Standby<TMessageType> StandbyInboundMessage { get; set; }
+
+	[JsonPropertyName("user_preferences")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public List<UserPreference>? UserPreferences { get; set; }
+}
+
+public class UserPreference
+{
+	[JsonPropertyName("wa_id")]
+	public string? WaId { get; set; }
+
+	[JsonPropertyName("user_id")]
+	public string? UserId { get; set; }
+
+	[JsonPropertyName("parent_user_id")]
+	public string? ParentUserId { get; set; }
+
+	[JsonPropertyName("detail")]
+	public string? Detail { get; set; }
+
+	[JsonPropertyName("category")]
+	public string? Category { get; set; }
+
+	[JsonPropertyName("value")]
+	public string? Value { get; set; }
+
+	[JsonPropertyName("timestamp")]
+	public long Timestamp { get; set; }
 }
 
 public class MessageMetadata

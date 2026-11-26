@@ -281,6 +281,18 @@ namespace WhatsappBusiness.CloudApi.Interfaces
         /// <returns>PhoneNumberByIdResponse</returns>
         PhoneNumberByIdResponse GetWhatsAppBusinessAccountPhoneNumberById(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
 
+        Task<BaseSuccessResponse> UpdateWhatsAppBusinessPhoneNumberDisplayNameAsync(string whatsAppBusinessPhoneNumberId, UpdatePhoneNumberDisplayNameRequest request, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        BaseSuccessResponse UpdateWhatsAppBusinessPhoneNumberDisplayName(string whatsAppBusinessPhoneNumberId, UpdatePhoneNumberDisplayNameRequest request, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<OfficialBusinessAccountStatusResponse> GetOfficialBusinessAccountStatusAsync(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        OfficialBusinessAccountStatusResponse GetOfficialBusinessAccountStatus(string whatsAppBusinessPhoneNumberId, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        Task<OfficialBusinessAccountUpdateResponse> UpdateOfficialBusinessAccountStatusAsync(string whatsAppBusinessPhoneNumberId, UpdateOfficialBusinessAccountStatusRequest request, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
+        OfficialBusinessAccountUpdateResponse UpdateOfficialBusinessAccountStatus(string whatsAppBusinessPhoneNumberId, UpdateOfficialBusinessAccountStatusRequest request, WhatsAppBusinessCloudApiConfig? cloudApiConfig = null, CancellationToken cancellationToken = default);
+
         /// <summary>
         /// You need to verify the phone number you want to use to send messages to your customers. Phone numbers must be verified through SMS/voice call. The verification process can be done through the Graph API calls specified below.
         /// To verify a phone number using Graph API, make a POST request to {{PHONE_NUMBER_ID

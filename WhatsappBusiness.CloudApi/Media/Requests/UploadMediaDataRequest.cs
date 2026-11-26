@@ -24,5 +24,9 @@ namespace WhatsappBusiness.CloudApi.Media.Requests
         /// </summary>
         [JsonPropertyName("data")]
         public byte[] Data { get; set; }
+
+        [JsonPropertyName("ttl_minutes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? TtlMinutes { get; set; }
     }
 }

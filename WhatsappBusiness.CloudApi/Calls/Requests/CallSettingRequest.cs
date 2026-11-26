@@ -6,7 +6,26 @@ namespace WhatsappBusiness.CloudApi.Calls.Requests
 	public class CallSettingRequest
 	{
 		[JsonPropertyName("calling")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public Calling Calling { get; set; }
+
+		[JsonPropertyName("storage_configuration")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public StorageConfiguration? StorageConfiguration { get; set; }
+	}
+
+	public class StorageConfiguration
+	{
+		[JsonPropertyName("status")]
+		public string? Status { get; set; }
+
+		[JsonPropertyName("data_localization_region")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string? DataLocalizationRegion { get; set; }
+
+		[JsonPropertyName("retention_minutes")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public int? RetentionMinutes { get; set; }
 	}
 
 	public class Calling

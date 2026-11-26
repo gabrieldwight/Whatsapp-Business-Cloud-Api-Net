@@ -16,6 +16,15 @@ namespace WhatsappBusiness.CloudApi.Response
         [JsonPropertyName("quality_rating")]
         public string QualityRating { get; set; }
 
+        [JsonPropertyName("name_status")]
+        public string? NameStatus { get; set; }
+
+        [JsonPropertyName("code_verification_status")]
+        public string? CodeVerificationStatus { get; set; }
+
+        [JsonPropertyName("official_business_account")]
+        public OfficialBusinessAccountStatusResponse? OfficialBusinessAccount { get; set; }
+
         [JsonPropertyName("whatsapp_business_manager_messaging_limit")]
         public string? WhatsAppBusinessManagerMessagingLimit { get; set; }
 
