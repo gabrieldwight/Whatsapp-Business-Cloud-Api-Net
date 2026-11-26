@@ -24,7 +24,7 @@ namespace WhatsappBusiness.CloudApi.Calls.Requests
 		public string? DataLocalizationRegion { get; set; }
 
 		[JsonPropertyName("retention_minutes")]
-		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 		public int? RetentionMinutes { get; set; }
 	}
 
