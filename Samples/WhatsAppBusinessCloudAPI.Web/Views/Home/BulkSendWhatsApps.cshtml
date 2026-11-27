@@ -19,11 +19,8 @@
 					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 					<div class="card-body">
 						<div class="form-group">
-							<label class="control-label">Bulk File (CSV)</label>
-							<div class="input-group">
-								<input type="file" class="custom-file-input" id="bulkFile" name="bulkFile" />
-								<label class="custom-file-label">Choose Bulk File</label>
-							</div>
+							<label class="form-label" for="bulkFile">Bulk File (CSV)</label>
+							<input type="file" class="form-control" id="bulkFile" name="bulkFile" />
 						</div>
 						
 						@if (ViewBag.SendStatus != null)

@@ -1,12 +1,14 @@
-﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
-	<a asp-controller="Home" asp-action="Index" class="brand-link">
-		<img src="~/whatsapp-logo.png" alt="WhatsApp Business Cloud API Logo" class="brand-image img-circle elevation-3"
-			 style="opacity: .8">
-		<span class="brand-text font-weight-light">WhatsApp Business Cloud API</span>
-	</a>
-	<div class="sidebar">
-		<nav class="mt-2">
-			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+﻿<aside class="app-sidebar bg-dark shadow" data-bs-theme="dark">
+	<div class="sidebar-brand">
+		<a asp-controller="Home" asp-action="Index" class="brand-link">
+			<img src="~/whatsapp-logo.png" alt="WhatsApp Business Cloud API Logo" class="brand-image rounded-circle shadow"
+				 style="opacity: .8">
+			<span class="brand-text fw-light">WhatsApp Business Cloud API</span>
+		</a>
+	</div>
+	<div class="sidebar-wrapper">
+		<nav class="mt-2" aria-label="Main navigation">
+			<ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" data-accordion="false">
 				<li class="nav-item ">
 					<a asp-controller="Home" asp-action="Messages" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.Messages))">
 						<i class="nav-icon fa-solid fa-comments"></i>
@@ -43,12 +45,12 @@
 					</a>
 				</li>
 
-				<li class="nav-item ">
-					<a href="#" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""))">
+				<li class="nav-item @Html.IsActive("Home", "SendWhatsAppTextMessage,SendWhatsAppMediaMessage,SendWhatsAppLocationMessage,SendWhatsAppInteractiveMessage,SendWhatsAppTemplateMessage,SendWhatsAppContactMessage", "menu-open")">
+					<a href="#" class="nav-link @Html.IsActive("Home", "SendWhatsAppTextMessage,SendWhatsAppMediaMessage,SendWhatsAppLocationMessage,SendWhatsAppInteractiveMessage,SendWhatsAppTemplateMessage,SendWhatsAppContactMessage")">
 						<i class="nav-icon fa-solid fa-paper-plane"></i>
 						<p>
 							Send
-							<i class="fas fa-angle-left right"></i>
+							<i class="nav-arrow fa-solid fa-chevron-right"></i>
 						</p>
 					</a>
 					<ul class="nav nav-treeview">
@@ -62,7 +64,7 @@
 						</li>
 						<li class="nav-item ">
 							<a asp-controller="Home" asp-action="SendWhatsAppMediaMessage" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.SendWhatsAppMediaMessage))">
-								<i class="nav-icon fa-solid fa-photo-film-music"></i>
+								<i class="nav-icon fa-solid fa-photo-film"></i>
 								<p>
 									Media Message
 								</p>
@@ -103,12 +105,12 @@
 					</ul>
 				</li>
 
-				<li class="nav-item ">
-					<a href="#" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.CreateQRCodeMessage))">
+				<li class="nav-item @Html.IsActive("Home", "CreateQRCodeMessage,QRCodeMessageList", "menu-open")">
+					<a href="#" class="nav-link @Html.IsActive("Home", "CreateQRCodeMessage,QRCodeMessageList")">
 						<i class="nav-icon fa-solid fa-qrcode"></i>
 						<p>
 							QR Code Message
-							<i class="fas fa-angle-left right"></i>
+							<i class="nav-arrow fa-solid fa-chevron-right"></i>
 						</p>
 					</a>
 					<ul class="nav nav-treeview">
@@ -131,12 +133,12 @@
 					</ul>
 				</li>
 
-				<li class="nav-item ">
-					<a href="#" class="nav-link @Html.IsActive(nameof(HomeController).Replace("Controller", ""), nameof(HomeController.Analytics))">
+				<li class="nav-item @Html.IsActive("Home", "Analytics,ConversationAnalytics", "menu-open")">
+					<a href="#" class="nav-link @Html.IsActive("Home", "Analytics,ConversationAnalytics")">
 						<i class="nav-icon fa-solid fa-chart-line"></i>
 						<p>
 							Account Metrics
-							<i class="fas fa-angle-left right"></i>
+							<i class="nav-arrow fa-solid fa-chevron-right"></i>
 						</p>
 					</a>
 					<ul class="nav nav-treeview">

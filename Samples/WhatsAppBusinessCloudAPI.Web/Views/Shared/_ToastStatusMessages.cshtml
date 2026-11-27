@@ -5,15 +5,16 @@
 }
 @if (!string.IsNullOrEmpty(type))
 {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $(`.toastsDefault${'@type'}`).Toasts('create', {
-                class: `bg-${'@type'}`,
-                title: '@title',
-                autohide: true,
-                delay: 4000,
-                body: '@body'
-            })
-        });
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="statusToast" class="toast text-bg-@type" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">@title</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">@body</div>
+        </div>
+    </div>
+    <script>
+        bootstrap.Toast.getOrCreateInstance(document.getElementById('statusToast'), { delay: 4000 }).show();
     </script>
 }

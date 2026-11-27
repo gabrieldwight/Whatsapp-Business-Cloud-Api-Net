@@ -3,20 +3,67 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "font-awesome@6.7.2",
+      "library": "font-awesome@7.3.1",
       "destination": "wwwroot/lib/font-awesome/",
       "files": [
-        "css/all.min.css",
-        "webfonts/fa-brands-400.ttf",
+        "css/all.css",
         "webfonts/fa-brands-400.woff2",
-        "webfonts/fa-regular-400.ttf",
         "webfonts/fa-regular-400.woff2",
-        "webfonts/fa-solid-900.ttf",
         "webfonts/fa-solid-900.woff2"
       ]
     },
     {
-      "library": "admin-lte@3.2.0",
+      "library": "bootstrap@5.3.8",
+      "destination": "wwwroot/lib/bootstrap/dist/",
+      "files": [
+        "js/bootstrap.bundle.js",
+        "css/bootstrap-grid.css",
+        "css/bootstrap-grid.css.map",
+        "css/bootstrap-grid.min.css",
+        "css/bootstrap-grid.min.css.map",
+        "css/bootstrap-grid.rtl.css",
+        "css/bootstrap-grid.rtl.css.map",
+        "css/bootstrap-grid.rtl.min.css",
+        "css/bootstrap-grid.rtl.min.css.map",
+        "css/bootstrap-reboot.css",
+        "css/bootstrap-reboot.css.map",
+        "css/bootstrap-reboot.min.css",
+        "css/bootstrap-reboot.min.css.map",
+        "css/bootstrap-reboot.rtl.css",
+        "css/bootstrap-reboot.rtl.css.map",
+        "css/bootstrap-reboot.rtl.min.css",
+        "css/bootstrap-reboot.rtl.min.css.map",
+        "css/bootstrap-utilities.css",
+        "css/bootstrap-utilities.css.map",
+        "css/bootstrap-utilities.min.css",
+        "css/bootstrap-utilities.min.css.map",
+        "css/bootstrap-utilities.rtl.css",
+        "css/bootstrap-utilities.rtl.css.map",
+        "css/bootstrap-utilities.rtl.min.css",
+        "css/bootstrap-utilities.rtl.min.css.map",
+        "css/bootstrap.css",
+        "css/bootstrap.css.map",
+        "css/bootstrap.min.css",
+        "css/bootstrap.min.css.map",
+        "css/bootstrap.rtl.css",
+        "css/bootstrap.rtl.css.map",
+        "css/bootstrap.rtl.min.css",
+        "css/bootstrap.rtl.min.css.map",
+        "js/bootstrap.bundle.js.map",
+        "js/bootstrap.bundle.min.js",
+        "js/bootstrap.bundle.min.js.map",
+        "js/bootstrap.esm.js",
+        "js/bootstrap.esm.js.map",
+        "js/bootstrap.esm.min.js",
+        "js/bootstrap.esm.min.js.map",
+        "js/bootstrap.js",
+        "js/bootstrap.js.map",
+        "js/bootstrap.min.js",
+        "js/bootstrap.min.js.map"
+      ]
+    },
+    {
+      "library": "admin-lte@4.10.2",
       "destination": "wwwroot/lib/admin-lte/",
       "files": [
         "js/adminlte.min.js",
@@ -24,7 +71,7 @@
       ]
     },
     {
-      "library": "select2@4.0.13",
+      "library": "select2@4.2.0",
       "destination": "wwwroot/lib/select2/",
       "files": [
         "css/select2.min.css",
@@ -32,15 +79,15 @@
       ]
     },
     {
-      "library": "select2-bootstrap-theme@0.1.0-beta.10",
-      "destination": "wwwroot/lib/select2-bootstrap-theme/",
+      "library": "select2-bootstrap-5-theme@1.3.0",
+      "destination": "wwwroot/lib/select2-bootstrap-5-theme/",
       "files": [
-        "select2-bootstrap.min.css"
+        "select2-bootstrap-5-theme.min.css"
       ]
     },
     {
       "provider": "unpkg",
-      "library": "@microsoft/signalr@8.0.0",
+      "library": "@microsoft/signalr@11.0.0",
       "destination": "wwwroot/lib/signalr/",
       "files": [
         "dist/browser/signalr.min.js",

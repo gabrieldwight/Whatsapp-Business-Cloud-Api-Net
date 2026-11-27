@@ -1,17 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
 using System.Data;
-using System.Globalization;
 using CsvHelper;
 using WhatsappBusiness.CloudApi.Interfaces;
-using WhatsappBusiness.CloudApi.Configurations;
-using WhatsAppBusinessCloudAPI.Web.Extensions.Alerts;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using WhatsappBusiness.CloudApi.Messages.Requests;
-using WhatsappBusiness.CloudApi.Response;
-using WhatsappBusiness.CloudApi.Webhook;
-using static System.Net.Mime.MediaTypeNames;
-using System;
 
 namespace WhatsAppBusinessCloudAPI.Web.Controllers
 {
@@ -311,13 +301,12 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
             try
             {
                 using (var reader = new StreamReader(fileInfo.filePath))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                using (var csv = CsvReader.Create(reader))
                 {
-                    csv.Read();
                     csv.ReadHeader();
 
                     // Add columns to the DataTable
-                    foreach (string header in csv.HeaderRecord)
+                    foreach (string header in csv.Headers)
                     {
                         dataTable.Columns.Add(header.Trim());
                     }
@@ -328,7 +317,7 @@ namespace WhatsAppBusinessCloudAPI.Web.Controllers
                         DataRow row = dataTable.NewRow();
                         foreach (DataColumn col in dataTable.Columns)
                         {
-                            row[col.ColumnName] = csv.GetField(col.DataType, col.ColumnName);
+                            row[col.ColumnName] = csv.GetString(col.ColumnName);
                         }
                         dataTable.Rows.Add(row);
                     }

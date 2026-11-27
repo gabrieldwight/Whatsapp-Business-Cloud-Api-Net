@@ -368,3 +368,14 @@ FodyWeavers.xsd
 
 # LibMan (Library Manager) - client-side libraries
 **/wwwroot/lib/
+
+# Keep newly referenced web sample assets alongside the existing tracked libraries.
+!Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/
+Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/*
+!Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/font-awesome/
+Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/font-awesome/*
+!Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/font-awesome/css/
+Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/font-awesome/css/*
+!Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/font-awesome/css/all.css
+!Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/select2-bootstrap-5-theme/
+!Samples/WhatsAppBusinessCloudAPI.Web/wwwroot/lib/signalr/
